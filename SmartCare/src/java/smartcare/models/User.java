@@ -1,25 +1,27 @@
+
 package smartcare.models;
 
-public class Patient {
-    private String patientId;
-    private String patientName;
+public class User {
+    
+    private String userID;
+    private String name;
     private String username;
     private String password;
 
-    public String getPatientId() {
-        return patientId;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
+    public void setUserID(String doctorID) {
+        this.userID = userID;
     }
 
-    public String getPatientName() {
-        return patientName;
+    public String getName() {
+        return name;
     }
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUsername() {
@@ -37,6 +39,5 @@ public class Patient {
     public void setPassword(String password) {
         this.password = password;
     }
-    
     
 }
