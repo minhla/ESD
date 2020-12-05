@@ -1,1 +1,8 @@
 /SmartCare/nbproject/private/
+*.lck
+*.ctrl
+*.dat
+Database/SmartCare/log/README_DO_NOT_TOUCH_FILES.txt
+Database/SmartCare/README_DO_NOT_TOUCH_FILES.txt
+Database/SmartCare/seg0/README_DO_NOT_TOUCH_FILES.txt
+Database/SmartCare/service.properties
