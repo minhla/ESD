@@ -1,8 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+Class: login
+Description: the servlet for handing login interactions
+Created: 01/12/2020
+Updated: 06/12/2020
+Author/s: Michael Tonkin
+*/
 package smartcare.controllers;
 
 import java.io.IOException;
@@ -15,10 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.validator.internal.util.logging.Log;
 import smartcare.models.database.Jdbc;
 
-/**
- *
- * @author Michael
- */
+
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
 public class Login extends HttpServlet {
 
@@ -34,16 +33,16 @@ public class Login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setAttribute("errorMsg", "");
-        
+        request.setAttribute("errorMsg", "");  
         
         //get the email and password entered by the user.
         String entrdEmail = (String)request.getParameter("email");
         String entrdPass = (String)request.getParameter("password");
         
         Jdbc jdbc = new Jdbc();
+        //attempt a login
         if(jdbc.loginStmt("Users", entrdEmail, entrdPass))
-        {//SELECT USERTYPE FROM Users WHERE Email='Michael2.Tonkin@live.uwe.ac.uk';
+        {
             //send to a different landing page depending on the user's account type.
             String accType = jdbc.getValueStmt("USERTYPE", "Email='" + entrdEmail + "'", "Users");
             System.out.println(entrdEmail);
@@ -63,12 +62,12 @@ public class Login extends HttpServlet {
             }
         }
         else
-        {
+        {   //print error message in the event that we cannot find the account
             request.setAttribute("errorMsg", "Login failed - account not found.");
             request.getRequestDispatcher("views/login.jsp").forward(request, response);
-        }
-        
+        }        
     }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
