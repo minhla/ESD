@@ -21,5 +21,11 @@
                 <input type="Submit" value="Login">
             </form>
         </div>
+        <div>
+            <%
+                String error = (String)request.getAttribute("errorMsg");
+                if (error != null) out.println(error);
+            %>
+        </div>
     </body>
 </html>

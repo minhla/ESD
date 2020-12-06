@@ -34,11 +34,13 @@ public class Login extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setAttribute("errorMsg", "");
+        
         
         //get the email and password entered by the user.
         String entrdEmail = (String)request.getParameter("email");
         String entrdPass = (String)request.getParameter("password");
-
+        
         Jdbc jdbc = new Jdbc();
         if(jdbc.loginStmt("Users", entrdEmail, entrdPass))
         {//SELECT USERTYPE FROM Users WHERE Email='Michael2.Tonkin@live.uwe.ac.uk';
@@ -56,8 +58,14 @@ public class Login extends HttpServlet {
                 case "D": //doctor
                     request.getRequestDispatcher("views/landing/doctorLanding.jsp").forward(request, response);
                 default:
+                    request.setAttribute("errorMsg", "Login failed - account type not recognised.");
                     request.getRequestDispatcher("views/login.jsp").forward(request, response);
             }
+        }
+        else
+        {
+            request.setAttribute("errorMsg", "Login failed - account not found.");
+            request.getRequestDispatcher("views/login.jsp").forward(request, response);
         }
         
     }
