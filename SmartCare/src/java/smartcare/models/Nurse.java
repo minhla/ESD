@@ -1,4 +1,4 @@
-package smartcare.models;
+package smartcare.models.users.staff;
 
 public class Nurse {
     private String nurseID;

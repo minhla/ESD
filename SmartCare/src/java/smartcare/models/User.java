@@ -1,17 +1,19 @@
-package smartcare.models.users.staff;
 
-public class Doctor {
-    private String doctorID;
+package smartcare.models.users;
+
+public class User {
+    
+    private String userID;
     private String name;
     private String username;
     private String password;
 
-    public String getDoctorID() {
-        return doctorID;
+    public String getUserID() {
+        return userID;
     }
 
-    public void setDoctorID(String doctorID) {
-        this.doctorID = doctorID;
+    public void setUserID(String doctorID) {
+        this.userID = userID;
     }
 
     public String getName() {
@@ -37,7 +39,5 @@ public class Doctor {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
     
 }

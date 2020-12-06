@@ -2,7 +2,6 @@
 <<<<<<< Updated upstream
 /SmartCare/build/
 /SmartCare/dist/
-=======
 *.lck
 *.ctrl
 *.dat

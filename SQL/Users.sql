@@ -9,6 +9,3 @@ CREATE TABLE Users (
     address VARCHAR(70),
     PRIMARY KEY (uuid)
 )
-
-INSERT INTO YODA.USERS (UUID, FIRSTNAME, LASTNAME, USERTYPE, DOB, PHONE, EMAIL, ADDRESS) 
-	VALUES (1, 'Michael', 'Tonkin', 'A', '2020-12-01', '999', 'Michael2.Tonkin@live.uwe.ac.uk', 'Frenchay Campus, Coldharbour Ln, Bristol BS16 1QY')
