@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.hibernate.validator.internal.util.logging.Log;
-import smartcare.models.database.statements.LoginStmt;
+import smartcare.models.database.Jdbc;
 
 /**
  *
@@ -39,12 +39,24 @@ public class Login extends HttpServlet {
         String entrdEmail = (String)request.getParameter("email");
         String entrdPass = (String)request.getParameter("password");
 
-        LoginStmt loginStmt = new LoginStmt();
-        if(loginStmt.execute("Users", entrdEmail, entrdPass))
-        {
-            try (PrintWriter out = response.getWriter())
+        Jdbc jdbc = new Jdbc();
+        if(jdbc.loginStmt("Users", entrdEmail, entrdPass))
+        {//SELECT USERTYPE FROM Users WHERE Email='Michael2.Tonkin@live.uwe.ac.uk';
+            //send to a different landing page depending on the user's account type.
+            String accType = jdbc.getValueStmt("USERTYPE", "Email='" + entrdEmail + "'", "Users");
+            System.out.println(entrdEmail);
+            switch(accType)
             {
-                out.println("<p>Login successful</p>");
+                case "A": //admin
+                    request.getRequestDispatcher("views/landing/adminLanding.jsp").forward(request, response);
+                case "P": //patient
+                    request.getRequestDispatcher("views/landing/patientLanding.jsp").forward(request, response);
+                case "N": //nurse
+                    request.getRequestDispatcher("views/landing/nurseLanding.jsp").forward(request, response);
+                case "D": //doctor
+                    request.getRequestDispatcher("views/landing/doctorLanding.jsp").forward(request, response);
+                default:
+                    request.getRequestDispatcher("views/login.jsp").forward(request, response);
             }
         }
         
