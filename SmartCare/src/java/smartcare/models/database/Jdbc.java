@@ -10,6 +10,7 @@ Author/s: Michael Tonkin.
 package smartcare.models.database;
 
 import java.sql.*;
+import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 public class Jdbc implements ServletContextListener{
@@ -135,6 +136,16 @@ public class Jdbc implements ServletContextListener{
         }
         System.out.println("Login credentials not found");
         return false;
+    }
+
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
     

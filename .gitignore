@@ -1,4 +1,5 @@
 /SmartCare/nbproject/private/
+/SmartCare/build/web/WEB-INF/classes/smartcare/*
 <<<<<<< Updated upstream
 /SmartCare/build/
 /SmartCare/dist/
@@ -10,4 +11,5 @@ Database/SmartCare/README_DO_NOT_TOUCH_FILES.txt
 Database/SmartCare/seg0/README_DO_NOT_TOUCH_FILES.txt
 Database/SmartCare/service.properties
 Database/derby.log
+SmartCare/build/web/WEB-INF/classes/smartcare/
 >>>>>>> Stashed changes
