@@ -39,6 +39,7 @@ public class Login extends HttpServlet {
         String entrdEmail = (String)request.getParameter("email");
         String entrdPass = (String)request.getParameter("password");
         
+        System.out.println(entrdEmail+" "+entrdPass);
         Jdbc jdbc = new Jdbc();
         //attempt a login
         if(jdbc.loginStmt("Users", entrdEmail, entrdPass))
