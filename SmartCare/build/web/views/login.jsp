@@ -13,11 +13,11 @@
     </head>
     <body>
         <div>
-            <form method="get" action="Login.do">
+            <form method="post" action="Login.do">
                 <p>Email</p>
                 <input type="text" name="email">
                 <p>Password:</p>
-                <input type="text" name="password"> <br />
+                <input type="password" name="password"> <br />
                 <input type="Submit" value="Login">
             </form>
         </div>
