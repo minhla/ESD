@@ -3,13 +3,14 @@ Class: Jdbc
 Description: Connects to the database
 Created: 05/12/2020
 Updated: 06/12/2020
-Author/s: Michael Tonkin.
+Author/s: Michael Tonkin, Giacomo Pellizzari.
 */
 
 
 package smartcare.models.database;
 
 import java.sql.*;
+import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 public class Jdbc implements ServletContextListener{
@@ -51,7 +52,52 @@ public class Jdbc implements ServletContextListener{
         
         return conn;
     }
-   
+    /*
+    Method: getResultSet
+    Description: executes a select query and returns the whole result
+    Params: String column - the column you with to search
+            String condition - where to stop looking for the result
+            String table - the table to search
+    Returns: String - result of query divided by '/n'.
+    */
+    public String getResultSet(String column, String condition, String table, int numOfColumns)
+    {
+        StringBuilder sb = new StringBuilder();
+        Statement stmt = null;
+        String sql = "SELECT " + column + " FROM " + table + " WHERE " + condition;
+        String result = "";
+        Connection conn = this.connect();
+        System.out.println(sql);
+        
+        try
+        {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            //ResultSetMetaData rsMetaData = rs.getMetaData();
+            int index = 1;
+            while (rs.next()) 
+            {
+                for(int i = 1; i <= numOfColumns; i++){
+                    sb.append(rs.getString(i)).append(" ");
+                }
+                
+                sb.append("\n<br>");
+                System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3));
+                index++;
+            }
+            rs.close();
+            stmt.close();
+            conn.close();  
+
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Failed to execute getValueStmt statement");
+            e.printStackTrace();
+        }     
+        
+        return sb.toString();
+    }
     /*
     Method: getValueStmt
     Description: executes a select query
@@ -116,6 +162,9 @@ public class Jdbc implements ServletContextListener{
             String eml = rs.getString("email");
             String pas = rs.getString("password");
             
+            System.out.println(eml);
+            System.out.println(pas);
+            
             if (eml.equalsIgnoreCase(email) && pas.equals(password))
             {   
                 System.out.println("Login credentials accepted.");
@@ -135,6 +184,45 @@ public class Jdbc implements ServletContextListener{
         }
         System.out.println("Login credentials not found");
         return false;
+    }
+    
+    /*
+    Method: addRecords
+    Description: Enables to add values to a table
+    Params: String table - the table to be updated (and columns)
+            String data - part of statement representing data to insert
+    */
+    public int addRecords(String table, String data){
+        int flag = 0;
+        Statement stmt = null;
+        String sql = "insert into " + table + " values " + data;
+        System.out.println(sql);
+        
+        Connection conn = this.connect();
+        
+        try
+        {
+            stmt = conn.createStatement();
+            flag = stmt.executeUpdate(sql);
+            stmt.close();
+            conn.close();  
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Failed to execute update table: " + table);
+            e.printStackTrace();
+        }     
+        return flag;
+    }
+
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
     
