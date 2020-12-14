@@ -116,7 +116,7 @@ public class Jdbc implements ServletContextListener{
             String eml = rs.getString("email");
             String pas = rs.getString("password");
             
-            if (eml.equalsIgnoreCase(email) && pas.equals(password))
+            if (eml.equalsIgnoreCase(email) && pas.equalsIgnoreCase(password))
             {   
                 System.out.println("Login credentials accepted.");
                 return true;
