@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,7 +66,7 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
         
-                response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         request.setAttribute("errorMsg", "");  
         HttpSession session = request.getSession();
         
@@ -81,16 +82,21 @@ public class Login extends HttpServlet {
             //send to a different landing page depending on the user's account type.
             String accType = jdbc.getValueStmt("USERTYPE", "Email='" + entrdEmail + "'", "Users");
             System.out.println(entrdEmail);
-            session.setAttribute("userEmail", entrdEmail);
+            session.setAttribute("user", entrdEmail);
+            
             switch(accType)
             {
                 case "A": //admin
-                    request.getRequestDispatcher("views/landing/adminLanding.jsp").forward(request, response);
+                    setCookies(entrdEmail, session, response);
+                    request.getRequestDispatcher("AdminLanding.do").forward(request, response);
                 case "P": //patient
+                    setCookies(entrdEmail, session, response);
                     request.getRequestDispatcher("views/landing/patientLanding.jsp").forward(request, response);
                 case "N": //nurse
+                    setCookies(entrdEmail, session, response);
                     request.getRequestDispatcher("views/landing/nurseLanding.jsp").forward(request, response);
                 case "D": //doctor
+                    setCookies(entrdEmail, session, response);
                     request.getRequestDispatcher("views/landing/doctorLanding.jsp").forward(request, response);
                 default:
                     request.setAttribute("errorMsg", "Login failed - account type not recognised.");
@@ -111,7 +117,18 @@ public class Login extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for the login page";
     }// </editor-fold>
-
+    
+    
+    private void setCookies(String user, HttpSession session, HttpServletResponse response)
+    {
+        //setting session to expiry in 30 mins
+        session.setMaxInactiveInterval(30*60);
+        Cookie userName = new Cookie("user", user);
+        userName.setMaxAge(30*60);
+        response.addCookie(userName);   
+    }
+    
+    
 }

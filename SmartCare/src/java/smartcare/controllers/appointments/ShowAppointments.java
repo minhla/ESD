@@ -5,7 +5,7 @@ Created: 09/12/2020
 Updated: 09/12/2020
 Author/s: Giacomo Pellizzari.
 */
-package smartcare.controllers;
+package smartcare.controllers.appointments;
 
 import java.io.IOException;
 import java.io.PrintWriter;

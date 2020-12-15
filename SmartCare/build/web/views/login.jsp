@@ -13,7 +13,7 @@
     </head>
     <body>
         <div>
-            <form method="post" action="Login.do">
+            <form method="post" action="<%=request.getContextPath() %>/Login.do">
                 <p>Email</p>
                 <input type="text" name="email">
                 <p>Password:</p>
