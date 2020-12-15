@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.hibernate.validator.internal.util.logging.Log;
 import smartcare.models.database.Jdbc;
 
@@ -66,6 +67,7 @@ public class Login extends HttpServlet {
         
                 response.setContentType("text/html;charset=UTF-8");
         request.setAttribute("errorMsg", "");  
+        HttpSession session = request.getSession();
         
         //get the email and password entered by the user.
         String entrdEmail = (String)request.getParameter("email");
@@ -79,6 +81,7 @@ public class Login extends HttpServlet {
             //send to a different landing page depending on the user's account type.
             String accType = jdbc.getValueStmt("USERTYPE", "Email='" + entrdEmail + "'", "Users");
             System.out.println(entrdEmail);
+            session.setAttribute("userEmail", entrdEmail);
             switch(accType)
             {
                 case "A": //admin
