@@ -13,14 +13,16 @@
     </head>
     <body>
         <h1>Doctor landing page</h1>
-        <form action="ShowAppointments.do" name="show" method="Post">
-            <input type="submit" value="list daily appoinments">
+        <form action="DoctorServlet.do" name="show" method="Post">
+            <input type="submit" name="action" value="list daily appoinments">
         </form>
         <% 
             String appointments = (String) request.getAttribute("appointmentsdata");
             if(appointments!=null){
                 out.print(appointments);
             }
+            
+            out.print(request.getAttribute("status"));
         
           %>
     </body>

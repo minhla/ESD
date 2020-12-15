@@ -1,30 +1,27 @@
 /*
-Class: BookAppointments
-Description: enable to add appointment to database
-Created: 09/12/2020
-Updated: 09/12/2020
-Author/s: Giacomo Pellizzari.
-*/
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package smartcare.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Time;
-import java.time.LocalTime;
-import java.util.Date;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import smartcare.models.Appointment;
 import smartcare.models.database.Jdbc;
 
 /**
  *
  * @author jitojar
  */
-public class BookAppointment extends HttpServlet {
+public class PatientServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,14 +32,17 @@ public class BookAppointment extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+    
+    private HttpServletRequest bookAppointment(HttpServletRequest request){
+        
+        ArrayList<Appointment> Appointments = new ArrayList<Appointment>();
         
         String viewPath = "views/landing/patientLanding.jsp";
         Jdbc jdbc = new Jdbc();
         HttpSession session = request.getSession();
         
+        
+        //if we have to add a new appointment
         //get parameters from form
         String starttime = request.getParameter("starttime");
         //add ten minutes to start time
@@ -69,9 +69,32 @@ public class BookAppointment extends HttpServlet {
             request.setAttribute("updateSuccess", "There has been a problem.");
         }
         
+        //when showing available appointments
+        Appointment app = new Appointment();
+        app.setComment("this is the comment mate");
+        Appointments.add(app);
+        
+        //show on the patientLanding
+        request.setAttribute("Appointments", Appointments);
         
         
+        //when deleting an appointment
         
+        return request;
+    }
+    
+    
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        String viewPath = "views/landing/patientLanding.jsp";
+        
+        
+        String action = request.getParameter("action");
+        
+        if(action.equals("Book Appointment")){
+            request = bookAppointment(request);
+        }
         
         RequestDispatcher view = request.getRequestDispatcher(viewPath);
         view.forward(request,response);

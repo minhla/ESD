@@ -9,24 +9,24 @@
         <servlet-class>smartcare.controllers.Login</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ShowAppointments</servlet-name>
-        <servlet-class>smartcare.controllers.ShowAppointments</servlet-class>
+        <servlet-name>DoctorServlet</servlet-name>
+        <servlet-class>smartcare.controllers.DoctorServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>BookAppointment</servlet-name>
-        <servlet-class>smartcare.controllers.BookAppointment</servlet-class>
+        <servlet-name>PatientServlet</servlet-name>
+        <servlet-class>smartcare.controllers.PatientServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ShowAppointments</servlet-name>
-        <url-pattern>/ShowAppointments.do</url-pattern>
+        <servlet-name>DoctorServlet</servlet-name>
+        <url-pattern>/DoctorServlet.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>BookAppointment</servlet-name>
-        <url-pattern>/BookAppointment.do</url-pattern>
+        <servlet-name>PatientServlet</servlet-name>
+        <url-pattern>/PatientServlet.do</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
