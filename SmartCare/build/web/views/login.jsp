@@ -4,28 +4,35 @@
     Author     : Michael
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Smart Care: Login</title>
     </head>
+    
     <body>
-        <div>
-            <form method="post" action="Login.do">
+        <div class="login-container">
+            <a href="/SmartCare"><h1>SmartCare</h1></a>
+            <form method="post" action="Login.do" class="login-form">
                 <p>Email</p>
                 <input type="text" name="email">
-                <p>Password:</p>
+                <p>Password</p>
                 <input type="password" name="password"> <br />
-                <input type="Submit" value="Login">
+                <button type="Submit" value="Login">Login</button>
             </form>
+            <div class="error-message">
+                <%
+                    String error = (String)request.getAttribute("errorMsg");
+                    if (error != null) out.println(error);
+                %>
+            </div>
         </div>
-        <div>
-            <%
-                String error = (String)request.getAttribute("errorMsg");
-                if (error != null) out.println(error);
-            %>
-        </div>
+       
     </body>
+    <style>
+        <%@ include file="./css/styles.css" %>
+    </style>
 </html>
