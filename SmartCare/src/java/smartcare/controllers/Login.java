@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,43 +34,7 @@ public class Login extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setAttribute("errorMsg", "");  
-        HttpSession session = request.getSession();
         
-        //get the email and password entered by the user.
-        String entrdEmail = (String)request.getParameter("email");
-        String entrdPass = (String)request.getParameter("password");
-        
-        System.out.println(entrdEmail+" "+entrdPass);
-        Jdbc jdbc = new Jdbc();
-        //attempt a login
-        if(jdbc.loginStmt("Users", entrdEmail, entrdPass))
-        {
-            //send to a different landing page depending on the user's account type.
-            String accType = jdbc.getValueStmt("USERTYPE", "Email='" + entrdEmail + "'", "Users");
-            System.out.println(entrdEmail);
-            session.setAttribute("userEmail", entrdEmail);
-            switch(accType)
-            {
-                case "A": //admin
-                    request.getRequestDispatcher("views/landing/adminLanding.jsp").forward(request, response);
-                case "P": //patient
-                    request.getRequestDispatcher("views/landing/patientLanding.jsp").forward(request, response);
-                case "N": //nurse
-                    request.getRequestDispatcher("views/landing/nurseLanding.jsp").forward(request, response);
-                case "D": //doctor
-                    request.getRequestDispatcher("views/landing/doctorLanding.jsp").forward(request, response);
-                default:
-                    request.setAttribute("errorMsg", "Login failed - account type not recognised.");
-                    request.getRequestDispatcher("views/login.jsp").forward(request, response);
-            }
-        }
-        else
-        {   //print error message in the event that we cannot find the account
-            request.setAttribute("errorMsg", "Login failed - account not found.");
-            request.getRequestDispatcher("views/login.jsp").forward(request, response);
-        }        
     }
     
 
@@ -100,6 +65,49 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
+        response.setContentType("text/html;charset=UTF-8");
+        request.setAttribute("errorMsg", "");  
+        HttpSession session = request.getSession();
+        
+        //get the email and password entered by the user.
+        String entrdEmail = (String)request.getParameter("email");
+        String entrdPass = (String)request.getParameter("password");
+        
+        System.out.println(entrdEmail+" "+entrdPass);
+        Jdbc jdbc = new Jdbc();
+        //attempt a login
+        if(jdbc.loginStmt("Users", entrdEmail, entrdPass))
+        {
+            //send to a different landing page depending on the user's account type.
+            String accType = jdbc.getValueStmt("USERTYPE", "Email='" + entrdEmail + "'", "Users");
+            System.out.println(entrdEmail);
+            session.setAttribute("user", entrdEmail);
+            
+            switch(accType)
+            {
+                case "A": //admin
+                    setCookies(entrdEmail, session, response);
+                    request.getRequestDispatcher("AdminLanding.do").forward(request, response);
+                case "P": //patient
+                    setCookies(entrdEmail, session, response);
+                    request.getRequestDispatcher("views/landing/patientLanding.jsp").forward(request, response);
+                case "N": //nurse
+                    setCookies(entrdEmail, session, response);
+                    request.getRequestDispatcher("views/landing/nurseLanding.jsp").forward(request, response);
+                case "D": //doctor
+                    setCookies(entrdEmail, session, response);
+                    request.getRequestDispatcher("views/landing/doctorLanding.jsp").forward(request, response);
+                default:
+                    request.setAttribute("errorMsg", "Login failed - account type not recognised.");
+                    request.getRequestDispatcher("views/login.jsp").forward(request, response);
+            }
+        }
+        else
+        {   //print error message in the event that we cannot find the account
+            request.setAttribute("errorMsg", "Login failed - account not found.");
+            request.getRequestDispatcher("views/login.jsp").forward(request, response);
+        } 
     }
 
     /**
@@ -109,7 +117,18 @@ public class Login extends HttpServlet {
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for the login page";
     }// </editor-fold>
-
+    
+    
+    private void setCookies(String user, HttpSession session, HttpServletResponse response)
+    {
+        //setting session to expiry in 30 mins
+        session.setMaxInactiveInterval(30*60);
+        Cookie userName = new Cookie("user", user);
+        userName.setMaxAge(30*60);
+        response.addCookie(userName);   
+    }
+    
+    
 }

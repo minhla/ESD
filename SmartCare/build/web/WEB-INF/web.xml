@@ -9,6 +9,20 @@
         <servlet-class>smartcare.controllers.Login</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>smartcare.controllers.Logout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ShowAppointments</servlet-name>
+        <servlet-class>smartcare.controllers.appointments.ShowAppointments</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>BookAppointment</servlet-name>
+        <servlet-class>smartcare.controllers.appointments.BookAppointment</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <jsp-file>/views/landing/adminLanding.jsp</jsp-file>
         <servlet-name>DoctorServlet</servlet-name>
         <servlet-class>smartcare.controllers.DoctorServlet</servlet-class>
     </servlet>
@@ -21,6 +35,12 @@
         <url-pattern>/Login.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/Logout.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ShowAppointments</servlet-name>
+        <url-pattern>/ShowAppointments.do</url-pattern>
         <servlet-name>DoctorServlet</servlet-name>
         <url-pattern>/DoctorServlet.do</url-pattern>
     </servlet-mapping>
@@ -28,13 +48,30 @@
         <servlet-name>PatientServlet</servlet-name>
         <url-pattern>/PatientServlet.do</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/AdminLanding.do</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
-            30
+            20
         </session-timeout>
     </session-config>
     <welcome-file-list>
         <welcome-file>views/login.jsp</welcome-file>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
+    <filter>
+        <filter-name>RequestLoggingFilter</filter-name>
+        <filter-class>smartcare.controllers.filters.RequestLoggingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RequestLoggingFilter</filter-name>
+        <servlet-name>Login</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>smartcare.controllers.filters.AuthenticationFilter</filter-class>
+    </filter>
 </web-app>

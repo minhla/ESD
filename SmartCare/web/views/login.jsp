@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : login
     Created on : 03-Dec-2020, 09:18:55
     Author     : Michael
@@ -12,11 +12,11 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Smart Care: Login</title>
     </head>
-    
+
     <body>
         <div class="login-container">
             <a href="/SmartCare"><h1>SmartCare</h1></a>
-            <form method="post" action="Login.do" class="login-form">
+            <form method="post" action="<%=request.getContextPath() %>/Login.do" class="login-form">
                 <p>Email</p>
                 <input type="text" name="email">
                 <p>Password</p>
@@ -30,7 +30,7 @@
                 %>
             </div>
         </div>
-       
+
     </body>
     <style>
         <%@ include file="./css/styles.css" %>
