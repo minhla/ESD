@@ -43,6 +43,38 @@
         
           %>
           
+     <div>
+        <h1>Prescription Form</h1>
+        <form action="DoctorServlet.do" name="prescription" method="Post" >
+            Patient ID:<br/> <input type="text" name="patientID" >         
+            <input type="submit" value="Get patient detail" name ="action"><br/><br/>
+            <p>
+            <% 
+                String patientDetail = (String) session.getAttribute("patientDetail");
+                
+                if(patientDetail!=null)
+                {
+                     out.println(patientDetail);              
+                }
+
+            %>
+            </p>
+            Weight:<br/> <input type="text" name="weight"><br/><br/>
+            Allergies:<br/> <textarea type="text" name="allergies" rows="4" cols="50"></textarea><br/><br/>
+            Medicine:<br/> <textarea  type="text" name="med" rows="4" cols="50"></textarea><br/><br/>
+            <input type="submit" value="Create Prescription" name ="action"><br/>
+        </form>
+        <p>
+            <% 
+                String update = (String) session.getAttribute("updateSuccess");
+                if(update!=null)
+                {
+                    out.println(update);
+                }
+            %>
+        </p>
+    </div>
+          
         <form action="Logout.do" method="post">
             <input type="submit" value="Logout" >
         </form>

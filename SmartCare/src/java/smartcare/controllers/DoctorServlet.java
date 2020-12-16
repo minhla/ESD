@@ -1,8 +1,10 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+Class: DoctorServlet
+Description: the servlet for handing doctor interactions
+Created: 14/12/2020
+Updated: 16/12/2020
+Author/s: Asia Benyadilok
+*/
 package smartcare.controllers;
 
 import java.io.IOException;
@@ -13,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import smartcare.models.database.Jdbc;
 
 /**
@@ -56,6 +59,99 @@ public class DoctorServlet extends HttpServlet {
         
     }
     
+    /*
+    Method: createPrescription
+    Description: handle interactions with prescription form
+    Params: HttpServletRequest request
+    Returns: HttpServletRequest request
+    */
+    private HttpServletRequest createPrescription(HttpServletRequest request){
+        
+        
+        //create obj of database and get session
+        Jdbc jdbc = new Jdbc();
+        HttpSession session = request.getSession();
+        
+        
+       //get parameters from prescription form
+       String patientID = request.getParameter("patientID");
+       String weight = request.getParameter("weight");
+       String allergies = request.getParameter("allergies");
+       String med = request.getParameter("med");
+       //get current date
+       LocalDate currentDate = java.time.LocalDate.now();
+
+
+       //Add details of prescription to database
+       String table = "prescription (weight, allergies, medicine, patientid, issuedate)";
+       String values = "("  + weight + ", '"+ allergies+ "', '"+ med + "', " + patientID+",'"+currentDate.toString()+"')";
+
+
+        int success = jdbc.addRecords(table, values);
+
+        //check if the database is successfully updated or not
+        if(success != 0)
+        {
+            session.setAttribute("updateSuccess", "The prescription has been added!");
+        }
+        else
+        {
+            session.setAttribute("updateSuccess", "There has been a problem.");
+        }
+        
+
+        
+        return request;
+        
+    }
+    
+    /*
+    Method: getPatientDetail
+    Description: method to get patient detail
+    Params: HttpServletRequest request
+    Returns: HttpServletRequest request
+    */
+     private HttpServletRequest getPatientDetail(HttpServletRequest request){
+        
+        
+        //create obj of database and get session
+        Jdbc jdbc = new Jdbc();
+        HttpSession session = request.getSession();
+        
+        
+       //get parameters from prescription form
+       String patientID = request.getParameter("patientID");
+
+       String patientDetail = null;
+       
+       try 
+       {
+           //get patient detail from database
+           patientDetail = jdbc.getResultSet("firstname, lastname, dob", "uuid = "+patientID, "users",3);
+           if(patientDetail.equals(""))
+           {
+               session.setAttribute("patientDetail","Patient not found!");
+           }
+           else
+           {
+               String detailList [] = patientDetail.split(" ");
+
+               session.setAttribute("patientDetail","Patient Name: "+detailList[0]+"<br/>"+
+                                                    "Patient Surname: "+detailList[1]+"<br/>"+
+                                                    "Date of Birth: "+detailList[2]+"<br/>");         
+           }
+       }
+       
+       catch(Exception e)
+       {
+           session.setAttribute("patientDetail","Patient not found!");
+       }
+     
+        
+       return request;
+        
+    }
+    
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -64,6 +160,18 @@ public class DoctorServlet extends HttpServlet {
         
         //show appointment
         request = showAppointments(request);
+        
+        //get action type from the doctor landing
+        String action = request.getParameter("action");
+        
+        if (action.equals("Get patient detail"))
+        {
+            request = getPatientDetail(request);
+        }
+        else if (action.equals("Create Prescription"))
+        {
+            request = createPrescription(request);
+        }
         
         RequestDispatcher view = request.getRequestDispatcher(viewPath);
         view.forward(request,response);

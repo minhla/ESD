@@ -98,6 +98,49 @@ public class Jdbc implements ServletContextListener{
         
         return sb.toString();
     }
+    
+        /*
+    Method: getALLResultSet
+    Description: get all result that macth with conditions
+    Params: String column - the column you with to search
+            String condition - where to stop looking for the result
+            String table - the table to search
+    Returns: String - result of query divided by '/n'.
+    */
+    public String getAllResultSet(String column, String condition, String table, int numOfColumns)
+    {
+        StringBuilder sb = new StringBuilder();
+        Statement stmt = null;
+        String sql = "SELECT " + column + " FROM " + table + " WHERE " + condition;
+        String result = "";
+        Connection conn = this.connect();
+        System.out.println(sql);
+        
+        try
+        {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            //ResultSetMetaData rsMetaData = rs.getMetaData();
+            while (rs.next()) 
+            {
+                for(int i = 1; i <= numOfColumns; i++){
+                    sb.append(rs.getString(i)).append(" ");
+                }
+                
+            }
+            rs.close();
+            stmt.close();
+            conn.close();  
+
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Failed to execute getValueStmt statement");
+            e.printStackTrace();
+        }     
+        
+        return sb.toString();
+    }
     /*
     Method: getValueStmt
     Description: executes a select query
