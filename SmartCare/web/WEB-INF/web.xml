@@ -13,22 +13,16 @@
         <servlet-class>smartcare.controllers.Logout</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ShowAppointments</servlet-name>
-        <servlet-class>smartcare.controllers.appointments.ShowAppointments</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>BookAppointment</servlet-name>
-        <servlet-class>smartcare.controllers.appointments.BookAppointment</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>AdminServlet</servlet-name>
         <jsp-file>/views/landing/adminLanding.jsp</jsp-file>
-        <servlet-name>DoctorServlet</servlet-name>
-        <servlet-class>smartcare.controllers.DoctorServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>PatientServlet</servlet-name>
         <servlet-class>smartcare.controllers.PatientServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoctorServlet</servlet-name>
+        <servlet-class>smartcare.controllers.DoctorServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
@@ -39,18 +33,16 @@
         <url-pattern>/Logout.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ShowAppointments</servlet-name>
-        <url-pattern>/ShowAppointments.do</url-pattern>
-        <servlet-name>DoctorServlet</servlet-name>
-        <url-pattern>/DoctorServlet.do</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>PatientServlet</servlet-name>
         <url-pattern>/PatientServlet.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/AdminLanding.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoctorServlet</servlet-name>
+        <url-pattern>/DoctorServlet.do</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
