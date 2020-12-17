@@ -17,10 +17,13 @@
         <jsp-file>/views/landing/adminLanding.jsp</jsp-file>
     </servlet>
     <servlet>
+        <servlet-name>DoctorRegisterServlet</servlet-name>
+        <jsp-file>/views/registration/doctorRegister.jsp</jsp-file>
+    </servlet>
+    <servlet>
         <servlet-name>AdminServlet</servlet-name>
         <servlet-class>smartcare.controllers.AdminServlet</servlet-class>
     </servlet>
-
     <servlet>
         <servlet-name>PatientServlet</servlet-name>
         <servlet-class>smartcare.controllers.PatientServlet</servlet-class>
@@ -48,10 +51,14 @@
     <servlet-mapping>
         <servlet-name>DoctorServlet</servlet-name>
         <url-pattern>/DoctorServlet.do</url-pattern>
-    </servlet-mapping> 
-  <servlet-mapping>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/AdminServlet.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoctorRegisterServlet</servlet-name>
+        <url-pattern>/DoctorRegister</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
