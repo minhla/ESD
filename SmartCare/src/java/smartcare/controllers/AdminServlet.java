@@ -59,7 +59,7 @@ public class AdminServlet extends HttpServlet {
        try 
        {
            //get patient detail from database
-           patientDetail = jdbc.getResultSet("firstname, lastname, dob", "uuid = "+patientID, "users",3);
+           patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(uuid = "+patientID+" AND usertype = 'P')", "users",3);
            if(patientDetail.equals(""))
            {
                session.setAttribute("patientDetail","Patient not found!");
@@ -194,22 +194,32 @@ public class AdminServlet extends HttpServlet {
          //get week num
        int weekNum = cl.WEEK_OF_YEAR;
        
-       //Add details of prescription to database
-       String table = "invoice (servicetype, detail, amount, patientid, issuedate, weeknum, paymenttype)";
-       String values = "('"  + service + "', '"+ detail+ "', "+ amount + ", " + patientID+",'"+currentDate.toString()+"',"+weekNum+",'"+paymenttype+"')";
+       //validate the patient id
+       String validation = jdbc.getResultSet("firstname, lastname, dob", "(uuid = "+patientID+" AND usertype = 'P')", "users",3);
+       
+       if (!validation.equals(""))
+       {
+        //Add details of prescription to database
+        String table = "invoice (servicetype, detail, amount, patientid, issuedate, weeknum, paymenttype)";
+        String values = "('"  + service + "', '"+ detail+ "', "+ amount + ", " + patientID+",'"+currentDate.toString()+"',"+weekNum+",'"+paymenttype+"')";
 
 
-        int success = jdbc.addRecords(table, values);
+         int success = jdbc.addRecords(table, values);
 
-        //check if the database is successfully updated or not
-        if(success != 0)
-        {
-            session.setAttribute("updateSuccess", "The invoice has been added!");
-        }
-        else
-        {
-            session.setAttribute("updateSuccess", "There has been a problem.");
-        }
+         //check if the database is successfully updated or not
+         if(success != 0)
+         {
+             session.setAttribute("updateSuccess", "The invoice has been added!");
+         }
+         else
+         {
+             session.setAttribute("updateSuccess", "There has been a problem.");
+         }
+       }
+       else
+       {
+           session.setAttribute("updateSuccess", "Patient not found!");
+       }
         
 
         

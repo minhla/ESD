@@ -143,7 +143,7 @@ public class PatientServlet extends HttpServlet {
        try 
         {
             //get patient detail from database
-            patientDetail = jdbc.getResultSet("firstname, lastname, dob", "uuid = "+patientID, "users",3);
+            patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(uuid = "+patientID+" AND usertype = 'P')", "users",3);
             prescription = jdbc.getResultSet("weight, allergies, medicine", "(issuedate = '"+issuedate.toString()+"' AND patientid = "+patientID+")","prescription",3);
             String weight = jdbc.getResultSet("weight","(issuedate = '"+issuedate.toString()+"' AND patientid = "+patientID+")","prescription",1);
             String allergies = jdbc.getResultSet("allergies","(issuedate = '"+issuedate.toString()+"' AND patientid = "+patientID+")","prescription",1);
@@ -201,7 +201,7 @@ public class PatientServlet extends HttpServlet {
         {
             request = reIssuePrescription(request);
         }
-        if(action.equals("Cancel")){
+        else if(action.equals("Cancel")){
             request = deleteAppointment(request);
         }
         

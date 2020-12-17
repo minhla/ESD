@@ -81,24 +81,32 @@ public class DoctorServlet extends HttpServlet {
        //get current date
        LocalDate currentDate = java.time.LocalDate.now();
 
+       //validate the patient id
+       String validation = jdbc.getResultSet("firstname, lastname, dob", "(uuid = "+patientID+" AND usertype = 'P')", "users",3);
+       
+       if (!validation.equals(""))
+       {
+        //Add details of prescription to database
+        String table = "prescription (weight, allergies, medicine, patientid, issuedate)";
+        String values = "("  + weight + ", '"+ allergies+ "', '"+ med + "', " + patientID+",'"+currentDate.toString()+"')";
 
-       //Add details of prescription to database
-       String table = "prescription (weight, allergies, medicine, patientid, issuedate)";
-       String values = "("  + weight + ", '"+ allergies+ "', '"+ med + "', " + patientID+",'"+currentDate.toString()+"')";
 
+         int success = jdbc.addRecords(table, values);
 
-        int success = jdbc.addRecords(table, values);
-
-        //check if the database is successfully updated or not
-        if(success != 0)
-        {
-            session.setAttribute("updateSuccess", "The prescription has been added!");
-        }
-        else
-        {
-            session.setAttribute("updateSuccess", "There has been a problem.");
-        }
-        
+         //check if the database is successfully updated or not
+         if(success != 0)
+         {
+             session.setAttribute("updateSuccess", "The prescription has been added!");
+         }
+         else
+         {
+             session.setAttribute("updateSuccess", "There has been a problem.");
+         }
+       }
+       else
+       {
+            session.setAttribute("updateSuccess", "Patient not found!");
+       }
 
         
         return request;
@@ -127,7 +135,7 @@ public class DoctorServlet extends HttpServlet {
        try 
        {
            //get patient detail from database
-           patientDetail = jdbc.getResultSet("firstname, lastname, dob", "uuid = "+patientID, "users",3);
+           patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(uuid = "+patientID+" AND usertype = 'P')", "users",3);
            if(patientDetail.equals(""))
            {
                session.setAttribute("patientDetail","Patient not found!");

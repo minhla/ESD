@@ -20,7 +20,6 @@
         <servlet-name>AdminServlet</servlet-name>
         <servlet-class>smartcare.controllers.AdminServlet</servlet-class>
     </servlet>
-
     <servlet>
         <servlet-name>PatientServlet</servlet-name>
         <servlet-class>smartcare.controllers.PatientServlet</servlet-class>
@@ -28,6 +27,10 @@
     <servlet>
         <servlet-name>DoctorServlet</servlet-name>
         <servlet-class>smartcare.controllers.DoctorServlet</servlet-class>
+    </servlet>
+     <servlet>
+        <servlet-name>NurseServlet</servlet-name>
+        <servlet-class>smartcare.controllers.NurseServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
@@ -48,10 +51,14 @@
     <servlet-mapping>
         <servlet-name>DoctorServlet</servlet-name>
         <url-pattern>/DoctorServlet.do</url-pattern>
-    </servlet-mapping> 
-  <servlet-mapping>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/AdminServlet.do</url-pattern>
+    </servlet-mapping>
+     <servlet-mapping>
+        <servlet-name>NurseServlet</servlet-name>
+        <url-pattern>/NurseServlet.do</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
