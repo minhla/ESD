@@ -50,7 +50,7 @@ public class DoctorServlet extends HttpServlet {
         System.out.println("Hello, appointments = " + appointments);
         
         request.setAttribute("appointmentsdata", appointments);
-        request.setAttribute("status", "it works mate!!!!");
+        request.setAttribute("status", "button pressed");
         
         return request;
         

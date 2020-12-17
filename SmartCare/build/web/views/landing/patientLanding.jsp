@@ -5,13 +5,13 @@
     Created on : 06-Dec-2020, 09:33:42
     Author     : Michael, Giacomo
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Patient</title>
+        
     </head>
     <body>
         
@@ -36,7 +36,6 @@
         </div>
         <div>
             <h4> Your booked appointments: </h4>
-            <!--<form action="PatientServlet.do" name ="deleteAppointment" method="Post">-->
             <table>
                 <tr>
                     <th>Appointment ID</th>
@@ -78,7 +77,6 @@
                     out.print("<p>"+ request.getAttribute("deleteSuccess") +"</p>");
                 }
             %>
-            <!--</form>-->
         </div>
         
     </body>
