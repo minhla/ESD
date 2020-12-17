@@ -28,9 +28,15 @@
         <servlet-name>DoctorServlet</servlet-name>
         <servlet-class>smartcare.controllers.DoctorServlet</servlet-class>
     </servlet>
+<<<<<<< HEAD
      <servlet>
         <servlet-name>NurseServlet</servlet-name>
         <servlet-class>smartcare.controllers.NurseServlet</servlet-class>
+=======
+    <servlet>
+        <servlet-name>AddPatient</servlet-name>
+        <servlet-class>smartcare.controllers.AddPatient</servlet-class>
+>>>>>>> c75c1bc... registration and apointment with doctor done
     </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
@@ -56,9 +62,15 @@
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/AdminServlet.do</url-pattern>
     </servlet-mapping>
+<<<<<<< HEAD
      <servlet-mapping>
         <servlet-name>NurseServlet</servlet-name>
         <url-pattern>/NurseServlet.do</url-pattern>
+=======
+    <servlet-mapping>
+        <servlet-name>AddPatient</servlet-name>
+        <url-pattern>/AddPatient.do</url-pattern>
+>>>>>>> c75c1bc... registration and apointment with doctor done
     </servlet-mapping>
     <session-config>
         <session-timeout>

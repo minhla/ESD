@@ -30,7 +30,7 @@
                 %>
             </div>
         </div>
-
+          <a href="<%=request.getContextPath() %>/views/landing/newPatient.jsp">Create Account</a>
     </body>
     <style>
         <%@ include file="./css/styles.css" %>
