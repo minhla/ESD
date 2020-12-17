@@ -37,6 +37,27 @@ public class Appointment {
         this.comment = comment;
     }
 
+    @Override
+    public String toString() {
+        return "Appointment{" + "ID=" + ID + ", starttime=" + starttime + ", endtime=" + endtime + ", date=" + date + ", comment=" + comment + ", userID=" + userID + '}';
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public String getStarttime() {
+        return starttime;
+    }
+
+    public String getEndtime() {
+        return endtime;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
     
     
     

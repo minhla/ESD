@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.hibernate.validator.internal.util.logging.Log;
 import smartcare.models.database.Jdbc;
+import smartcare.models.users.User;
 
 
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
@@ -46,9 +47,14 @@ public class Login extends HttpServlet {
         //attempt a login
         if(jdbc.loginStmt("Users", entrdEmail, entrdPass))
         {
+            //set the session variable
+            User user = new User();
+            String details[] = jdbc.getResultSet("uuid, firstName", "email = '"+entrdEmail+"'", "Users", 2).split(" ");
+            user.setUserID(details[0]);
+            user.setName(details[1]);
+            session.setAttribute("user", user);
             //send to a different landing page depending on the user's account type.
             String accType = jdbc.getValueStmt("USERTYPE", "Email='" + entrdEmail + "'", "Users");
-            System.out.println(entrdEmail);
             session.setAttribute("userEmail", entrdEmail);
             switch(accType)
             {

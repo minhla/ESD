@@ -12,7 +12,7 @@ public class User {
         return userID;
     }
 
-    public void setUserID(String doctorID) {
+    public void setUserID(String userID) {
         this.userID = userID;
     }
 
