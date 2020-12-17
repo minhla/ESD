@@ -1,8 +1,6 @@
 package smartcare.controllers;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -41,7 +39,7 @@ public class DoctorRegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String address = request.getParameter("address");
         String password = request.getParameter("password");
-        
+
         Doctor doctor = new Doctor();
         doctor.setDoctorID(doctorID);
         doctor.setFirstName(firstname);
@@ -52,14 +50,14 @@ public class DoctorRegisterServlet extends HttpServlet {
         doctor.setEmail(email);
         doctor.setAddress(address);
         doctor.setPassword(password);
-        
+
         try {
             DoctorDAO.registerDoctor(doctor);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
-        response.sendRedirect("registration/registersuccess.jsp");
+
+        response.sendRedirect("views/registration/registersuccess.jsp");
 //        RequestDispatcher dispatcher = request.getRequestDispatcher("/web/views/registration/registersuccess.jsp");
 //        dispatcher.forward(request, response);
     }
