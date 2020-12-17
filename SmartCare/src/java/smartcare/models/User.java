@@ -1,5 +1,5 @@
 
-package smartcare.models.users;
+package smartcare.models;
 
 public class User {
     

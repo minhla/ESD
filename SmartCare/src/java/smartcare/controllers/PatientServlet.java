@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import smartcare.models.Appointment;
 import smartcare.models.database.Jdbc;
-import smartcare.models.users.User;
+import smartcare.models.User;
 
 /**
  *

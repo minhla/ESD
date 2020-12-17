@@ -1,4 +1,4 @@
-package smartcare.models.users.staff;
+package smartcare.models;
 
 public class Doctor {
     private String doctorID;

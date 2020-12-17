@@ -1,6 +1,7 @@
 /SmartCare/nbproject/private/
 /SmartCare/nbproject/*.properties/
 /SmartCare/build/web/WEB-INF/classes/smartcare/*.class
+SmartCare/build/web/WEB-INF/classes/*
 <<<<<<< Updated upstream
 /SmartCare/build/*
 /SmartCare/dist/*
