@@ -31,6 +31,7 @@
      <servlet>
         <servlet-name>NurseServlet</servlet-name>
         <servlet-class>smartcare.controllers.NurseServlet</servlet-class>
+     </servlet>
     <servlet>
         <servlet-name>AddPatient</servlet-name>
         <servlet-class>smartcare.controllers.AddPatient</servlet-class>
@@ -62,6 +63,7 @@
      <servlet-mapping>
         <servlet-name>NurseServlet</servlet-name>
         <url-pattern>/NurseServlet.do</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddPatient</servlet-name>
         <url-pattern>/AddPatient.do</url-pattern>
