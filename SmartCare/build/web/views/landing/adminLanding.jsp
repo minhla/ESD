@@ -113,7 +113,10 @@
                  <p>Password: <input type="password" name="new_acc_password"></p>
                  <input type="submit" value="Submit">
              </form>
-             
+            <%
+                String error = (String)request.getAttribute("updateSuccess");
+                if (error != null) out.println(error);
+            %>
              
          </div>
         
