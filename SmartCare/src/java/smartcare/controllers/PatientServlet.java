@@ -86,15 +86,19 @@ public class PatientServlet extends HttpServlet {
         appointments = jdbc.getResultSet(column, condition, table, numOfColumns);
         System.out.println("the appointments for this user are, appointments = " + appointments);
         
-        //split the data received and put it into appointmentList
-        String singleAppointment[] = appointments.split("<br>");
-        for (String element : singleAppointment){
-            String val[] = element.split(" ");
-            Appointment temp = new Appointment(val[0], val[1], val[2], val[3], val[4], user.getUserID());
-            appointmentList.add(temp);
-            System.out.println(element);
+        if(appointments.length()>=1){
+            //split the data received and put it into appointmentList
+            String singleAppointment[] = appointments.split("<br>");
+            for (String element : singleAppointment){
+                String val[] = element.split(" ");
+                System.out.println("the element is:" + element);
+                Appointment temp = new Appointment(val[0], val[1], val[2], val[3], val[4], user.getUserID());
+                appointmentList.add(temp);
+                System.out.println(element);
 
+            }
         }
+        
         
         //show on the patientLanding
         request.setAttribute("Appointments", appointmentList);
