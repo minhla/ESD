@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import smartcare.models.Appointment;
 import smartcare.models.database.Jdbc;
+import smartcare.models.users.User;
 
 /**
  *
@@ -36,33 +37,26 @@ public class PatientServlet extends HttpServlet {
      */
     
     private HttpServletRequest bookAppointment(HttpServletRequest request){
-        
-        ArrayList<Appointment> Appointments = new ArrayList<Appointment>();
-        
-        String viewPath = "views/landing/patientLanding.jsp";
         Jdbc jdbc = new Jdbc();
         HttpSession session = request.getSession();
         
-        
-        //if we have to add a new appointment
         //get parameters from form
         String starttime = request.getParameter("starttime");
-        //add ten minutes to start time
+        //add ten minutes to start time (not implemented yet)
         String endtime = request.getParameter("starttime");
         String date = request.getParameter("date");
         String comment = request.getParameter("comment");
         
-        //get the right user ID from the database
-        String userEmail = (String)session.getAttribute("userEmail");
-        String userID = jdbc.getValueStmt("uuid", "email = '"+ userEmail +"'", "Users");
-        System.out.println("userID = " + userID);
+        //get the right user ID from the session variable
+        User user = (User)session.getAttribute("user");
+        System.out.println("userID = " + user.getUserID());
         
-        //check if that time slot is free
+        //check if that time slot is free (not implemented yet)
         
         //Add to database
         String table = "appointments (appointmentdate, starttime, endtime, comment, patientID)";
         String values = "('"  + date + "', '"+ starttime+ "', '" 
-                + endtime + "', '" + comment + "', " + userID +")";
+                + endtime + "', '" + comment + "', " + user.getUserID() +")";
         
         int success = jdbc.addRecords(table, values);
         if(success != 0){
@@ -71,17 +65,58 @@ public class PatientServlet extends HttpServlet {
             request.setAttribute("updateSuccess", "There has been a problem.");
         }
         
-        //when showing available appointments
-        Appointment app = new Appointment();
-        app.setComment("this is the comment mate");
-        Appointments.add(app);
+        return request;
+    }
+    
+    private HttpServletRequest showAppointments(HttpServletRequest request){
+        
+        ArrayList<Appointment> appointmentList = new ArrayList<Appointment>();
+        String appointments = new String();
+        HttpSession session = request.getSession();
+        Jdbc jdbc = new Jdbc();
+        User user = (User)session.getAttribute("user");
+        
+        //retreve all available appointments from database
+        String column = "appointmentid, starttime, endtime, appointmentdate, comment";
+        int numOfColumns = 5;
+        String table = "Appointments";
+        String condition = "patientID = " + user.getUserID();
+        
+        //Get all of the appointments for this user
+        appointments = jdbc.getResultSet(column, condition, table, numOfColumns);
+        System.out.println("the appointments for this user are, appointments = " + appointments);
+        
+        //split the data received and put it into appointmentList
+        String singleAppointment[] = appointments.split("<br>");
+        for (String element : singleAppointment){
+            String val[] = element.split(" ");
+            Appointment temp = new Appointment(val[0], val[1], val[2], val[3], val[4], user.getUserID());
+            appointmentList.add(temp);
+            System.out.println(element);
+
+        }
         
         //show on the patientLanding
-        request.setAttribute("Appointments", Appointments);
+        request.setAttribute("Appointments", appointmentList);
         
+        return request;
+    }
+    
+    private HttpServletRequest deleteAppointment(HttpServletRequest request){
+        //after pressing the delete button the appointment will be deleted
+        String appointmentId = request.getParameter("appointmentId");
+        System.out.println("deleting appointment" + appointmentId);
+        Jdbc jdbc = new Jdbc();
         
-        //when deleting an appointment
+        int success = jdbc.delete("Appointments", "appointmentId = " + appointmentId);
+        String deleteSuccess = new String();
+        if(success == 0){
+            deleteSuccess = "Failed to cancel appointment";
+        }else{
+            deleteSuccess = "Successfully cancelled appointment";
+        }
         
+        request.setAttribute("deleteSuccess", deleteSuccess);
         return request;
     }
     
@@ -162,6 +197,12 @@ public class PatientServlet extends HttpServlet {
         {
             request = reIssuePrescription(request);
         }
+        if(action.equals("Cancel")){
+            request = deleteAppointment(request);
+        }
+        
+        
+        request = showAppointments(request);
         
         RequestDispatcher view = request.getRequestDispatcher(viewPath);
         view.forward(request,response);

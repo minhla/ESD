@@ -82,7 +82,6 @@ public class Jdbc implements ServletContextListener{
                 }
                 
                 sb.append("\n<br>");
-                System.out.println(rs.getString(1) + " " + rs.getString(2) + " " + rs.getString(3));
                 index++;
             }
             rs.close();
@@ -92,7 +91,7 @@ public class Jdbc implements ServletContextListener{
         }
         catch(SQLException e)
         {
-            System.out.println("Failed to execute getValueStmt statement");
+            System.out.println("Failed to execute getResultSet statement");
             e.printStackTrace();
         }     
         
@@ -253,6 +252,29 @@ public class Jdbc implements ServletContextListener{
         catch(SQLException e)
         {
             System.out.println("Failed to execute update table: " + table);
+            e.printStackTrace();
+        }     
+        return flag;
+    }
+    
+    public int delete(String table, String condition){
+        int flag = 0;
+        Statement stmt = null;
+        String sql = "delete from " + table + " where " + condition;
+        System.out.println(sql);
+        
+        Connection conn = this.connect();
+        
+        try
+        {
+            stmt = conn.createStatement();
+            flag = stmt.executeUpdate(sql);
+            stmt.close();
+            conn.close();  
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Failed to execute delete from: " + table);
             e.printStackTrace();
         }     
         return flag;
