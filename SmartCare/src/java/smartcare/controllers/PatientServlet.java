@@ -35,15 +35,74 @@ public class PatientServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-    private HttpServletRequest bookAppointment(HttpServletRequest request){
+    private HttpServletRequest bookAppointmentWithDoctor(HttpServletRequest request){
         Jdbc jdbc = new Jdbc();
         HttpSession session = request.getSession();
         
         //get parameters from form
         String starttime = request.getParameter("starttime");
-        //add ten minutes to start time (not implemented yet)
-        String endtime = request.getParameter("starttime");
+        // TODO add 30 minutes to start time for apointment duration
+        String endtime = starttime;
+        String date = request.getParameter("date");
+        String comment = request.getParameter("comment");
+        
+        //get the right user ID from the database
+        String userEmail = (String)session.getAttribute("userEmail");
+        String userID = jdbc.getValueStmt("uuid", "email = '"+ userEmail +"'", "Users");
+        System.out.println("userID = " + userID);
+        
+        
+        
+        //check if that time slot is free
+       
+        String availableDoctorId = "0";
+        
+        Jdbc jdbcAv = new Jdbc();
+                
+        
+
+        String column = "uuid, firstname, lastname";
+        String tableAv = "users";
+        String condition = "usertype = 'D'";
+                            // TO DO check for available doctors
+                            String test = " SELECT lastname FROM smartcare.USERS "
+                            +" where usertype = 'D' "
+                            + " and UUID not in ( "
+                            + " SELECT u.UUID FROM SMARTCARE.USERS u "
+                            + " join smartcare.APPOINTMENTS a on u.UUID = a.DOCTORID "
+                            + " where a.STARTTIME <= '" +starttime+ "'  and a.ENDTIME >=  '" + endtime + "' and appointmentdate =  '"+ date +"')";
+                            
+    
+        //Get all of the appointments for the doctor
+        availableDoctorId = jdbcAv.getValueStmt(column, condition, tableAv);
+        
+        
+        //Add to database
+        String table = "appointments (appointmentdate, starttime, endtime, comment, patientID)";
+        String values = "('"  + date + "', '"+ starttime+ "', '" 
+                + endtime + "', '" + comment + "', " + userID +")";
+        
+        int success = jdbc.addRecords(table, values);
+        
+        String doctorName = jdbc.getValueStmt("lastname", "uuid = '"+ availableDoctorId +"'", "users");
+        
+        if(success != 0){
+            request.setAttribute("updateSuccess", "The appointment has been scheduled with doctor " + doctorName);
+        }else{
+            request.setAttribute("updateSuccess", "There has been a problem.");
+        }    
+        
+    return request;
+    }
+        
+    private HttpServletRequest bookAppointment(HttpServletRequest request){
+        Jdbc jdbc = new Jdbc();
+        HttpSession session = request.getSession();
+        
+       //get parameters from form
+        String starttime = request.getParameter("starttime");
+        // TODO add 30 minutes to start time for apointment duration
+        String endtime = starttime;
         String date = request.getParameter("date");
         String comment = request.getParameter("comment");
         
@@ -191,7 +250,7 @@ public class PatientServlet extends HttpServlet {
         String action = request.getParameter("action");
         
         if(action.equals("Book Appointment")){
-            request = bookAppointment(request);
+            request = bookAppointmentWithDoctor(request);
         }
         else if(action.equals("request for re-issue"))
         {
