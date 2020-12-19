@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.hibernate.validator.internal.util.logging.Log;
 import smartcare.models.database.Jdbc;
-import smartcare.models.users.User;
+import smartcare.models.User;
 
 
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
