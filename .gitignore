@@ -1,9 +1,3 @@
-/SmartCare/nbproject/private/
-/SmartCare/nbproject/*.properties/
-/SmartCare/build/web/WEB-INF/classes/smartcare/*.class
-<<<<<<< Updated upstream
-/SmartCare/build/*
-/SmartCare/dist/*
 *.lck
 *.ctrl
 *.dat
@@ -11,6 +5,24 @@ Database/SmartCare/log/README_DO_NOT_TOUCH_FILES.txt
 Database/SmartCare/README_DO_NOT_TOUCH_FILES.txt
 Database/SmartCare/seg0/README_DO_NOT_TOUCH_FILES.txt
 Database/SmartCare/service.properties
-Database/derby.log
 SmartCare/build/web/WEB-INF/classes/smartcare/
->>>>>>> Stashed changes
+
+### Java ###
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+### Java-Web ###
+## ignoring target file
+target/
+
+### NetBeans ###
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+build/
+nbbuild/
+dist/
+nbdist/
