@@ -10,6 +10,9 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>SmartCare - Admin</title>
+        <link rel="icon" 
+              type="image/png" 
+              href="https://i.imgur.com/Vwma7mV.png">
     </head>
     <body>
 
