@@ -32,7 +32,7 @@ public class AddPatient extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        String viewPath = "views/landing/newPatient.jsp";
+        String viewPath = "views/registration/newPatient.jsp";
         Jdbc jdbc = new Jdbc();
         HttpSession session = request.getSession();
         

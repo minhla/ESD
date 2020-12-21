@@ -1,5 +1,5 @@
 body {
-  background-image: url('https://i.imgur.com/72TYdZE.png');
+  background-image: url("https://i.imgur.com/qz8zIAQ.png");
   background-size: cover;
   display: flex;
   font-family: Arial, Helvetica, sans-serif;
@@ -7,12 +7,11 @@ body {
 
 .login-container {
   position: absolute;
-  right: 200px;
-  margin-top: 100px;
+  right: 150px;
+  margin-top: 150px;
   width: 400px;
   height: 350px;
   background-color: white;
-  
 }
 
 a {
@@ -50,8 +49,23 @@ a {
   color: white;
 }
 
+.login-form > button:hover {
+  cursor: pointer;
+}
+
 .login-form > button:active {
   transform: translateY(4px);
+  -webkit-box-shadow: 0px 0px 12px -5px rgba(0, 0, 0, 0.94);
+  -moz-box-shadow: 0px 0px 12px -5px rgba(0, 0, 0, 0.94);
+  box-shadow: 0px 0px 12px -5px rgba(0, 0, 0, 0.94);
+}
+
+.register-container {
+  margin-top: 15px;
+}
+
+.register-container > a:hover {
+  color: #3f3f3f;
 }
 
 .error-message {

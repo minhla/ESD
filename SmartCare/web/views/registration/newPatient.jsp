@@ -9,13 +9,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Create a new account</title>
     </head>
     <body>
-        <h1>New patient page</h1>
         
-        <h1>Patient adding page</h1>
-        <h4>Fill in the form to add a new patient</h4>
+        <h1>Patient registration</h1>
+        <h4>Please fill in your information to create a new account</h4>
         <form action="<%=request.getContextPath() %>/AddPatient.do" name="addpatient" method="Post">
             First name: <input type="text" name="firstname"><br/>
             Last name: <input type="text" name="lastname"><br/>

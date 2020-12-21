@@ -235,15 +235,15 @@ public class AdminServlet extends HttpServlet {
          //get action type from the admin landing
         String action = request.getParameter("action");
         
-        if (action.equals("Get patient detail"))
+        if (action.equals("Get patient details"))
         {
             request = getPatientDetail(request);
         }
-        else if(action.equals("issue invoice"))
+        else if(action.equals("Issue Invoice"))
         {
             request = createInvoice(request);
         }
-        else if(action.equals("produce weekly documents"))
+        else if(action.equals("Produce Weekly Documents"))
         {
             request = getWeeklyDocument(request);
         }
