@@ -93,19 +93,24 @@ public class Login extends HttpServlet {
             {
                 case "A": //admin
                     setCookies(entrdEmail, session, response);
-                    request.getRequestDispatcher("AdminLanding.do").forward(request, response);
+                    response.sendRedirect(request.getContextPath() + "/AdminServlet.do");
+                    break;
                 case "P": //patient
                     setCookies(entrdEmail, session, response);
-                    request.getRequestDispatcher("views/landing/patientLanding.jsp").forward(request, response);
+                    response.sendRedirect(request.getContextPath() + "/PatientServlet.do");
+                    break;
                 case "N": //nurse
                     setCookies(entrdEmail, session, response);
-                    request.getRequestDispatcher("views/landing/nurseLanding.jsp").forward(request, response);
+                    response.sendRedirect(request.getContextPath() + "/NurseServlet.do");
+                    break;
                 case "D": //doctor
                     setCookies(entrdEmail, session, response);
-                    request.getRequestDispatcher("views/landing/doctorLanding.jsp").forward(request, response);
+                    response.sendRedirect(request.getContextPath() + "/DoctorServlet.do");
+                    break;
                 default:
                     request.setAttribute("errorMsg", "Login failed - account type not recognised.");
                     request.getRequestDispatcher("views/login.jsp").forward(request, response);
+                    break;
             }
         }
         else

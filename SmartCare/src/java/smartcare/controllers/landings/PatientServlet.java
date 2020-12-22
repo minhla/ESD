@@ -5,7 +5,7 @@ Created: 14/12/2020
 Updated: 16/12/2020
 Author/s: Asia Benyadilok
 */
-package smartcare.controllers;
+package smartcare.controllers.landings;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,6 +26,8 @@ import smartcare.models.User;
  */
 public class PatientServlet extends HttpServlet {
 
+    final String JSP = "/views/landing/patientLanding.jsp";
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -248,27 +250,30 @@ public class PatientServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String viewPath = "views/landing/patientLanding.jsp";
+        
         
         //get action from patient landing
         String action = request.getParameter("action");
-        
-        if(action.equals("Book Appointment")){
-            request = bookAppointmentWithDoctor(request);
-        }
-        else if(action.equals("request for re-issue"))
+        if(action != null)
         {
-            request = reIssuePrescription(request);
+            if(action.equals("Book Appointment")){
+                request = bookAppointmentWithDoctor(request);
+            }
+            else if(action.equals("request for re-issue"))
+            {
+                request = reIssuePrescription(request);
+            }
+            else if(action.equals("Cancel")){
+                request = deleteAppointment(request);
+            }
+            
+            request = showAppointments(request);
         }
-        else if(action.equals("Cancel")){
-            request = deleteAppointment(request);
-        }
+        
+        RequestDispatcher view = request.getRequestDispatcher(JSP);
+        view.forward(request, response);
         
         
-        request = showAppointments(request);
-        
-        RequestDispatcher view = request.getRequestDispatcher(viewPath);
-        view.forward(request,response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -13,24 +13,20 @@
         <servlet-class>smartcare.controllers.Logout</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AdminServlet1</servlet-name>
-        <jsp-file>/views/landing/adminLanding.jsp</jsp-file>
-    </servlet>
-    <servlet>
         <servlet-name>AdminServlet</servlet-name>
-        <servlet-class>smartcare.controllers.AdminServlet</servlet-class>
+        <servlet-class>smartcare.controllers.landings.AdminServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>PatientServlet</servlet-name>
-        <servlet-class>smartcare.controllers.PatientServlet</servlet-class>
+        <servlet-class>smartcare.controllers.landings.PatientServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DoctorServlet</servlet-name>
-        <servlet-class>smartcare.controllers.DoctorServlet</servlet-class>
+        <servlet-class>smartcare.controllers.landings.DoctorServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>NurseServlet</servlet-name>
-        <servlet-class>smartcare.controllers.NurseServlet</servlet-class>
+        <servlet-class>smartcare.controllers.landings.NurseServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddPatient</servlet-name>
@@ -38,7 +34,7 @@
     </servlet>
     <servlet>
         <servlet-name>RegisterStaff</servlet-name>
-        <servlet-class>smartcare.controllers.RegisterStaff</servlet-class>
+        <servlet-class>smartcare.controllers.landings.RegisterStaff</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
@@ -51,10 +47,6 @@
     <servlet-mapping>
         <servlet-name>PatientServlet</servlet-name>
         <url-pattern>/PatientServlet.do</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>AdminServlet1</servlet-name>
-        <url-pattern>/AdminLanding.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DoctorServlet</servlet-name>

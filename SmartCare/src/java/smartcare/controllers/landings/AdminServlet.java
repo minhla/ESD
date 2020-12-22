@@ -5,7 +5,7 @@ Created: 14/12/2020
 Updated: 16/12/2020
 Author/s: Asia Benyadilok
 */
-package smartcare.controllers;
+package smartcare.controllers.landings;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,6 +26,7 @@ import smartcare.models.database.Jdbc;
  */
 public class AdminServlet extends HttpServlet {
 
+    final String JSP = "/views/landing/adminLanding.jsp";
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -230,26 +231,25 @@ public class AdminServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String viewPath = "/views/landing/adminLanding.jsp";
         
          //get action type from the admin landing
         String action = request.getParameter("action");
+        if (action != null)
+            if (action.equals("Get patient details"))
+            {
+                request = getPatientDetail(request);
+            }
+            else if(action.equals("Issue Invoice"))
+            {
+                request = createInvoice(request);
+            }
+            else if(action.equals("Produce Weekly Documents"))
+            {
+                request = getWeeklyDocument(request);
+            }
         
-        if (action.equals("Get patient details"))
-        {
-            request = getPatientDetail(request);
-        }
-        else if(action.equals("Issue Invoice"))
-        {
-            request = createInvoice(request);
-        }
-        else if(action.equals("Produce Weekly Documents"))
-        {
-            request = getWeeklyDocument(request);
-        }
         
-        
-        RequestDispatcher view = request.getRequestDispatcher(viewPath);
+        RequestDispatcher view = request.getRequestDispatcher(JSP);
         view.forward(request,response);
     }
 

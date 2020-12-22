@@ -1,27 +1,25 @@
 /*
-Class: NurseServlet
-Description: the servlet for handing nurse interactions
-Created: 14/12/2020
-Updated: 16/12/2020
-Author/s: Asia Benyadilok
-*/
-package smartcare.controllers;
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package smartcare.controllers.landings;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import smartcare.models.database.Jdbc;
 
 /**
  *
- * @author asia
+ * @author Michael
  */
-public class NurseServlet extends HttpServlet {
+public class RegisterStaff extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,43 +30,9 @@ public class NurseServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-      private HttpServletRequest showAppointments(HttpServletRequest request){
-        
-        String appointments = "";
-        Jdbc jdbc = new Jdbc();
-        
-        //get current date
-        LocalDate currentDate = java.time.LocalDate.now();
-        
-        
-        String column = "appointmentid, comment, starttime, endtime, appointmentdate";
-        int numOfColumns = 5;
-        String table = "Appointments";
-        String condition = "appointmentdate = '" + currentDate.toString()+"'";
-        
-        //Get all of the appointments for the doctor
-        appointments = jdbc.getResultSet(column, condition, table, numOfColumns);
-        System.out.println("Hello, appointments = " + appointments);
-        
-        request.setAttribute("appointmentsdata", appointments);
-        request.setAttribute("status", "button pressed");
-        
-        return request;
-        
-    }
-    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String viewPath = "/views/landing/nurseLanding.jsp";
-        
-        //show appointment
-        request = showAppointments(request);
-        
-        
-        RequestDispatcher view = request.getRequestDispatcher(viewPath);
-        view.forward(request,response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -98,6 +62,38 @@ public class NurseServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
+        String viewPath = "views/landing/adminLanding.jsp";
+        Jdbc jdbc = new Jdbc();
+        HttpSession session = request.getSession();
+        
+        //get parameters from form
+        String firstname = request.getParameter("new_acc_firstname");
+        String lastname = request.getParameter("new_acc_lastname");
+        String dob = request.getParameter("new_acc_dob");
+        String phone = request.getParameter("new_acc_phone");
+        String email = request.getParameter("new_acc_email");
+        String address = request.getParameter("new_acc_address");
+        String password = request.getParameter("new_acc_password");
+        String userType = request.getParameter("new_acc_type");
+   
+        //Add to database
+        String table = "users (firstname, lastname, usertype, dob, phone, email, address, password)";
+        String values = "('"  + firstname + "','" + lastname + "', '"+ userType
+                              + "', '" + dob + "', '" + phone +"', '"
+                              + email + "', '" + address + "', '" + password +"')";
+        
+        
+        int success = jdbc.addRecords(table, values);
+        if(success != 0){
+            request.setAttribute("updateSuccess", "The account has been added!");
+        }else{
+            request.setAttribute("updateSuccess", "There has been a problem.");
+        }
+        
+        RequestDispatcher view = request.getRequestDispatcher(viewPath);
+        view.forward(request,response);
+        
     }
 
     /**
