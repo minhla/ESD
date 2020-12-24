@@ -121,6 +121,7 @@ public class AdminServlet extends HttpServlet {
            payPrivate = jdbc.getAllResultSet("paymenttype", "(weeknum ="+weekNum+" AND paymenttype = 'Private')", "invoice",1);
            payNHS =  jdbc.getAllResultSet("paymenttype", "(weeknum ="+weekNum+" AND paymenttype = 'NHS')", "invoice",1);
            
+           //TODO put in model class
            //calculate turnover
            int totalTurnover =0;
            String amount[] = turnover.split(" ");
