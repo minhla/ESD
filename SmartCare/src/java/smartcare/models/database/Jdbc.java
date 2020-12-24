@@ -10,10 +10,15 @@ Author/s: Michael Tonkin, Giacomo Pellizzari.
 package smartcare.models.database;
 
 import java.sql.*;
+import java.util.ArrayList;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 public class Jdbc implements ServletContextListener{
+
+    //Singleton instance
+    private static Jdbc JDBC_INSTANCE = null;    
+
     //The URL for the database
     static final String DB_URL = "jdbc:derby://localhost:1527/SmartCare";
     
@@ -21,9 +26,17 @@ public class Jdbc implements ServletContextListener{
     static final String USER = "SmartCare";
     static final String PASS = "HSVu2G";
     
-    public Jdbc()
+    private Jdbc()
     {
 
+    }
+    
+    
+    public static Jdbc getJdbc(){
+        if(JDBC_INSTANCE == null){
+            JDBC_INSTANCE = new Jdbc();
+        }
+        return JDBC_INSTANCE;
     }
     
     /*
@@ -52,6 +65,51 @@ public class Jdbc implements ServletContextListener{
         
         return conn;
     }
+    
+    
+        /*
+    Method: getResultList
+    Description: executes a select query and returns the whole result
+    Params: String column - the column you with to search
+            String condition - where to stop looking for the result
+            String table - the table to search
+    Returns: String - result of query divided by '/n'.
+    */
+    public ArrayList<String> getResultList(String column, String condition, String table, int numOfColumns)
+    {
+        ArrayList<String> results = new ArrayList<String>();
+        Statement stmt = null;
+        String sql = "SELECT " + column + " FROM " + table + " WHERE " + condition;
+        String result = "";
+        Connection conn = this.connect();
+        System.out.println(sql);
+        
+        try
+        {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            //ResultSetMetaData rsMetaData = rs.getMetaData();
+            while (rs.next()) 
+            {
+                for(int i = 1; i <= numOfColumns; i++){
+                    results.add(rs.getString(i));
+                }
+            }
+            rs.close();
+            stmt.close();
+            conn.close();  
+
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Failed to execute getResultList statement");
+            e.printStackTrace();
+        }     
+        
+        return results;
+    }
+    
+    
     /*
     Method: getResultSet
     Description: executes a select query and returns the whole result
@@ -60,6 +118,7 @@ public class Jdbc implements ServletContextListener{
             String table - the table to search
     Returns: String - result of query divided by '/n'.
     */
+    @Deprecated
     public String getResultSet(String column, String condition, String table, int numOfColumns)
     {
         StringBuilder sb = new StringBuilder();
@@ -106,6 +165,7 @@ public class Jdbc implements ServletContextListener{
             String table - the table to search
     Returns: String - result of query divided by '/n'.
     */
+    @Deprecated
     public String getAllResultSet(String column, String condition, String table, int numOfColumns)
     {
         StringBuilder sb = new StringBuilder();
@@ -148,6 +208,7 @@ public class Jdbc implements ServletContextListener{
             String table - the table to search
     Returns: String - result of query.
     */
+    @Deprecated
     public String getValueStmt(String column, String condition, String table)
     {
         Statement stmt = null;
@@ -257,10 +318,17 @@ public class Jdbc implements ServletContextListener{
         return flag;
     }
     
+    /*
+    Method: delete
+    Description: Deletes an entry in the database.
+    Params: String table - the table to be updated (and columns)
+            String condition - forms part of the "WHERE..." sql statement. Use to 
+                                select which item should be deleted
+    */
     public int delete(String table, String condition){
         int flag = 0;
         Statement stmt = null;
-        String sql = "delete from " + table + " where " + condition;
+        String sql = "DELETE FROM " + table + " WHERE " + condition;
         System.out.println(sql);
         
         Connection conn = this.connect();
@@ -280,6 +348,7 @@ public class Jdbc implements ServletContextListener{
         return flag;
     }
 
+    
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

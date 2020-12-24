@@ -31,6 +31,7 @@
                         sessionID = cookie.getValue();
                     }
                 }
+                System.out.println(userName);
             }
         %>
         <div class="top-bar">

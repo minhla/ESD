@@ -24,6 +24,8 @@ import smartcare.models.database.Jdbc;
 public class NurseServlet extends HttpServlet {
 
     final String JSP = "/views/landing/nurseLanding.jsp";
+    Jdbc jdbc = Jdbc.getJdbc();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,7 +39,6 @@ public class NurseServlet extends HttpServlet {
       private HttpServletRequest showAppointments(HttpServletRequest request){
         
         String appointments = "";
-        Jdbc jdbc = new Jdbc();
         
         //get current date
         LocalDate currentDate = java.time.LocalDate.now();

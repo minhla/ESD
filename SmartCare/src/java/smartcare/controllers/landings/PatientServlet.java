@@ -27,7 +27,7 @@ import smartcare.models.User;
 public class PatientServlet extends HttpServlet {
 
     final String JSP = "/views/landing/patientLanding.jsp";
-    
+    Jdbc jdbc = Jdbc.getJdbc();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,7 +38,6 @@ public class PatientServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private HttpServletRequest bookAppointmentWithDoctor(HttpServletRequest request){
-        Jdbc jdbc = new Jdbc();
         HttpSession session = request.getSession();
         
         //get parameters from form
@@ -59,10 +58,6 @@ public class PatientServlet extends HttpServlet {
        
         String availableDoctorId = "0";
         
-        Jdbc jdbcAv = new Jdbc();
-                
-        
-
         String column = "uuid, firstname, lastname";
         String tableAv = "users";
         String condition = "usertype = 'D'";
@@ -76,7 +71,7 @@ public class PatientServlet extends HttpServlet {
                             
     
         //Get all of the appointments for the doctor
-        availableDoctorId = jdbcAv.getValueStmt(column, condition, tableAv);
+        availableDoctorId = jdbc.getValueStmt(column, condition, tableAv);
         
         
         //Add to database
@@ -98,7 +93,7 @@ public class PatientServlet extends HttpServlet {
     }
         
     private HttpServletRequest bookAppointment(HttpServletRequest request){
-        Jdbc jdbc = new Jdbc();
+        
         HttpSession session = request.getSession();
         
        //get parameters from form
@@ -134,7 +129,7 @@ public class PatientServlet extends HttpServlet {
         ArrayList<Appointment> appointmentList = new ArrayList<Appointment>();
         String appointments = new String();
         HttpSession session = request.getSession();
-        Jdbc jdbc = new Jdbc();
+        
         User user = (User)session.getAttribute("user");
         
         //retreve all available appointments from database
@@ -171,7 +166,6 @@ public class PatientServlet extends HttpServlet {
         //after pressing the delete button the appointment will be deleted
         String appointmentId = request.getParameter("appointmentId");
         System.out.println("deleting appointment" + appointmentId);
-        Jdbc jdbc = new Jdbc();
         
         int success = jdbc.delete("Appointments", "appointmentId = " + appointmentId);
         String deleteSuccess = new String();
@@ -187,8 +181,6 @@ public class PatientServlet extends HttpServlet {
     
       private HttpServletRequest reIssuePrescription(HttpServletRequest request){
         
-        //create obj of database
-        Jdbc jdbc = new Jdbc();
         HttpSession session = request.getSession();
         
                 

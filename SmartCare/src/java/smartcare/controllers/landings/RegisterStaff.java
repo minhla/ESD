@@ -21,6 +21,8 @@ import smartcare.models.database.Jdbc;
  */
 public class RegisterStaff extends HttpServlet {
 
+    Jdbc jdbc = Jdbc.getJdbc();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -64,7 +66,7 @@ public class RegisterStaff extends HttpServlet {
         processRequest(request, response);
         
         String viewPath = "views/landing/adminLanding.jsp";
-        Jdbc jdbc = new Jdbc();
+        
         HttpSession session = request.getSession();
         
         //get parameters from form

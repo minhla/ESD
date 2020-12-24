@@ -19,6 +19,8 @@ import smartcare.models.User;
 @WebServlet(name = "/AddPatient")
 public class AddPatient extends HttpServlet {
 
+        Jdbc jdbc = Jdbc.getJdbc();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -33,7 +35,7 @@ public class AddPatient extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         String viewPath = "views/registration/newPatient.jsp";
-        Jdbc jdbc = new Jdbc();
+        
         HttpSession session = request.getSession();
         
         //get parameters from form

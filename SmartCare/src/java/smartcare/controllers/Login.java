@@ -24,6 +24,8 @@ import smartcare.models.User;
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
 public class Login extends HttpServlet {
 
+    Jdbc db = Jdbc.getJdbc();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,7 +37,7 @@ public class Login extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        System.out.println(db.getResultList("firstname", "(uuid = 1)", "USERS", 1));
     }
     
 
@@ -76,18 +78,18 @@ public class Login extends HttpServlet {
         String entrdPass = (String)request.getParameter("password");
         
         System.out.println(entrdEmail+" "+entrdPass);
-        Jdbc jdbc = new Jdbc();
+        
         //attempt a login
-        if(jdbc.loginStmt("Users", entrdEmail, entrdPass))
+        if(db.loginStmt("Users", entrdEmail, entrdPass))
         {
             //set the session variable
             User user = new User();
-            String details[] = jdbc.getResultSet("uuid, firstName", "email = '"+entrdEmail+"'", "Users", 2).split(" ");
+            String details[] = db.getResultSet("uuid, firstName", "email = '"+entrdEmail+"'", "Users", 2).split(" ");
             user.setUserID(details[0]);
             user.setName(details[1]);
             session.setAttribute("user", user);
             //send to a different landing page depending on the user's account type.
-            String accType = jdbc.getValueStmt("USERTYPE", "Email='" + entrdEmail + "'", "Users");
+            String accType = db.getValueStmt("USERTYPE", "Email='" + entrdEmail + "'", "Users");
             session.setAttribute("userEmail", entrdEmail);
             switch(accType)
             {

@@ -2,7 +2,7 @@
 Class: AdminServlet
 Description: the servlet for handing admin interactions
 Created: 14/12/2020
-Updated: 16/12/2020
+Updated: 22/12/2020
 Author/s: Asia Benyadilok
 */
 package smartcare.controllers.landings;
@@ -27,15 +27,8 @@ import smartcare.models.database.Jdbc;
 public class AdminServlet extends HttpServlet {
 
     final String JSP = "/views/landing/adminLanding.jsp";
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
+    Jdbc jdbc = Jdbc.getJdbc();
     
     
        /*
@@ -46,11 +39,8 @@ public class AdminServlet extends HttpServlet {
     */
      private HttpServletRequest getPatientDetail(HttpServletRequest request){
         
-        
-        //create obj of database and get session
-        Jdbc jdbc = new Jdbc();
+        //create get session
         HttpSession session = request.getSession();
-        
         
        //get parameters from prescription form
        String patientID = request.getParameter("patientID");
@@ -93,11 +83,7 @@ public class AdminServlet extends HttpServlet {
     */
      private HttpServletRequest getWeeklyDocument(HttpServletRequest request){
         
-        
-        //create obj of database and get session
-        Jdbc jdbc = new Jdbc();
         HttpSession session = request.getSession();
-        
         
        //get current date
        LocalDate currentDate = java.time.LocalDate.now();
@@ -171,11 +157,7 @@ public class AdminServlet extends HttpServlet {
     */
     private HttpServletRequest createInvoice(HttpServletRequest request){
         
-        
-        //create obj of database and get session
-        Jdbc jdbc = new Jdbc();
         HttpSession session = request.getSession();
-        
         
        //get parameters from prescription form
        String patientID = request.getParameter("patientID");

@@ -25,20 +25,11 @@ import smartcare.models.database.Jdbc;
 public class DoctorServlet extends HttpServlet {
 
     final String JSP = "/views/landing/doctorLanding.jsp";
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    Jdbc jdbc = Jdbc.getJdbc();
     
     private HttpServletRequest showAppointments(HttpServletRequest request){
         
         String appointments = "";
-        Jdbc jdbc = new Jdbc();
         
         //get current date
         LocalDate currentDate = java.time.LocalDate.now();
@@ -68,11 +59,7 @@ public class DoctorServlet extends HttpServlet {
     */
     private HttpServletRequest createPrescription(HttpServletRequest request){
         
-        
-        //create obj of database and get session
-        Jdbc jdbc = new Jdbc();
         HttpSession session = request.getSession();
-        
         
        //get parameters from prescription form
        String patientID = request.getParameter("patientID");
@@ -122,9 +109,6 @@ public class DoctorServlet extends HttpServlet {
     */
      private HttpServletRequest getPatientDetail(HttpServletRequest request){
         
-        
-        //create obj of database and get session
-        Jdbc jdbc = new Jdbc();
         HttpSession session = request.getSession();
         
         
