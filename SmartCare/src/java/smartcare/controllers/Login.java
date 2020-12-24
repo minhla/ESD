@@ -9,6 +9,7 @@ package smartcare.controllers;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -17,13 +18,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.hibernate.validator.internal.util.logging.Log;
+import smartcare.models.Admin;
+import smartcare.models.Nurse;
+import smartcare.models.Doctor;
+import smartcare.models.Patient;
 import smartcare.models.database.Jdbc;
 import smartcare.models.User;
 
 
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
+@WebServlet(name = "Login", urlPatterns = {"/Login.do"})
 public class Login extends HttpServlet {
+    
+    private void setupUserSession(User user, String[] details, HttpSession session)
+    {
+        user.setUserID(details[0]);
+        user.setName(details[1]);
 
+        session.setAttribute("user", user);            
+        session.setAttribute("userEmail", user.getEmail());            
+        session.setAttribute("userType", user.getUserType());
+    }
+    
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -35,7 +51,6 @@ public class Login extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
     }
     
 
@@ -80,30 +95,48 @@ public class Login extends HttpServlet {
         //attempt a login
         if(jdbc.loginStmt("Users", entrdEmail, entrdPass))
         {
-            //set the session variable
-            User user = new User();
-            String details[] = jdbc.getResultSet("uuid, firstName", "email = '"+entrdEmail+"'", "Users", 2).split(" ");
-            user.setUserID(details[0]);
-            user.setName(details[1]);
-            session.setAttribute("user", user);
-            //send to a different landing page depending on the user's account type.
-            String accType = jdbc.getValueStmt("USERTYPE", "Email='" + entrdEmail + "'", "Users");
-            session.setAttribute("userEmail", entrdEmail);
+            
+            String details[] = jdbc.getResultSet("uuid, firstName, usertype", "email = '"+entrdEmail+"'", "Users", 3).split(" ");
+
+            String accType = details[2];
+
             switch(accType)
             {
                 case "A": //admin
+                    
+                    Admin admin = new Admin();
+                    admin.setUserType("A");
+                    setupUserSession(admin, details, session);
+                    
                     setCookies(entrdEmail, session, response);
                     response.sendRedirect(request.getContextPath() + "/AdminServlet.do");
                     break;
+                    
                 case "P": //patient
+                    
+                    Patient patient = new Patient();
+                    patient.setUserType("P");
+                    setupUserSession(patient, details, session); 
+                    
                     setCookies(entrdEmail, session, response);
                     response.sendRedirect(request.getContextPath() + "/PatientServlet.do");
                     break;
+                    
                 case "N": //nurse
+                    
+                    Nurse nurse = new Nurse();
+                    nurse.setUserType("N");
+                    setupUserSession(nurse, details, session);                     
+                    
                     setCookies(entrdEmail, session, response);
                     response.sendRedirect(request.getContextPath() + "/NurseServlet.do");
                     break;
                 case "D": //doctor
+                    
+                    Doctor doctor = new Doctor();
+                    doctor.setUserType("D");
+                    setupUserSession(doctor, details, session);                       
+                    
                     setCookies(entrdEmail, session, response);
                     response.sendRedirect(request.getContextPath() + "/DoctorServlet.do");
                     break;
@@ -117,9 +150,11 @@ public class Login extends HttpServlet {
         {   //print error message in the event that we cannot find the account
             request.setAttribute("errorMsg", "Login failed - account not found.");
             request.getRequestDispatcher("views/login.jsp").forward(request, response);
-        } 
+        }
+        
     }
 
+    
     /**
      * Returns a short description of the servlet.
      *
