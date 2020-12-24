@@ -14,16 +14,25 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 public class Jdbc implements ServletContextListener{
+    
+    //Singleton instance
+    private static Jdbc JDBC_INSTANCE = null;
     //The URL for the database
     static final String DB_URL = "jdbc:derby://localhost:1527/SmartCare";
     
     //Database credentials
     static final String USER = "SmartCare";
     static final String PASS = "HSVu2G";
-    
+    //TODO make this a singleton
     public Jdbc()
     {
 
+    }
+    public static Jdbc getJdbc(){
+        if(JDBC_INSTANCE == null){
+            JDBC_INSTANCE = new Jdbc();
+        }
+        return JDBC_INSTANCE;
     }
     
     /*
@@ -95,7 +104,8 @@ public class Jdbc implements ServletContextListener{
             e.printStackTrace();
         }     
         
-        return sb.toString();
+        String output = sb.toString();
+        return new ArrayList<String>(String.);
     }
     
         /*
