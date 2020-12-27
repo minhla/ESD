@@ -29,12 +29,13 @@ import smartcare.models.User;
 @WebServlet(name = "Login", urlPatterns = {"/Login.do"})
 public class Login extends HttpServlet {
 
+    private Jdbc db = Jdbc.getJdbc();
+    
     private void setupUserSession(User user, String[] details, HttpSession session)
     {
         user.setUserID(details[0]);
         user.setName(details[1]);
 
-    Jdbc db = Jdbc.getJdbc();
         session.setAttribute("user", user);
         session.setAttribute("userEmail", user.getEmail());
         session.setAttribute("userType", user.getUserType());
