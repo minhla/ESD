@@ -73,39 +73,53 @@
             20
         </session-timeout>
     </session-config>
-    <welcome-file-list>
-        <welcome-file>views/login.jsp</welcome-file>
-        <welcome-file>login.jsp</welcome-file>
-    </welcome-file-list>
-    <!--<filter>
-        <filter-name>RequestLoggingFilter</filter-name>
-        <filter-class>smartcare.controllers.filters.RequestLoggingFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>RequestLoggingFilter</filter-name>
-        <servlet-name>Login</servlet-name>
-        <dispatcher>REQUEST</dispatcher>
-    </filter-mapping>
-    <filter>
-        <filter-name>AuthenticationFilter</filter-name>
-        <filter-class>smartcare.controllers.filters.AuthenticationFilter</filter-class>
-    </filter>-->
-    <!--
-    <filter>
-        <filter-name>AuthenticationFilter</filter-name>
-        <filter-class>smartcare.controllers.filters.AuthenticationFilter</filter-class>
-    </filter>
     <filter>
         <filter-name>RF</filter-name>
         <filter-class>smartcare.controllers.filters.RequestLoggingFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>AdminFilter</filter-name>
+        <filter-class>smartcare.controllers.filters.AdminFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>DoctorFilter</filter-name>
+        <filter-class>smartcare.controllers.filters.DoctorFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>NurseFilter</filter-name>
+        <filter-class>smartcare.controllers.filters.NurseFilter</filter-class>
+    </filter>
+     <filter>
+        <filter-name>PatientFilter</filter-name>
+        <filter-class>smartcare.controllers.filters.PatientFilter</filter-class>
+    </filter>
     <filter-mapping>
-        <filter-name>AuthenticationFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <filter-name>AdminFilter</filter-name>
+        <servlet-name>AdminServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
     <filter-mapping>
+        <filter-name>DoctorFilter</filter-name>
+        <servlet-name>DoctorServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>NurseFilter</filter-name>
+        <servlet-name>NurseServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>PatientFilter</filter-name>
+        <servlet-name>PatientServlet</servlet-name>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <!--<filter-mapping>
         <filter-name>RF</filter-name>
         <url-pattern>/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
     </filter-mapping>-->
+    <welcome-file-list>
+        <welcome-file>views/login.jsp</welcome-file>
+        <welcome-file>login.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>

@@ -1,5 +1,5 @@
 /*
-Class: AuthenticationFilter
+Class: AdminFilter
 Description: 
 */
 
@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -18,12 +19,14 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import smartcare.models.User;
 
-public class AuthenticationFilter implements Filter
+public class AdminFilter implements Filter
 {
-    
+    private static final String ADMIN_FILTER_ERROR = "adminFilterError";
+    private static final String LOGIN_JSP = "views/login.jsp";
     private ServletContext context;
-
+    
     @Override
     public void init(FilterConfig fConfig) throws ServletException {
         this.context = fConfig.getServletContext();
@@ -32,26 +35,19 @@ public class AuthenticationFilter implements Filter
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse res = (HttpServletResponse) response;
+        // Get the current user from the session
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpSession httpSession = httpRequest.getSession(false);
         
-        String uri = req.getRequestURI();
-        this.context.log("Requested Resouces::" + uri);
-        
-        HttpSession session = req.getSession(false);
-        
-        if(session == null & !(uri.endsWith("html") || uri.endsWith("Login.do")))
-        {
-            this.context.log("Unauthorized access request");
-            res.sendRedirect("login.jsp");
-        }
-        else
-        {
-            //pass the request along to the filter chain
+        // Check if the user is an admin
+        if (httpSession.getAttribute("userType") != "A") {
+            request.setAttribute(ADMIN_FILTER_ERROR, "Unauthorised attempt to access admin page.");
+            RequestDispatcher view = request.getRequestDispatcher(LOGIN_JSP);
+            view.forward(request, response);
+        } else {
             chain.doFilter(request, response);
         }
     }
-
     @Override
     public void destroy() {
         //close resources here

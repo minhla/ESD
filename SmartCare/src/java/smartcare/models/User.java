@@ -7,7 +7,9 @@ public class User {
     private String name;
     private String username;
     private String password;
-
+    private String email;
+    private String userType;
+    
     public String getUserID() {
         return userID;
     }
@@ -40,4 +42,22 @@ public class User {
         this.password = password;
     }
     
-}
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public String getUserType()
+    {
+        return userType;
+    } 
+    
+    public void setUserType(String userType)
+    {
+        this.userType = userType;
+    }
+    
+}   
