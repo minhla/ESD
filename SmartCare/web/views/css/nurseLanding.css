@@ -1,0 +1,115 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background-color: mistyrose;
+}
+
+textarea {
+  resize: vertical;
+  max-height: 200px;
+  min-height: 130px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"] {
+  min-width: 200px;
+  max-width: 250px;
+  border: none;
+  border-bottom: solid 2px lightgray;
+  transition: all 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus {
+  outline: none;
+  border: none;
+  border-bottom: solid 2px #ff416c;
+}
+
+input[type="submit"] {
+  letter-spacing: 1px;
+  background-color: white;
+  border-radius: 15px;
+  height: 30px;
+  padding: 8px 16px;
+  border: 1px solid #ff416c;
+  outline: none;
+  color: #ff416c;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+input[type="submit"]:hover {
+  cursor: pointer;
+  background-color: #ff416c;
+  color: white;
+}
+
+.outer-container {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 0 20px;
+}
+
+.top-bar {
+  height: 50px;
+  padding: 0 15px;
+  background-color: salmon;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-bar > p {
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.logout-button {
+  cursor: pointer;
+}
+
+.top-bar input {
+  border-radius: 0;
+  background-color: inherit;
+  height: 50px;
+  width: 120px;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  outline: none;
+  color: white;
+  transition: all 0.2s ease-in-out;
+}
+
+.top-bar input:hover {
+  cursor: pointer;
+  background-color: lightsalmon;
+}
+
+.appointment-container {
+  background-color: white;
+  width: 29%;
+  border-radius: 15px;
+  padding: 25px 25px 0 25px;
+  -webkit-box-shadow: 0px 0px 20px -6px rgba(0,0,0,0.56);
+  -moz-box-shadow: 0px 0px 20px -6px rgba(0,0,0,0.56);
+  box-shadow: 0px 0px 20px -6px rgba(0,0,0,0.56);
+}
+
+.appointment-container h1 {
+  margin: 0;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid pink;
+}
+
+.appointment-list {
+  margin: 15px 0;
+}
