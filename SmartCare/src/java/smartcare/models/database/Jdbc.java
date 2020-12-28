@@ -248,10 +248,10 @@ public class Jdbc implements ServletContextListener{
             String email - The user's email.
             String password - the user's password.
     */
-    public boolean loginStmt(String table, String email, String password)
+    public boolean loginStmt(String username, String password)
     {
         Statement stmt = null;
-        String sql = "SELECT email, password FROM " + table;
+        String sql = "SELECT username, password FROM USERS";
         
         Connection conn = this.connect();
         
@@ -262,13 +262,10 @@ public class Jdbc implements ServletContextListener{
         
         while(rs.next())
         {
-            String eml = rs.getString("email");
+            String eml = rs.getString("username");
             String pas = rs.getString("password");
             
-            System.out.println(eml);
-            System.out.println(pas);
-            
-            if (eml.equalsIgnoreCase(email) && pas.equals(password))
+            if (eml.equalsIgnoreCase(username) && pas.equals(password))
             {   
                 System.out.println("Login credentials accepted.");
                 return true;
