@@ -98,7 +98,6 @@ public class Login extends HttpServlet {
             //set the session variable
             User user = new User();
             ArrayList<String> details = db.getResultList("username, usertype", "username='" + entrdUsername + "'", "USERS", 2);
-            System.out.println(details);
             user.setUsername(details.get(0));
             //send to a different landing page depending on the user's account type.
             String accType = details.get(1);

@@ -5,8 +5,8 @@ CREATE TABLE Appointments (
     starttime TIME,
     endtime TIME,
     comment VARCHAR(50),
-    doctorid INT,
-    patientid INT,
-    FOREIGN KEY (doctorid) REFERENCES Users(uuid),
-    FOREIGN KEY (patientid) REFERENCES Users(uuid)
+    doctor_username VARCHAR(35),
+    patient_username VARCHAR(35),
+    FOREIGN KEY (doctor_username) REFERENCES Users(username),
+    FOREIGN KEY (patient_username) REFERENCES Users(username)
 )

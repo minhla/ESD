@@ -4,7 +4,7 @@ CREATE TABLE Prescription (
     weight INT,
     allergies VARCHAR(500),
     medicine VARCHAR(500),
-    patientid INT,
+    patient_username VARCHAR(35),
     issuedate VARCHAR(20),
-    FOREIGN KEY (patientid) REFERENCES Users(uuid)    
+    FOREIGN KEY (patient_username) REFERENCES Users(username)    
 )

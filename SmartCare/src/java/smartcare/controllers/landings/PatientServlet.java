@@ -105,7 +105,6 @@ public class PatientServlet extends HttpServlet {
         
         //get the right user ID from the session variable
         User user = (User)session.getAttribute("user");
-        System.out.println("userID = " + user.getUserID());
         
         //check if that time slot is free (not implemented yet)
         
