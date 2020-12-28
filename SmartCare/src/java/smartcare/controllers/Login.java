@@ -2,7 +2,7 @@
 Class: login
 Description: the servlet for handing login interactions
 Created: 01/12/2020
-Updated: 06/12/2020
+Updated: 24/12/2020
 Author/s: Michael Tonkin
 */
 package smartcare.controllers;

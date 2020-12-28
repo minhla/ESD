@@ -1,9 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package smartcare.controllers.landings;
+Class: RegisterStaff
+Description: allows Admin users to handle the registration of staff members.
+Created: 10/12/2020
+Updated: 28/12/2020
+Author/s: Michael Tonkin
+*/
+package smartcare.controllers.registration;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,13 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import smartcare.models.database.Jdbc;
 
-/**
- *
- * @author Michael
- */
-public class RegisterStaff extends HttpServlet {
 
-    Jdbc jdbc = Jdbc.getJdbc();
+public class RegisterStaff extends HttpServlet 
+{
+
+    private Jdbc jdbc = Jdbc.getJdbc();
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -66,9 +66,7 @@ public class RegisterStaff extends HttpServlet {
         processRequest(request, response);
         
         String viewPath = "views/landing/adminLanding.jsp";
-        
-        HttpSession session = request.getSession();
-        
+                
         //get parameters from form
         String firstname = request.getParameter("new_acc_firstname");
         String lastname = request.getParameter("new_acc_lastname");

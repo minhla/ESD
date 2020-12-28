@@ -1,4 +1,4 @@
-package smartcare.controllers;
+package smartcare.controllers.registration;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,7 +17,7 @@ import smartcare.models.User;
  * @author David
  */
 @WebServlet(name = "/AddPatient")
-public class AddPatient extends HttpServlet {
+public class RegisterPatient extends HttpServlet {
 
         Jdbc jdbc = Jdbc.getJdbc();
     

@@ -1,4 +1,10 @@
-
+/*
+Class: Logout
+Description: clears browser session upon the user logging out.
+Created: 06/12/2020
+Updated: 06/12/2020
+Author/s: Michael Tonkin
+*/
 package smartcare.controllers;
 
 import java.io.IOException;
@@ -28,7 +34,7 @@ public class Logout extends HttpServlet {
     		}
     	}
     	}
-    	//invalidate the session if exists
+    	//invalidate the session if one exists
     	HttpSession session = request.getSession(false);
     	System.out.println("User="+session.getAttribute("user"));
     	if(session != null){
