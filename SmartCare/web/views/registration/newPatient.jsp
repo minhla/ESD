@@ -23,7 +23,6 @@
             Last name: <input type="text" name="lastname"><br/>
             Date of birth: <input type="date" name="dob"><br/>
             Email: <input type="text" name="email"><br/>
-            Password: <input type="password" name="password"><br/>
             Phone: <input type="text" name="phone"><br/>
             Address: <input type="text" name="address"><br/>
 

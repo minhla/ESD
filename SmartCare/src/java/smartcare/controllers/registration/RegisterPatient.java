@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import smartcare.models.database.Jdbc;
 import smartcare.models.User;
+import smartcare.util.RegistrationUtils;
 
 /**
  *
@@ -19,8 +20,8 @@ import smartcare.models.User;
 @WebServlet(name = "/AddPatient")
 public class RegisterPatient extends HttpServlet {
 
-        Jdbc jdbc = Jdbc.getJdbc();
-    
+        private Jdbc jdbc = Jdbc.getJdbc();
+        private RegistrationUtils ru = new RegistrationUtils();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,15 +42,16 @@ public class RegisterPatient extends HttpServlet {
         //get parameters from form
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
+        String username = firstname.charAt(0) + "-" + lastname;
+        username = username.toLowerCase();
         String dob = request.getParameter("dob");
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
-        String password = request.getParameter("password");
-   
+        String password = ru.dateToPassword(dob);
         //Add to database
-        String table = "users (firstname, lastname, usertype, dob, phone, email, address, password)";
-        String values = "('"  + firstname + "','" + lastname + "', '"+ "P"
+        String table = "users (username, firstname, lastname, usertype, dob, phone, email, address, password)";
+        String values = "('" + username + "','" + firstname + "','" + lastname + "', '"+ "P"
                               + "', '" + dob + "', '" + phone +"', '"
                               + email + "', '" + address + "', '" + password +"')";
         
