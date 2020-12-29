@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.hibernate.validator.internal.util.logging.Log;
+import smartcare.models.Account;
 import smartcare.models.Admin;
 import smartcare.models.Nurse;
 import smartcare.models.Doctor;
@@ -30,6 +31,7 @@ import smartcare.models.User;
 public class Login extends HttpServlet {
 
     private Jdbc db = Jdbc.getJdbc();
+    private Account ac = new Account();
     
     private void setupUserSession(User user, String[] details, HttpSession session)
     {
@@ -95,7 +97,7 @@ public class Login extends HttpServlet {
         System.out.println(entrdEmail+" "+entrdPass);
 
         //attempt a login
-        if(db.loginStmt("Users", entrdEmail, entrdPass))
+        if(ac.loginStmt("Users", entrdEmail, entrdPass, db))
         {
             //set the session variable
             User user = new User();
