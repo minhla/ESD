@@ -26,6 +26,14 @@ public class Appointment {
         this.userID = userID;
     }
     
+    public Appointment(String ID, String starttime, String endtime, String date, String comment) {
+        this.ID = ID;
+        this.starttime = starttime;
+        this.endtime = endtime;
+        this.date = date;
+        this.comment = comment;
+    }
+    
     public Appointment() {
     }
 

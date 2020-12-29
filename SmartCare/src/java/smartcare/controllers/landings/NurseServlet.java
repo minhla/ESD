@@ -10,11 +10,16 @@ package smartcare.controllers.landings;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import smartcare.models.Appointment;
+import smartcare.models.Nurse;
+import smartcare.models.User;
 import smartcare.models.database.Jdbc;
 
 /**
@@ -36,38 +41,27 @@ public class NurseServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
-      private HttpServletRequest showAppointments(HttpServletRequest request){
-        
-        String appointments = "";
-        
-        //get current date
-        LocalDate currentDate = java.time.LocalDate.now();
-        
-        
-        String column = "appointmentid, comment, starttime, endtime, appointmentdate";
-        int numOfColumns = 5;
-        String table = "Appointments";
-        String condition = "appointmentdate = '" + currentDate.toString()+"'";
-        
-        //Get all of the appointments for the doctor
-        appointments = jdbc.getResultSet(column, condition, table, numOfColumns);
-        System.out.println("Hello, appointments = " + appointments);
-        
-        request.setAttribute("appointmentsdata", appointments);
-        request.setAttribute("status", "button pressed");
-        
-        return request;
-        
+    
+    private void showAppointments(HttpServletRequest request, Nurse nurse){
+        ArrayList<Appointment> appointments;
+        appointments = nurse.getAppointments();
+        request.setAttribute("appointments", appointments);
     }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        //show appointment
-        request = showAppointments(request);
+        HttpSession session = request.getSession();
         
+        //Make a new doctor instance from session variable
+        Nurse nurse;
+        nurse = (Nurse)(User)session.getAttribute("user");
         
+        //Show appointments
+        showAppointments(request, nurse);
+        
+        //send response
         RequestDispatcher view = request.getRequestDispatcher(JSP);
         view.forward(request,response);
     }

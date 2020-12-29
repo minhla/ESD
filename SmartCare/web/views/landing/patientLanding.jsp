@@ -1,3 +1,4 @@
+<%@page import="smartcare.models.User"%>
 <%@page import="smartcare.models.Appointment"%>
 <%@page import="java.util.ArrayList"%>
 <%--
@@ -45,7 +46,7 @@
 
         <div class="outer-container">
             <div class="book-appointment-container">
-                <h2> Welcome, <%out.println((String) session.getAttribute("userEmail"));%></h2>
+                <h2> Welcome, <%out.println(((User)session.getAttribute("user")).getName());%></h2>
                 <h1>Book an appointment</h1>
                 <div name="left">
                     <h4>Fill in the form to book the appointment</h4>
@@ -65,19 +66,35 @@
                     </p>
                 </div>
                 <div>
-                    <h4> Your booked appointments: </h4>
-                    <table>
+                    <%
+                        //check if to show doctors appointments
+                        boolean showTable = false;
+                        if(!((ArrayList)request.getAttribute("appointments")).isEmpty()){
+                            showTable = true;
+                        }
+                    %>
+                    
+                    <%
+                        if(showTable){
+                            out.print("<h4>Your appointments:</h4>");
+                        }else{
+                            out.print("<h4>You haven't got any booked appointments</h4>");
+                        }
+                    %>
+                    
+                    <table <% if(!showTable){out.print("hidden='true'");} %> >
                         <tr>
                             <th>Appointment ID</th>
                             <th>Date</th>
                             <th>Start time</th>
+                            <th>Comment</th>
                             <th>Action</th>
                         </tr>
                         <%
-                            if (request.getAttribute("Appointments") != null) {
-                                ArrayList<Appointment> a = new ArrayList<Appointment>();
-                                a = (ArrayList) request.getAttribute("Appointments");
-        
+                            if (showTable) {
+                                ArrayList<Appointment> a;
+                                a = (ArrayList) request.getAttribute("appointments");
+                                
                                 //loop through all of the appointments in the array list
                                 for (Appointment appointment : a) {
                                     out.print("<form action='PatientServlet.do' name ='deleteAppointment' method='Post'>");
@@ -93,12 +110,14 @@
                                     out.print(appointment.getStarttime());
                                     out.print("</td>");
                                     out.print("<td>");
+                                    out.print(appointment.getComment());
+                                    out.print("</td>");
+                                    out.print("<td>");
                                     out.print("<input type='submit' value='Cancel' name='action'>");
                                     out.print("</td>");
                                     out.print("</tr>");
                                     out.print("</form>");
                                 }
-        
                             }
                         %>
                     </table>
