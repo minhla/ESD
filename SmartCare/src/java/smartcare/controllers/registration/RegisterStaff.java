@@ -9,6 +9,10 @@ package smartcare.controllers.registration;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,12 +20,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import smartcare.models.database.Jdbc;
+import smartcare.util.RegistrationUtils;
 
 
 public class RegisterStaff extends HttpServlet 
 {
 
     private Jdbc jdbc = Jdbc.getJdbc();
+    private RegistrationUtils ru = new RegistrationUtils();
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -70,18 +76,24 @@ public class RegisterStaff extends HttpServlet
         //get parameters from form
         String firstname = request.getParameter("new_acc_firstname");
         String lastname = request.getParameter("new_acc_lastname");
+        String username = firstname.charAt(0) + "-" + lastname;
+        username = username.toLowerCase();
         String dob = request.getParameter("new_acc_dob");
         String phone = request.getParameter("new_acc_phone");
         String email = request.getParameter("new_acc_email");
         String address = request.getParameter("new_acc_address");
-        String password = request.getParameter("new_acc_password");
+        String password = ru.dateToPassword(dob);
         String userType = request.getParameter("new_acc_type");
-   
+        
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        LocalDateTime date = LocalDateTime.now();  
+        String regdate = dateFormat.format(date);
+        
         //Add to database
-        String table = "users (firstname, lastname, usertype, dob, phone, email, address, password)";
-        String values = "('"  + firstname + "','" + lastname + "', '"+ userType
+        String table = "users (username, firstname, lastname, usertype, dob, phone, email, address, password, regdate)";
+        String values = "('" + username  + "', '"+  firstname + "','" + lastname + "', '"+ userType
                               + "', '" + dob + "', '" + phone +"', '"
-                              + email + "', '" + address + "', '" + password +"')";
+                              + email + "', '" + address + "', '" + password  + "', '" + regdate +"')";
         
         
         int success = jdbc.addRecords(table, values);

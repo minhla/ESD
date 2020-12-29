@@ -121,7 +121,6 @@
                     <p>Date of birth: <input type="date" name="new_acc_dob"></p>
                     <p>Phone number: <input type="text" name="new_acc_phone" placeholder="Maximum 11 numbers"></p>
                     <p>Address: <input type="text" name="new_acc_address" placeholder="Somewhere on Earth..."></p>
-                    <p>Password: <input type="password" name="new_acc_password" placeholder="Make it as secure as possible"></p>
                     <input type="submit" value="Submit">
                 </form>
                 <%

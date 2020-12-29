@@ -2,6 +2,9 @@ package smartcare.controllers.registration;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -49,11 +52,16 @@ public class RegisterPatient extends HttpServlet {
         String email = request.getParameter("email");
         String address = request.getParameter("address");
         String password = ru.dateToPassword(dob);
+        
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        LocalDateTime date = LocalDateTime.now();  
+        String regdate = dateFormat.format(date);
+        
         //Add to database
-        String table = "users (username, firstname, lastname, usertype, dob, phone, email, address, password)";
-        String values = "('" + username + "','" + firstname + "','" + lastname + "', '"+ "P"
+        String table = "users (username, firstname, lastname, usertype, dob, phone, email, address, password, regdate)";
+        String values = "('" + username  + "', '"+  firstname + "','" + lastname + "', '"+ "P"
                               + "', '" + dob + "', '" + phone +"', '"
-                              + email + "', '" + address + "', '" + password +"')";
+                              + email + "', '" + address + "', '" + password  + "', '" + regdate +"')";
         
         
         int success = jdbc.addRecords(table, values);
