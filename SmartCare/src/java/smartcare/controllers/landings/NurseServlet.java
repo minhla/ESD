@@ -41,7 +41,14 @@ public class NurseServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     
-    
+    /**
+    * Retrieves appointments for current Nurse (scheduled for today).
+    * Finds the appointment for this patient and alerts the nurseLanding.
+    * Links the Nurse.getAppointments with nurseLanding
+    *
+    * @param request The servlet request variable.
+    * @param patient The patient object to find the appointments of.
+    */
     private void showAppointments(HttpServletRequest request, Nurse nurse){
         ArrayList<Appointment> appointments;
         appointments = nurse.getAppointments();

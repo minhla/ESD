@@ -126,7 +126,15 @@ public class DoctorServlet extends HttpServlet {
        return request;
         
     }
-     
+    
+    /**
+    * Retrieves appointments for current doctor (scheduled for today).
+    * Finds the appointment for this patient and alerts the doctor Landing.
+    * Links the Doctor.getAppointments with doctorLanding
+    *
+    * @param request The servlet request variable.
+    * @param patient The patient object to find the appointments of.
+    */
     private void showAppointments(HttpServletRequest request, Doctor doctor){
         ArrayList<Appointment> appointments;
         appointments = doctor.getAppointments();

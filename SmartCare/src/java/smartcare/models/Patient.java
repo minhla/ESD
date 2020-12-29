@@ -23,9 +23,8 @@ public class Patient extends User
     */
     public ArrayList<Appointment> getAppointments(){
         ArrayList<Appointment> appointmentList = new ArrayList<>();
-        ArrayList<String> r = new ArrayList<>();
+        ArrayList<String> r;
         
-        //retreve all available appointments from database
         int numOfColumns = 5;
         String column = "appointmentid, starttime, endtime, appointmentdate, comment";
         String table = "Appointments";
@@ -34,7 +33,7 @@ public class Patient extends User
         //Get all of the appointments for this user
         r = this.jdbc.getResultList(column, condition, table, numOfColumns);
         
-        //get the received data and put it into appointment objects
+        //Get the received data and put it into appointment objects
         for(int i = 0; i < r.size(); i+=numOfColumns){
             Appointment app = new Appointment(r.get(i), r.get(i+1), r.get(i+2), r.get(i+3), r.get(i+4), this.getUserID());
             appointmentList.add(app);
@@ -59,6 +58,47 @@ public class Patient extends User
             deleteSuccess = "Successfully cancelled appointment";
         }
         return deleteSuccess;
+    }
+    
+    /**
+    * Adds an appointment to the appointment table in the database.
+    * Adds an appointment to the appointment table and returns 
+    * a success message.
+    *
+    * @param startTime start time of the appointment.
+    * @param date The date of the appointment.
+    * @param comment The reason of the appointment.
+    * @return      String with a success message about adding the appointment.
+    */
+    public String addAppointment(String startTime, String date, String comment){
+        String updateSuccess;
+        String endtime = startTime;
+        
+        //get the right user ID from the session variable
+        System.out.println("userID = " + this.getUserID());
+        
+        //check if that time slot is free (not implemented yet)
+        
+        //sanitize the comment input
+        comment = comment.replace("'", "''");
+        //check the length of the comment
+        if(comment.length() > 50){
+            comment = comment.substring(0, Math.min(comment.length(), 50));
+        }
+        
+        //Add to database
+        String table = "appointments (appointmentdate, starttime, endtime, comment, patientID)";
+        String values = "('"  + date + "', '"+ startTime+ "', '" 
+                + endtime + "', '" + comment + "', " + this.getUserID() +")";
+        
+        int success = this.jdbc.addRecords(table, values);
+        if(success != 0){
+            updateSuccess = "The appointment has been scheduled!";
+        }else{
+            updateSuccess = "There was a problem adding an appointment";
+        }
+        
+        return updateSuccess;
     }
     
 }

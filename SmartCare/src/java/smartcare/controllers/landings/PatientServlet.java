@@ -38,6 +38,7 @@ public class PatientServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    @Deprecated
     private HttpServletRequest bookAppointmentWithDoctor(HttpServletRequest request){
         HttpSession session = request.getSession();
         
@@ -92,40 +93,7 @@ public class PatientServlet extends HttpServlet {
         
     return request;
     }
-        
-    private HttpServletRequest bookAppointment(HttpServletRequest request){
-        
-        HttpSession session = request.getSession();
-        
-       //get parameters from form
-        String starttime = request.getParameter("starttime");
-        // TODO add 30 minutes to start time for apointment duration
-        String endtime = starttime;
-        String date = request.getParameter("date");
-        String comment = request.getParameter("comment");
-        
-        //get the right user ID from the session variable
-        User user = (User)session.getAttribute("user");
-        System.out.println("userID = " + user.getUserID());
-        
-        //check if that time slot is free (not implemented yet)
-        
-        //Add to database
-        String table = "appointments (appointmentdate, starttime, endtime, comment, patientID)";
-        String values = "('"  + date + "', '"+ starttime+ "', '" 
-                + endtime + "', '" + comment + "', " + user.getUserID() +")";
-        
-        int success = jdbc.addRecords(table, values);
-        if(success != 0){
-            request.setAttribute("updateSuccess", "The appointment has been scheduled!");
-        }else{
-            request.setAttribute("updateSuccess", "There has been a problem.");
-        }
-        
-        return request;
-    }
-    
-    
+       
     
       private HttpServletRequest reIssuePrescription(HttpServletRequest request){
         
@@ -188,11 +156,11 @@ public class PatientServlet extends HttpServlet {
     
     /**
     * Retrieves appointments for particular patient.
-    * Finds the appointment for this patient.
+    * Finds the appointment for this patient and alerts the patientLanding.
+    * Links the Patient.getAppointments with patientLanding.
     *
     * @param request The servlet request variable.
     * @param patient The patient object to find the appointments of.
-    * @return      void
     */
     private void showAppointments(HttpServletRequest request, Patient patient){
         ArrayList<Appointment> appointments;
@@ -200,10 +168,34 @@ public class PatientServlet extends HttpServlet {
         request.setAttribute("appointments", appointments);
     }
     
+    /**
+    * Deletes an appointment from the database.
+    * Deletes appointment for this patient and alerts the patientLanding.
+    * Links the Patient.deleteAppointment with the patientLanding.
+    *
+    * @param request The servlet request variable.
+    * @param patient The patient object who's appointment we have to delete
+    */
     private void deleteAppointment(HttpServletRequest request, Patient patient){
         String appointmentId = request.getParameter("appointmentId");
         String deleteSuccess = patient.deleteAppointment(appointmentId);
         request.setAttribute("deleteSuccess", deleteSuccess);
+    }
+    
+    /**
+    * Adds an appointment to the database.
+    * Adds the appointment for this patient and alerts the patientLanding.
+    * Links the Patient.addAppointment with the patientLanding.
+    *
+    * @param request The servlet request variable.
+    * @param patient The patient object for which to add appointment.
+    */
+    private void addAppointment(HttpServletRequest request, Patient patient){
+        String startTime = request.getParameter("starttime");
+        String date = request.getParameter("date");
+        String comment = request.getParameter("comment");
+        String addSuccess = patient.addAppointment(startTime, date, comment);
+        request.setAttribute("updateSuccess", addSuccess);
     }
     
     
@@ -220,21 +212,22 @@ public class PatientServlet extends HttpServlet {
         //Show all of the scheduled appointments
         showAppointments(request, patient);
         
-        
         //get action from patient landing
         String action = request.getParameter("action");
         if(action != null)
         {
-            if(action.equals("Book Appointment")){
-                //request = bookAppointmentWithDoctor(request);
-                request = bookAppointment(request);
-            }
-            else if(action.equals("request for re-issue"))
-            {
-                request = reIssuePrescription(request);
-            }
-            else if(action.equals("Cancel")){
-                deleteAppointment(request, patient);
+            switch (action) {
+                case "Book Appointment":
+                    addAppointment(request, patient);
+                    break;
+                case "request for re-issue":
+                    request = reIssuePrescription(request);
+                    break;
+                case "Cancel":
+                    deleteAppointment(request, patient);
+                    break;
+                default:
+                    break;
             }
             
             showAppointments(request, patient);
