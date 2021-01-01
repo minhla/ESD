@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import smartcare.models.Appointment;
 import smartcare.models.Patient;
+import smartcare.models.Prescription;
 import smartcare.models.database.Jdbc;
 import smartcare.models.User;
 
@@ -104,49 +105,30 @@ public class PatientServlet extends HttpServlet {
        String patientID = request.getParameter("patientID");
        String issuedate = request.getParameter("issuedate");
 
-       String prescription = null;
-       String patientDetail = null;
-
-
+       //create prescription
+       Prescription prescription = new Prescription();
+       
+       prescription.reIssuePrescription(patientID, issuedate);
+       
        //get prescription from database
-       try 
-        {
-            //get patient detail from database
-            patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(uuid = "+patientID+" AND usertype = 'P')", "users",3);
-            prescription = jdbc.getResultSet("weight, allergies, medicine", "(issuedate = '"+issuedate.toString()+"' AND patientid = "+patientID+")","prescription",3);
-            String weight = jdbc.getResultSet("weight","(issuedate = '"+issuedate.toString()+"' AND patientid = "+patientID+")","prescription",1);
-            String allergies = jdbc.getResultSet("allergies","(issuedate = '"+issuedate.toString()+"' AND patientid = "+patientID+")","prescription",1);
-            String medicine = jdbc.getResultSet("medicine", "(issuedate = '"+issuedate.toString()+"' AND patientid = "+patientID+")","prescription",1);
+
+            ArrayList<String> result = prescription.reIssuePrescription(patientID, issuedate);
             
             //check if patient and prescription are available or not
-            if(!patientDetail.equals(""))
+            if(result.size() !=0)
             {
-                if(!prescription.equals(""))
-                {
-                    String detailList [] = patientDetail.split(" ");
-                    session.setAttribute("prescriptionDetail","Patient Name: "+detailList[0]+"<br/>"+
-                                                              "Patient Surname: "+detailList[1]+"<br/>"+
-                                                              "Date of Birth : "+detailList[2]+"<br/>"+
-                                                              "Weight : "+weight+"<br/>"+
-                                                              "Allergies : "+allergies+"<br/>"+
-                                                              "Medicine : "+medicine+"<br/>");
-                } 
-                else
-                {
-                    session.setAttribute("prescriptionDetail","Prescription not found!");
-                }
-            }
+
+                    session.setAttribute("prescriptionDetail","Patient Name: "+result.get(0)+"<br/>"+
+                                                              "Patient Surname: "+result.get(1)+"<br/>"+
+                                                              "Date of Birth : "+result.get(2)+"<br/>"+
+                                                              "Weight : "+result.get(3)+"<br/>"+
+                                                              "Allergies : "+result.get(4)+"<br/>"+
+                                                              "Medicine : "+result.get(5)+"<br/>");
+            } 
             else
             {
-                session.setAttribute("prescriptionDetail","Patient not found!");
-                
+                session.setAttribute("prescriptionDetail","Prescription not found!");
             }
-        }
-
-        catch(Exception e)
-        {
-            session.setAttribute("prescriptionDetail","Patient not found!");
-        }
 
         
         //when deleting an appointment

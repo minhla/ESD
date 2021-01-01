@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,6 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import smartcare.models.Document;
+import smartcare.models.Invoice;
 import smartcare.models.database.Jdbc;
 
 /**
@@ -84,65 +87,36 @@ public class AdminServlet extends HttpServlet {
      private HttpServletRequest getWeeklyDocument(HttpServletRequest request){
         
         HttpSession session = request.getSession();
-        
-       //get current date
-       LocalDate currentDate = java.time.LocalDate.now();
-       Date date= java.sql.Date.valueOf(currentDate);
-       //get calendar
-       Calendar cl = Calendar. getInstance();
-       //set date
-       cl.setTime(date);
-       //get week num
-       int weekNum = cl.WEEK_OF_YEAR;
-       String patientDetail = null;
-       String turnover = null;
-       String payPrivate = null;
-       String payNHS = null;
-       
-       try 
-       {
-           
-           //get patient detail from database
-           turnover = jdbc.getAllResultSet("amount", "weeknum ="+weekNum, "invoice",1);
-           payPrivate = jdbc.getAllResultSet("paymenttype", "(weeknum ="+weekNum+" AND paymenttype = 'Private')", "invoice",1);
-           payNHS =  jdbc.getAllResultSet("paymenttype", "(weeknum ="+weekNum+" AND paymenttype = 'NHS')", "invoice",1);
-           
-           //calculate turnover
-           int totalTurnover =0;
-           String amount[] = turnover.split(" ");
-           for (int i=0;i<amount.length;i++)
-           {
-               totalTurnover += Integer.parseInt( amount[i]) ;          
-           }
-           
-           //count paymenttypes
-           int privateCount = payPrivate.split(" ").length;
-           int nhsCount = payNHS.split(" ").length;
-           
-           
-           if(turnover.equals(""))
-           {
-               session.setAttribute("turnover","turnover: 0 <br/> private payment: 0 <br/> pay through NHS: 0");
-           }
-           else
-           {
-               session.setAttribute("turnover","this week turn over: "+totalTurnover+"<br/>"+
-                                                                   "private payment: "+privateCount+"<br/>"+ 
-                                                                   "NHS payment: "+nhsCount+"<br/>" );
-               /*
-               String detailList [] = patientDetail.split(" ");
 
-               session.setAttribute("patientDetail","Patient Name: "+detailList[0]+"<br/>"+
-                                                    "Patient Surname: "+detailList[1]+"<br/>"+
-                                                    "Date of Birth: "+detailList[2]+"<br/>");
-               */
-           }
-       }
+       //get parameters from document form
+       String startDate = request.getParameter("startDate");
+       String endDate = request.getParameter("endDate");
        
-       catch(Exception e)
-       {
-           session.setAttribute("patientDetail","Patient not found!");
-       }
+       //create document
+       Document document = new Document();
+       
+       //produce turnover document
+       ArrayList<Integer> result = document.calTurnover(startDate, endDate);
+       
+        if(result.get(0) == 0)
+        {
+            session.setAttribute("turnover","turnover: 0 <br/> private payment: 0 <br/> pay through NHS: 0");
+        }
+        else
+        {
+            session.setAttribute("turnover","this week turn over: "+result.get(0)+"<br/>"+
+                                                                "private payment: "+result.get(1)+"<br/>"+ 
+                                                                "NHS payment: "+result.get(2)+"<br/>" );
+            /*
+            String detailList [] = patientDetail.split(" ");
+
+            session.setAttribute("patientDetail","Patient Name: "+detailList[0]+"<br/>"+
+                                                 "Patient Surname: "+detailList[1]+"<br/>"+
+                                                 "Date of Birth: "+detailList[2]+"<br/>");
+            */
+        }
+       
+       
      
         
        return request;
@@ -165,30 +139,18 @@ public class AdminServlet extends HttpServlet {
        String detail = request.getParameter("detail");
        String amount = request.getParameter("amount");
        String paymenttype = request.getParameter("paymenttype");
-       boolean status = false;
 
-       //get current date
-       LocalDate currentDate = java.time.LocalDate.now();
-       Date date= java.sql.Date.valueOf(currentDate);
-       //get calendar
-       Calendar cl = Calendar. getInstance();
-       //set date
-       cl.setTime(date);
-         //get week num
-       int weekNum = cl.WEEK_OF_YEAR;
+       //create invoice object
+       Invoice invoice = new Invoice(patientID,service,detail,amount,paymenttype);
        
        //validate the patient id
        String validation = jdbc.getResultSet("firstname, lastname, dob", "(uuid = "+patientID+" AND usertype = 'P')", "users",3);
        
        if (!validation.equals(""))
        {
-        //Add details of prescription to database
-        String table = "invoice (servicetype, detail, amount, patientid, issuedate, weeknum, paymenttype)";
-        String values = "('"  + service + "', '"+ detail+ "', "+ amount + ", " + patientID+",'"+currentDate.toString()+"',"+weekNum+",'"+paymenttype+"')";
 
-
-         int success = jdbc.addRecords(table, values);
-
+         int success = invoice.createInvoice();
+         
          //check if the database is successfully updated or not
          if(success != 0)
          {

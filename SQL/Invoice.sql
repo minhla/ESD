@@ -5,7 +5,7 @@ CREATE TABLE invoice(
     detail VARCHAR(500),
     amount INT,
     patientid INT,
-    issuedate VARCHAR(20),
+    issuedate DATE,
     weeknum INT,
     paymenttype VARCHAR(100),
     FOREIGN KEY (patientid) REFERENCES Users(uuid)    

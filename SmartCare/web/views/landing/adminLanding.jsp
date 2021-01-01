@@ -65,16 +65,16 @@
                         %>
                     </p>
                     Type of service<br/> 
-                    <select id="services">
-                        <option value="surgery">Surgery</option>
+                    <select id="services" name="services">
+                        <option value="surgery" selected="selected">Surgery</option>
                         <option value="consultation">Consultation</option>
                     </select>
                     <br/><br/>
                     Details: <br/> <textarea type="text" name="detail" rows="4" cols="50"></textarea><br/><br/>
                     Total amount:<br/> <input type="number" name="amount" ><br/><br/> 
                     Payment type:<br/>             
-                    <select id="paymenttype">
-                        <option value="NHS">NHS</option>
+                    <select id="paymenttype" name="paymenttype">
+                        <option value="NHS" selected="selected">NHS</option>
                         <option value="Private">Private</option>
                     </select>
                     <br/><br/> 
@@ -95,6 +95,8 @@
             <div class="document-form">
                 <h1>Document Management</h1>
                 <form action="AdminServlet.do" name="document management" method="Post" >
+                    Start date:<br/> <input type="date" name="startDate" ><br/><br/> 
+                    End date:<br/> <input type="date" name="endDate" ><br/><br/> 
                     <input type="submit" value="Produce Weekly Documents" name ="action"><br/>
                 </form>
                 <br/>
