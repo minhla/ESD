@@ -7,6 +7,8 @@ CREATE TABLE Appointments (
     comment VARCHAR(50),
     doctorid INT,
     patientid INT,
+    locationid INT,
+    FOREIGN KEY (locationid) REFERENCES Locations(locationID),
     FOREIGN KEY (doctorid) REFERENCES Users(uuid),
     FOREIGN KEY (patientid) REFERENCES Users(uuid)
 )

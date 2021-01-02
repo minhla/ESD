@@ -198,6 +198,21 @@ public class PatientServlet extends HttpServlet {
         request.setAttribute("updateSuccess", addSuccess);
     }
     
+    /**
+    * Pass the locations to show on Google maps.
+    * Adds the appointment for this patient and alerts the patientLanding.
+    * Links the Patient.addAppointment with the patientLanding.
+    *
+    * @param request The servlet request variable.
+    * @param patient The patient object for which to add appointment.
+    */
+    private void passLocations(HttpServletRequest request, Patient patient){
+        String[] locations = new String[3];
+        locations[0] = "0,England,NHS,51.44,-2.62";
+        locations[1] = "1,Montebelluna,private,51.47,-2.64";
+        request.setAttribute("locations", locations);
+    }
+    
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -208,6 +223,11 @@ public class PatientServlet extends HttpServlet {
         //Make a new patient instance
         Patient patient;
         patient = (Patient)(User)session.getAttribute("user");
+        
+        //show the locations in the database
+        passLocations(request, patient);
+        
+        
         
         //Show all of the scheduled appointments
         showAppointments(request, patient);

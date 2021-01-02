@@ -15,27 +15,34 @@
         <link rel="icon" 
               type="image/png" 
               href="https://i.imgur.com/Vwma7mV.png">
+        <%--<script type="text/javascript" src="${pageContext.request.contextPath}/js/index.js"></script>--%>
+        <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBr-iV0D8LDHf9NTwz-jQvjMQXbjWlkhEM&callback=initMap&libraries=&v=weekly"defer></script>
+        <script type="text/javascript">
+            <%--Set variable to be used in map.js--%>
+            var tempLocations; // a list of strings contaitinin location objects
+            var stringOfLocations; //a big string containing all of locationg objects
+            
+            //get java array and convert it to a String
+            <% String array[] = (String[])request.getAttribute("locations");
+            StringBuilder sb = new StringBuilder();
+            for(String element:array){
+                sb.append(element + "|");
+            }
+            %>
+                
+            //get java String and convert it into javascript array
+            stringOfLocations = "<%= sb.toString() %>";
+            tempLocations = stringOfLocations.split('|');
+        </script>
+        <script type="text/javascript" src="<%=request.getContextPath()%>/views/javascript/map.js"></script>
+        
+        
 
     </head>
     <body>
 
-        <%
-            //allow access only if session exists
-            String user = (String) session.getAttribute("userEmail");
-            String userName = null;
-            String sessionID = null;
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("user")) {
-                        userName = cookie.getValue();
-                    }
-                    if (cookie.getName().equals("JSESSIONID")) {
-                        sessionID = cookie.getValue();
-                    }
-                }
-            }
-        %>
+        
         <div class="top-bar">
             <p>Patient landing page</p>
 
@@ -55,8 +62,19 @@
                         Date: <input type="date" name="date"><br/> <!-- there will be a dropdown here-->
                         Reason: <input type="text" name="comment"><br/>
                         Doctor:<br/>
+                        <input type="text" id="lat" readonly="yes" hidden="false">
+                        <input type="text" id="lng" readonly="yes" hidden="false">
+                        Location: <input type="text" id="location" readonly="yes" placeholder="Choose from map"><br>
+                        Type: <input type="text" id="type" readonly="yes" placeholder="Private/NHS"><br>
+                        <input type="text" id="idNum" readonly="yes" hidden="true">
+
                         <input type="submit" value="Book Appointment" name="action">
                     </form>
+                    <h3>Choose a location</h3>
+                    <!--The div element for the map -->
+                    <div id="map">
+                        
+                    </div>
                     <p>
                         <%
                             if (request.getAttribute("updateSuccess") != null) {
