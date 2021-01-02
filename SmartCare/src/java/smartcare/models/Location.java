@@ -72,5 +72,10 @@ public class Location {
         this.lng = Float.parseFloat(lng);
     }
     
+    public String getString(){
+        String s = ",";//separator
+        return id+s+name+s+type+s+String.valueOf(lat)+s+String.valueOf(lng);
+    }
+    
     
 }

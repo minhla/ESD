@@ -26,7 +26,7 @@ public class Map {
         ArrayList<String> r;
         
         int numOfColumns = 5;
-        String column = "id, name, type, lat, lng";
+        String column = "locationid, name, type, lat, lng";
         String table = "Locations";
         String condition = "1=1";
         
