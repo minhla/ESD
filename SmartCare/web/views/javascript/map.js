@@ -21,6 +21,7 @@ function initMap() {
         var location = {idNum:tempArray[0], name:tempArray[1], type:tempArray[2], lat:parseFloat(tempArray[3]), lng:parseFloat(tempArray[4])};
         locations.push(location);
     });
+    console.log(tempLocations[0]);
     
     
     // The location of Uluru
@@ -82,7 +83,7 @@ function initMap() {
     
     function showLocations(){
         var i;
-        for(i=0; i<2; i++){
+        for(i=0; i<locations.length; i++){
             console.log("new marker added");
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(locations[i].lat, locations[i].lng),

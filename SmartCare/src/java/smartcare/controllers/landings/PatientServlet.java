@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import smartcare.models.Appointment;
+import smartcare.models.Location;
+import smartcare.models.Map;
 import smartcare.models.Patient;
 import smartcare.models.database.Jdbc;
 import smartcare.models.User;
@@ -200,16 +202,22 @@ public class PatientServlet extends HttpServlet {
     
     /**
     * Pass the locations to show on Google maps.
-    * Adds the appointment for this patient and alerts the patientLanding.
-    * Links the Patient.addAppointment with the patientLanding.
+    * Gets all of the locations that should be shown on the map from the map model
+    * and passes them as an array of Strings.
     *
     * @param request The servlet request variable.
     * @param patient The patient object for which to add appointment.
     */
-    private void passLocations(HttpServletRequest request, Patient patient){
-        String[] locations = new String[3];
-        locations[0] = "0,England,NHS,51.44,-2.62";
-        locations[1] = "1,Montebelluna,private,51.47,-2.64";
+    private void passLocations(HttpServletRequest request){
+        Map map = new Map();
+        ArrayList<Location> locs = map.getLocations();
+        String[] locations = new String[locs.size()];
+        int i = 0;
+        for(Location loc:locs){
+            locations[i] = loc.getString();
+            System.out.println("the location at " + String.valueOf(i) +" is: " + locations[i]);
+            i++;
+        }
         request.setAttribute("locations", locations);
     }
     
@@ -225,9 +233,7 @@ public class PatientServlet extends HttpServlet {
         patient = (Patient)(User)session.getAttribute("user");
         
         //show the locations in the database
-        passLocations(request, patient);
-        
-        
+        passLocations(request);
         
         //Show all of the scheduled appointments
         showAppointments(request, patient);
