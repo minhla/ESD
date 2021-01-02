@@ -111,3 +111,12 @@ input[type="submit"]:hover {
   padding-bottom: 5px;
   border-bottom: 2px solid pink;
 }
+
+
+/* Set the size of the div element that contains the map */
+#map {
+  height: 400px;
+  /* The height is 400 pixels */
+  width: 100%;
+  /* The width is the width of the web page */
+}
