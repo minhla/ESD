@@ -178,6 +178,8 @@ public class PatientServlet extends HttpServlet {
         String startTime = request.getParameter("starttime");
         String date = request.getParameter("date");
         String comment = request.getParameter("comment");
+        String locationID = request.getParameter("locationID");
+        System.out.println("locationId" + locationID);
         String addSuccess = patient.addAppointment(startTime, date, comment);
         request.setAttribute("updateSuccess", addSuccess);
     }
@@ -188,7 +190,6 @@ public class PatientServlet extends HttpServlet {
     * and passes them as an array of Strings.
     *
     * @param request The servlet request variable.
-    * @param patient The patient object for which to add appointment.
     */
     private void passLocations(HttpServletRequest request){
         Map map = new Map();

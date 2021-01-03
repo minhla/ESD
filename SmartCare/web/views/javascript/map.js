@@ -68,18 +68,9 @@ function initMap() {
             marker.setPosition(clickedLocation);
         }
         //Get the marker's location.
-        markerLocation();
     });*/
     
-    //This function will get the marker's current location and then add the lat/long
-    //values to our textfields so that we can save the location.
-    function markerLocation(){
-        //Get location.
-        var currentLocation = marker.getPosition();
-        //Add lat and lng values to a field that we can save.
-        document.getElementById('lat').value = currentLocation.lat(); //latitude
-        document.getElementById('lng').value = currentLocation.lng(); //longitude
-    }
+    
     
     function showLocations(){
         var i;
@@ -96,10 +87,10 @@ function initMap() {
             google.maps.event.addListener(marker, 'click', (function(marker, i) {
                 return function() {
                     console.log("clicked");
-                    document.getElementById('lat').value = locations[i].lat; //latitude
-                    document.getElementById('lng').value = locations[i].lng; //longitude
+                    console.log("whaat");
                     document.getElementById('location').value = locations[i].name;
                     document.getElementById('type').value = locations[i].type;
+                    document.getElementById('locationID').value = locations[i].idNum;
                 }
             })(marker, i));
             

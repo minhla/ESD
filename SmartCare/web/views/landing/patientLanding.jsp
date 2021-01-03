@@ -61,12 +61,15 @@
                         Start Time: <input type="time" name="starttime"><br/>
                         Date: <input type="date" name="date"><br/> <!-- there will be a dropdown here-->
                         Reason: <input type="text" name="comment"><br/>
-                        Doctor:<br/>
-                        <input type="text" id="lat" readonly="yes" hidden="false">
-                        <input type="text" id="lng" readonly="yes" hidden="false">
+                        Doctor:<select name="doctor" id="doctor">
+                                <option value="volvo">Volvo</option>
+                                <option value="saab">Saab</option>
+                                <option value="opel">Opel</option>
+                                <option value="audi">Audi</option>
+                              </select><br/>
                         Location: <input type="text" id="location" readonly="yes" placeholder="Choose from map"><br>
                         Type: <input type="text" id="type" readonly="yes" placeholder="Private/NHS"><br>
-                        <input type="text" id="idNum" readonly="yes" hidden="true">
+                        <input type="text" name="locationID" id="locationID" readonly="yes" hidden="true">
 
                         <input type="submit" value="Book Appointment" name="action">
                     </form>
