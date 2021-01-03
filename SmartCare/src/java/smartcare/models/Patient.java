@@ -28,7 +28,7 @@ public class Patient extends User
         int numOfColumns = 5;
         String column = "appointmentid, starttime, endtime, appointmentdate, comment";
         String table = "Appointments";
-        String condition = "patientID = " + this.getUserID();
+        String condition = "patientID = " + this.getUserID() + " ORDER BY appointmentdate ASC, starttime ASC";
         
         //Get all of the appointments for this user
         r = this.jdbc.getResultList(column, condition, table, numOfColumns);
@@ -68,9 +68,10 @@ public class Patient extends User
     * @param startTime start time of the appointment.
     * @param date The date of the appointment.
     * @param comment The reason of the appointment.
+    * @param locationID the id of the location of the appointment.
     * @return      String with a success message about adding the appointment.
     */
-    public String addAppointment(String startTime, String date, String comment){
+    public String addAppointment(String startTime, String date, String comment, String locationID){
         String updateSuccess;
         String endtime = startTime;
         
@@ -87,9 +88,9 @@ public class Patient extends User
         }
         
         //Add to database
-        String table = "appointments (appointmentdate, starttime, endtime, comment, patientID)";
+        String table = "appointments (appointmentdate, starttime, endtime, comment, patientID, locationID)";
         String values = "('"  + date + "', '"+ startTime+ "', '" 
-                + endtime + "', '" + comment + "', " + this.getUserID() +")";
+                + endtime + "', '" + comment + "', " + this.getUserID() + "', " + locationID +")";
         
         int success = this.jdbc.addRecords(table, values);
         if(success != 0){

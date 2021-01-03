@@ -18,6 +18,7 @@
             <definitions>.\lib\nblibraries.properties</definitions>
         </libraries>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>Admin</word>
             <word>Google</word>
             <word>servlet</word>
         </spellchecker-wordlist>

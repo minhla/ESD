@@ -163,7 +163,6 @@
                         String prescription = (String) session.getAttribute("prescriptionDetail");
                         if (prescription != null) {
                             out.println(prescription);
-    
                         }
                     %>
                 </p>

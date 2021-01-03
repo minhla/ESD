@@ -40,9 +40,6 @@ function initMap() {
     showLocations();
     
     
-    
-    
-    
     //Listen for any clicks on the map.
     /*google.maps.event.addListener(map, 'click', function(event) {                
         //Get the location that the user clicked.
@@ -87,7 +84,6 @@ function initMap() {
             google.maps.event.addListener(marker, 'click', (function(marker, i) {
                 return function() {
                     console.log("clicked");
-                    console.log("whaat");
                     document.getElementById('location').value = locations[i].name;
                     document.getElementById('type').value = locations[i].type;
                     document.getElementById('locationID').value = locations[i].idNum;
@@ -114,7 +110,5 @@ function initMap() {
             console.log("added marker");
         }
     }
-    
-    
 }
 

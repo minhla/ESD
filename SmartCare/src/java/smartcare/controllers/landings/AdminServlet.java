@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -18,6 +19,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import smartcare.models.Admin;
+import smartcare.models.Appointment;
+import smartcare.models.User;
 import smartcare.models.database.Jdbc;
 
 /**
@@ -210,9 +214,44 @@ public class AdminServlet extends HttpServlet {
         
     }
     
+    /**
+    * Retrieves all appointments.
+    * retrieves all appointments in the database.
+    *
+    * @param request The servlet request variable.
+    * @param admin The Admin object.
+    */
+    private void showAppointments(HttpServletRequest request, Admin admin){
+        ArrayList<Appointment> appointments;
+        appointments = admin.getAppointments();
+        request.setAttribute("appointments", appointments);
+    }
+    
+    /**
+    * Deletes an appointment from the database.
+    * Deletes appointment for this patient and alerts the patientLanding.
+    * Links the Patient.deleteAppointment with the patientLanding.
+    *
+    * @param request The servlet request variable.
+    * @param patient The patient object who's appointment we have to delete
+    */
+    private void deleteAppointment(HttpServletRequest request, Admin admin){
+        String appointmentId = request.getParameter("appointmentId");
+        String deleteSuccess = admin.deleteAppointment(appointmentId);
+        request.setAttribute("deleteSuccess", deleteSuccess);
+    }
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        HttpSession session = request.getSession();
+        
+        //Make a new patient instance
+        Admin admin;
+        admin = (Admin)(User)session.getAttribute("user");
+        
+        
         
          //get action type from the admin landing
         String action = request.getParameter("action");
@@ -228,7 +267,12 @@ public class AdminServlet extends HttpServlet {
             else if(action.equals("Produce Weekly Documents"))
             {
                 request = getWeeklyDocument(request);
+            }else if(action.equals("Cancel"))
+            {
+                deleteAppointment(request, admin);
             }
+        
+        showAppointments(request, admin);
         
         
         RequestDispatcher view = request.getRequestDispatcher(JSP);

@@ -4,6 +4,8 @@
     Author     : Michael
 --%>
 
+<%@page import="smartcare.models.Appointment"%>
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -48,6 +50,69 @@
 
 
         <div class="outer-container">
+            <div>
+                    <%
+                        //check if there are appointments
+                        boolean showTable = false;
+                        if(!((ArrayList)request.getAttribute("appointments")).isEmpty()){
+                            showTable = true;
+                        }
+                        if(showTable){
+                            out.print("<h4>All booked appointments:</h4>");
+                        }else{
+                            out.print("<h4>There aren't any booked appointments</h4>");
+                        }
+                    %>
+                    
+                    <table <% if(!showTable){out.print("hidden='true'");} %> >
+                        <tr>
+                            <th>Appointment ID</th>
+                            <th>Date</th>
+                            <th>Start time</th>
+                            <th>Comment</th>
+                            <th>Action</th>
+                        </tr>
+                        <%
+                            if (showTable) {
+                                ArrayList<Appointment> a;
+                                a = (ArrayList) request.getAttribute("appointments");
+                                
+                                //loop through all of the appointments in the array list
+                                for (Appointment appointment : a) {
+                                    out.print("<form action='AdminServlet.do' name ='deleteAppointment' method='Post'>");
+                                    out.print("<input type='hidden' name='appointmentId' value='" + appointment.getID() + "'");
+                                    out.print("<tr>");
+                                    out.print("<td>");
+                                    out.print(appointment.getID());
+                                    out.print("</td>");
+                                    out.print("<td>");
+                                    out.print(appointment.getDate());
+                                    out.print("</td>");
+                                    out.print("<td>");
+                                    out.print(appointment.getStarttime());
+                                    out.print("</td>");
+                                    out.print("<td>");
+                                    out.print(appointment.getComment());
+                                    out.print("</td>");
+                                    out.print("<td>");
+                                    out.print("<input type='submit' value='Cancel' name='action'>");
+                                    out.print("</td>");
+                                    out.print("</tr>");
+                                    out.print("</form>");
+                                }
+                            }
+                        %>
+                    </table>
+                    <%
+                        if (request.getAttribute("deleteSuccess") != null) {
+                            out.print("<p>" + request.getAttribute("deleteSuccess") + "</p>");
+                        }
+                    %>
+                </div>
+            </div>
+            
+            
+            
             <div class="invoice-container">
                 <h1>Invoice Form</h1>
                 <form action="AdminServlet.do" name="invoice" method="Post" >
