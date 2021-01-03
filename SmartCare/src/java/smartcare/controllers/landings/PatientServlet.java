@@ -18,9 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import smartcare.models.Appointment;
 import smartcare.models.users.Patient;
+import smartcare.models.users.Doctor;
 import smartcare.models.Prescription;
 import smartcare.models.Location;
 import smartcare.models.Map;
+import smartcare.models.Location;
+import smartcare.models.Helper;
 import smartcare.models.database.Jdbc;
 import smartcare.models.users.User;
 
@@ -179,8 +182,8 @@ public class PatientServlet extends HttpServlet {
         String date = request.getParameter("date");
         String comment = request.getParameter("comment");
         String locationID = request.getParameter("locationID");
-        System.out.println("locationId" + locationID);
-        String addSuccess = patient.addAppointment(startTime, date, comment);
+        //String doctorID = request.getParameter("doctor"); could be doctor or nurse
+        String addSuccess = patient.addAppointment(startTime, date, comment, locationID);
         request.setAttribute("updateSuccess", addSuccess);
     }
     
@@ -192,17 +195,32 @@ public class PatientServlet extends HttpServlet {
     * @param request The servlet request variable.
     */
     private void passLocations(HttpServletRequest request){
-        Map map = new Map();
+        Helper map = new Helper();
         ArrayList<Location> locs = map.getLocations();
         String[] locations = new String[locs.size()];
         int i = 0;
         for(Location loc:locs){
             locations[i] = loc.getString();
-            System.out.println("the location at " + String.valueOf(i) +" is: " + locations[i]);
             i++;
         }
         request.setAttribute("locations", locations);
     }
+    
+    /**
+    * Pass all of the doctors and nurses in the database.
+    * Pass the doctors and nurses so the user can choose who to book an appointment
+    * with.
+    *
+    * @param request The servlet request variable.
+    */
+    private void passDoctorsAndNurses(HttpServletRequest request){
+        Helper help = new Helper();
+        ArrayList<Doctor> doctors = help.getDoctors();
+        ArrayList<Nurse> nurses = help.getNurses();
+        request.setAttribute("doctors", doctors);
+        request.setAttribute("nurses", nurses);
+    }
+    
     
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -217,6 +235,9 @@ public class PatientServlet extends HttpServlet {
         
         //show the locations in the database
         passLocations(request);
+        
+        //show all of the doctors and nurses available
+        passDoctorsAndNurses(request);
         
         //Show all of the scheduled appointments
         showAppointments(request, patient);

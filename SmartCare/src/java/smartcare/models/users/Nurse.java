@@ -14,6 +14,10 @@ public class Nurse extends User
         this.jdbc = Jdbc.getJdbc();
     }
     
+    public Nurse(String id, String name, String lastname){
+        super(id, name, lastname);
+    }
+    
     
     /**
     * Returns all of the appointments scheduled for today.
@@ -32,7 +36,7 @@ public class Nurse extends User
         int numOfColumns = 5;
         String column = "appointmentid, comment, starttime, endtime, appointmentdate";
         String table = "Appointments";
-        String condition = "appointmentdate = '" + currentDate.toString()+"'";
+        String condition = "appointmentdate = '" + currentDate.toString()+"' ORDER BY starttime ASC";
         
         //Get all of the appointments for this user
         r = this.jdbc.getResultList(column, condition, table, numOfColumns);
