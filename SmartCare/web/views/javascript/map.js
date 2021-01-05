@@ -30,7 +30,7 @@ function initMap() {
     
     // The map, centered at Uluru
     const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 10,
+      zoom: 11,
       center: uluru,
       gestureHandling: "cooperative",
       zoomControl: false
