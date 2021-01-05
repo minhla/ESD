@@ -17,7 +17,7 @@
               href="https://i.imgur.com/Vwma7mV.png">
         <%--<script type="text/javascript" src="${pageContext.request.contextPath}/js/index.js"></script>--%>
         <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBr-iV0D8LDHf9NTwz-jQvjMQXbjWlkhEM&callback=initMap&libraries=&v=weekly"defer></script>
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1EOfjA_iRybTpJ5wC1atKsJxsyZ50etg&callback=initMap&libraries=&v=weekly"defer></script>
         <script type="text/javascript">
             <%--Set variable to be used in map.js--%>
             var tempLocations; // a list of strings contaitinin location objects
