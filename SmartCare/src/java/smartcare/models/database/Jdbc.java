@@ -17,28 +17,28 @@ import javax.servlet.ServletContextListener;
 public class Jdbc implements ServletContextListener{
 
     //Singleton instance
-    private static Jdbc JDBC_INSTANCE = null;    
+    private static Jdbc JDBC_INSTANCE = null;
 
     //The URL for the database
     static final String DB_URL = "jdbc:derby://localhost:1527/SmartCare";
-    
+
     //Database credentials
     static final String USER = "SmartCare";
     static final String PASS = "HSVu2G";
-    
+
     private Jdbc()
     {
 
     }
-    
-    
+
+
     public static Jdbc getJdbc(){
         if(JDBC_INSTANCE == null){
             JDBC_INSTANCE = new Jdbc();
         }
         return JDBC_INSTANCE;
     }
-    
+
     /*
     Method: connect
     Description: provides a connection to the database. Should be called in any
@@ -47,8 +47,8 @@ public class Jdbc implements ServletContextListener{
     Returns: Connection - a connection to the database
     */
     public Connection connect()
-    {      
-        
+    {
+
         Connection conn = null;
 
         try
@@ -62,11 +62,11 @@ public class Jdbc implements ServletContextListener{
         {
             e.printStackTrace();
         }
-        
+
         return conn;
     }
-    
-    
+
+
         /*
     Method: getResultList
     Description: executes a select query and returns the whole result
@@ -83,13 +83,13 @@ public class Jdbc implements ServletContextListener{
         String result = "";
         Connection conn = this.connect();
         System.out.println(sql);
-        
+
         try
         {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             //ResultSetMetaData rsMetaData = rs.getMetaData();
-            while (rs.next()) 
+            while (rs.next())
             {
                 for(int i = 1; i <= numOfColumns; i++){
                     results.add(rs.getString(i));
@@ -97,19 +97,19 @@ public class Jdbc implements ServletContextListener{
             }
             rs.close();
             stmt.close();
-            conn.close();  
+            conn.close();
 
         }
         catch(SQLException e)
         {
             System.out.println("Failed to execute getResultList statement");
             e.printStackTrace();
-        }     
-        
+        }
+
         return results;
     }
-    
-    
+
+
     /*
     Method: getResultSet
     Description: executes a select query and returns the whole result
@@ -127,36 +127,36 @@ public class Jdbc implements ServletContextListener{
         String result = "";
         Connection conn = this.connect();
         System.out.println(sql);
-        
+
         try
         {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             //ResultSetMetaData rsMetaData = rs.getMetaData();
             int index = 1;
-            while (rs.next()) 
+            while (rs.next())
             {
                 for(int i = 1; i <= numOfColumns; i++){
                     sb.append(rs.getString(i)).append(" ");
                 }
-                
+
                 sb.append("\n<br>");
                 index++;
             }
             rs.close();
             stmt.close();
-            conn.close();  
+            conn.close();
 
         }
         catch(SQLException e)
         {
             System.out.println("Failed to execute getResultSet statement");
             e.printStackTrace();
-        }     
-        
+        }
+
         return sb.toString();
     }
-    
+
         /*
     Method: getALLResultSet
     Description: get all result that macth with conditions
@@ -174,30 +174,30 @@ public class Jdbc implements ServletContextListener{
         String result = "";
         Connection conn = this.connect();
         System.out.println(sql);
-        
+
         try
         {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             //ResultSetMetaData rsMetaData = rs.getMetaData();
-            while (rs.next()) 
+            while (rs.next())
             {
                 for(int i = 1; i <= numOfColumns; i++){
                     sb.append(rs.getString(i)).append(" ");
                 }
-                
+
             }
             rs.close();
             stmt.close();
-            conn.close();  
+            conn.close();
 
         }
         catch(SQLException e)
         {
             System.out.println("Failed to execute getValueStmt statement");
             e.printStackTrace();
-        }     
-        
+        }
+
         return sb.toString();
     }
     /*
@@ -215,30 +215,30 @@ public class Jdbc implements ServletContextListener{
         String sql = "SELECT " + column + " FROM " + table + " WHERE " + condition;
         String result = "";
         Connection conn = this.connect();
-        
+
         try
         {
         stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         ResultSetMetaData rsMetaData = rs.getMetaData();
-        if (rs.next()) 
+        if (rs.next())
         {
         result = rs.getString(1);
         }
         rs.close();
         stmt.close();
-        conn.close();  
-        
+        conn.close();
+
         }
         catch(SQLException e)
         {
             System.out.println("Failed to execute getValueStmt statement");
             e.printStackTrace();
-        }     
-        
+        }
+
         return result;
     }
-    
+
     /*
     Method: addRecords
     Description: Enables to add values to a table
@@ -250,29 +250,29 @@ public class Jdbc implements ServletContextListener{
         Statement stmt = null;
         String sql = "insert into " + table + " values " + data;
         System.out.println(sql);
-        
+
         Connection conn = this.connect();
-        
+
         try
         {
             stmt = conn.createStatement();
             flag = stmt.executeUpdate(sql);
             stmt.close();
-            conn.close();  
+            conn.close();
         }
         catch(SQLException e)
         {
             System.out.println("Failed to execute update table: " + table);
             e.printStackTrace();
-        }     
+        }
         return flag;
     }
-    
+
     /*
     Method: delete
     Description: Deletes an entry in the database.
     Params: String table - the table to be updated (and columns)
-            String condition - forms part of the "WHERE..." sql statement. Use to 
+            String condition - forms part of the "WHERE..." sql statement. Use to
                                 select which item should be deleted
     */
     public int delete(String table, String condition){
@@ -280,25 +280,25 @@ public class Jdbc implements ServletContextListener{
         Statement stmt = null;
         String sql = "DELETE FROM " + table + " WHERE " + condition;
         System.out.println(sql);
-        
+
         Connection conn = this.connect();
-        
+
         try
         {
             stmt = conn.createStatement();
             flag = stmt.executeUpdate(sql);
             stmt.close();
-            conn.close();  
+            conn.close();
         }
         catch(SQLException e)
         {
             System.out.println("Failed to execute delete from: " + table);
             e.printStackTrace();
-        }     
+        }
         return flag;
     }
 
-    
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -309,5 +309,3 @@ public class Jdbc implements ServletContextListener{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
-    
-

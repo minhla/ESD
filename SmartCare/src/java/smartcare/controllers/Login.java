@@ -30,14 +30,15 @@ public class Login extends HttpServlet {
 
     private LoginModel lm = new LoginModel();
     private Jdbc db = Jdbc.getJdbc();
-    
-    
+    private Account ac = new Account();
+
+
     private HttpSession setupUserSession(User user, HttpSession session)
     {
         session.setAttribute("user", user);
         session.setAttribute("username", user.getUsername());
         session.setAttribute("userType", user.getUserType());
-        
+
         return session;
     }
 
@@ -93,7 +94,7 @@ public class Login extends HttpServlet {
         String entrdPass = (String)request.getParameter("password");
 
         //attempt a login
-        if(lm.loginStmt(entrdUsername, entrdPass))
+        if(ac.loginStmt("Users", entrdEmail, entrdPass, db))
         {
             //set the session variable
             User user = new User();
@@ -155,7 +156,7 @@ public class Login extends HttpServlet {
 
     }
 
-    
+
     /**
      * Returns a short description of the servlet.
      *
