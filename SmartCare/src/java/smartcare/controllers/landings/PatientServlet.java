@@ -42,25 +42,25 @@ public class PatientServlet extends HttpServlet {
     @Deprecated
     private HttpServletRequest bookAppointmentWithDoctor(HttpServletRequest request){
         HttpSession session = request.getSession();
-        
+
         //get parameters from form
         String starttime = request.getParameter("starttime");
         // TODO add 30 minutes to start time for apointment duration
         String endtime = starttime;
         String date = request.getParameter("date");
         String comment = request.getParameter("comment");
-        
+
         //get the right user ID from the database
         String userEmail = (String)session.getAttribute("userEmail");
         String userID = jdbc.getValueStmt("uuid", "email = '"+ userEmail +"'", "Users");
         System.out.println("userID = " + userID);
-        
-        
-        
+
+
+
         //check if that time slot is free
-       
+
         String availableDoctorId = "0";
-        
+
         String column = "uuid, firstname, lastname";
         String tableAv = "users";
         String condition = "usertype = 'D'";
@@ -71,49 +71,49 @@ public class PatientServlet extends HttpServlet {
                             + " SELECT u.UUID FROM SMARTCARE.USERS u "
                             + " join smartcare.APPOINTMENTS a on u.UUID = a.DOCTORID "
                             + " where a.STARTTIME <= '" +starttime+ "'  and a.ENDTIME >=  '" + endtime + "' and appointmentdate =  '"+ date +"')";
-                            
-    
+
+
         //Get all of the appointments for the doctor
         availableDoctorId = jdbc.getValueStmt(column, condition, tableAv);
-        
-        
+
+
         //Add to database
         String table = "appointments (appointmentdate, starttime, endtime, comment, patientID)";
-        String values = "('"  + date + "', '"+ starttime+ "', '" 
+        String values = "('"  + date + "', '"+ starttime+ "', '"
                 + endtime + "', '" + comment + "', " + userID +")";
-        
+
         int success = jdbc.addRecords(table, values);
-        
+
         String doctorName = jdbc.getValueStmt("lastname", "uuid = '"+ availableDoctorId +"'", "users");
-        
+
         if(success != 0){
             request.setAttribute("updateSuccess", "The appointment has been scheduled with doctor " + doctorName);
         }else{
             request.setAttribute("updateSuccess", "There has been a problem.");
-        }    
-        
+        }
+
     return request;
     }
-       
-    
+
+
       private HttpServletRequest reIssuePrescription(HttpServletRequest request){
-        
+
         HttpSession session = request.getSession();
-        
-                
+
+
        //get parameters from prescription form
        String patientID = request.getParameter("patientID");
        String issuedate = request.getParameter("issuedate");
 
        //create prescription
        Prescription prescription = new Prescription();
-       
+
        prescription.reIssuePrescription(patientID, issuedate);
-       
+
        //get prescription from database
 
             ArrayList<String> result = prescription.reIssuePrescription(patientID, issuedate);
-            
+
             //check if patient and prescription are available or not
             if(result.size() !=0)
             {
@@ -124,18 +124,18 @@ public class PatientServlet extends HttpServlet {
                                                               "Weight : "+result.get(3)+"<br/>"+
                                                               "Allergies : "+result.get(4)+"<br/>"+
                                                               "Medicine : "+result.get(5)+"<br/>");
-            } 
+            }
             else
             {
                 session.setAttribute("prescriptionDetail","Prescription not found!");
             }
 
-        
+
         //when deleting an appointment
-        
+
         return request;
     }
-    
+
     /**
     * Retrieves appointments for particular patient.
     * Finds the appointment for this patient and alerts the patientLanding.
@@ -149,7 +149,7 @@ public class PatientServlet extends HttpServlet {
         appointments = patient.getAppointments();
         request.setAttribute("appointments", appointments);
     }
-    
+
     /**
     * Deletes an appointment from the database.
     * Deletes appointment for this patient and alerts the patientLanding.
@@ -163,7 +163,7 @@ public class PatientServlet extends HttpServlet {
         String deleteSuccess = patient.deleteAppointment(appointmentId);
         request.setAttribute("deleteSuccess", deleteSuccess);
     }
-    
+
     /**
     * Adds an appointment to the database.
     * Adds the appointment for this patient and alerts the patientLanding.
@@ -179,21 +179,21 @@ public class PatientServlet extends HttpServlet {
         String addSuccess = patient.addAppointment(startTime, date, comment);
         request.setAttribute("updateSuccess", addSuccess);
     }
-    
-    
+
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         HttpSession session = request.getSession();
-        
+
         //Make a new patient instance
         Patient patient;
         patient = (Patient)(User)session.getAttribute("user");
-        
+
         //Show all of the scheduled appointments
         showAppointments(request, patient);
-        
+
         //get action from patient landing
         String action = request.getParameter("action");
         if(action != null)
@@ -211,14 +211,14 @@ public class PatientServlet extends HttpServlet {
                 default:
                     break;
             }
-            
+
             showAppointments(request, patient);
         }
-        
+
         RequestDispatcher view = request.getRequestDispatcher(JSP);
         view.forward(request, response);
-        
-        
+
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

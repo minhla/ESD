@@ -9,6 +9,9 @@ package smartcare.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -28,7 +31,6 @@ import smartcare.models.database.Jdbc;
 @WebServlet(name = "Login", urlPatterns = {"/Login.do"})
 public class Login extends HttpServlet {
 
-    private LoginModel lm = new LoginModel();
     private Jdbc db = Jdbc.getJdbc();
     private Account ac = new Account();
 

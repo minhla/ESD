@@ -2,6 +2,9 @@ package smartcare.controllers.registration;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import smartcare.models.database.Jdbc;
 import smartcare.models.users.User;
+import smartcare.util.RegistrationUtils;
 
 /**
  *
@@ -19,8 +23,8 @@ import smartcare.models.users.User;
 @WebServlet(name = "/AddPatient")
 public class RegisterPatient extends HttpServlet {
 
-        Jdbc jdbc = Jdbc.getJdbc();
-    
+        private Jdbc jdbc = Jdbc.getJdbc();
+        private RegistrationUtils ru = new RegistrationUtils();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -33,34 +37,40 @@ public class RegisterPatient extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         String viewPath = "views/registration/newPatient.jsp";
-        
+
         HttpSession session = request.getSession();
-        
+
         //get parameters from form
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
+        String username = firstname.charAt(0) + "-" + lastname;
+        username = username.toLowerCase();
         String dob = request.getParameter("dob");
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
-        String password = request.getParameter("password");
-   
+        String password = ru.dateToPassword(dob);
+
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        LocalDateTime date = LocalDateTime.now();
+        String regdate = dateFormat.format(date);
+
         //Add to database
-        String table = "users (firstname, lastname, usertype, dob, phone, email, address, password)";
-        String values = "('"  + firstname + "','" + lastname + "', '"+ "P"
+        String table = "users (username, firstname, lastname, usertype, dob, phone, email, address, password, regdate)";
+        String values = "('" + username  + "', '"+  firstname + "','" + lastname + "', '"+ "P"
                               + "', '" + dob + "', '" + phone +"', '"
-                              + email + "', '" + address + "', '" + password +"')";
-        
-        
+                              + email + "', '" + address + "', '" + password  + "', '" + regdate +"')";
+
+
         int success = jdbc.addRecords(table, values);
         if(success != 0){
             request.setAttribute("updateSuccess", "The patient has been added!");
         }else{
             request.setAttribute("updateSuccess", "There has been a problem.");
         }
-        
+
         RequestDispatcher view = request.getRequestDispatcher(viewPath);
         view.forward(request,response);
     }

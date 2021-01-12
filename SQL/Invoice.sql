@@ -4,9 +4,9 @@ CREATE TABLE invoice(
     servicetype VARCHAR(100),
     detail VARCHAR(500),
     amount INT,
-    patientid INT,
-    issuedate DATE,
+    patient_username VARCHAR(35),
+    issuedate VARCHAR(20),
     weeknum INT,
     paymenttype VARCHAR(100),
-    FOREIGN KEY (patientid) REFERENCES Users(uuid)    
+    FOREIGN KEY (patient_username) REFERENCES Users(username)
 )

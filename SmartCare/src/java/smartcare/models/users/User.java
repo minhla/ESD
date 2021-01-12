@@ -3,20 +3,12 @@ package smartcare.models.users;
 
 public class User {
     
-    private String userID;
     private String name;
     private String username;
     private String password;
     private String email;
     private String userType;
-    
-    public String getUserID() {
-        return userID;
-    }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
 
     public String getName() {
         return name;
