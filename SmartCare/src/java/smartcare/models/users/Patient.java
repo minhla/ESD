@@ -1,8 +1,9 @@
-package smartcare.models;
+package smartcare.models.users;
 
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import smartcare.models.Appointment;
 import smartcare.models.database.Jdbc;
 
 public class Patient extends User

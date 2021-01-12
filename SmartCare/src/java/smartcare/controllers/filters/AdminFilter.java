@@ -19,7 +19,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import smartcare.models.User;
+import smartcare.models.users.User;
 
 public class AdminFilter implements Filter
 {

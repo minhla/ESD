@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import smartcare.models.database.Jdbc;
-import smartcare.models.User;
+import smartcare.models.users.User;
 
 /**
  *

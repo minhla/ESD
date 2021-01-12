@@ -1,14 +1,17 @@
-package smartcare.models;
+package smartcare.models.users;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
+import smartcare.models.Appointment;
 import smartcare.models.database.Jdbc;
 
-public class Nurse extends User
+public class Doctor extends User
 {
+    
     Jdbc jdbc;
     
-    public Nurse(){
+    public Doctor(){
         super();
         this.jdbc = Jdbc.getJdbc();
     }
@@ -22,7 +25,7 @@ public class Nurse extends User
     */
     public ArrayList<Appointment> getAppointments(){
         ArrayList<Appointment> appointmentList = new ArrayList<>();
-        ArrayList<String> r;
+        ArrayList<String> r = new ArrayList<>();
         
         //get current date
         LocalDate currentDate = java.time.LocalDate.now();
