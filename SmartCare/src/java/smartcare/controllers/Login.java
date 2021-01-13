@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import smartcare.models.LoginModel;
+import smartcare.models.Account;
 import smartcare.models.users.Admin;
 import smartcare.models.users.Nurse;
 import smartcare.models.users.Doctor;
@@ -92,18 +92,24 @@ public class Login extends HttpServlet {
         HttpSession session = request.getSession();
 
         //get the email and password entered by the user.
-        String entrdUsername = (String)request.getParameter("username");
+        String entrdEmail = (String)request.getParameter("email");
         String entrdPass = (String)request.getParameter("password");
 
         //attempt a login
         if(ac.loginStmt("Users", entrdEmail, entrdPass, db))
         {
-            //set the session variable
+            ArrayList<String> details = db.getResultList("username, usertype, firstname, lastname", "email='" + entrdEmail + "'", "USERS", 4);
+            
+            System.out.println(details.toString());
+            
             User user = new User();
-            ArrayList<String> details = db.getResultList("username, usertype", "username='" + entrdUsername + "'", "USERS", 2);
             user.setUsername(details.get(0));
+            user.setEmail(entrdEmail);
+            user.setUserType(details.get(1));
+            user.setName(details.get(2) + " " + details.get(3));
+            
             //send to a different landing page depending on the user's account type.
-            String accType = details.get(1);
+            String accType = user.getUserType();
             switch(accType)
             {
                 case "A": //admin

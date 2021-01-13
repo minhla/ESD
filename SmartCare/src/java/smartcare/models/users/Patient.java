@@ -29,14 +29,14 @@ public class Patient extends User
         int numOfColumns = 5;
         String column = "appointmentid, starttime, endtime, appointmentdate, comment";
         String table = "Appointments";
-        String condition = "patientID = " + this.getUserID();
+        String condition = "patientID = '" + this.getUsername() + "'";
         
         //Get all of the appointments for this user
         r = this.jdbc.getResultList(column, condition, table, numOfColumns);
         
         //Get the received data and put it into appointment objects
         for(int i = 0; i < r.size(); i+=numOfColumns){
-            Appointment app = new Appointment(r.get(i), r.get(i+1), r.get(i+2), r.get(i+3), r.get(i+4), this.getUserID());
+            Appointment app = new Appointment(r.get(i), r.get(i+1), r.get(i+2), r.get(i+3), r.get(i+4), this.getUsername());
             appointmentList.add(app);
         }
         
@@ -74,10 +74,7 @@ public class Patient extends User
     public String addAppointment(String startTime, String date, String comment){
         String updateSuccess;
         String endtime = startTime;
-        
-        //get the right user ID from the session variable
-        System.out.println("userID = " + this.getUserID());
-        
+                
         //check if that time slot is free (not implemented yet)
         
         //sanitize the comment input
@@ -90,7 +87,7 @@ public class Patient extends User
         //Add to database
         String table = "appointments (appointmentdate, starttime, endtime, comment, patientID)";
         String values = "('"  + date + "', '"+ startTime+ "', '" 
-                + endtime + "', '" + comment + "', " + this.getUserID() +")";
+                + endtime + "', '" + comment + "', " + this.getUsername()+")";
         
         int success = this.jdbc.addRecords(table, values);
         if(success != 0){

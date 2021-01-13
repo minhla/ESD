@@ -25,7 +25,7 @@ public class Account
     public String generatePasswordHash(String plaintext)
     {
         String ciphertext = null;
-        
+        System.out.println("Encrypting " + plaintext);
         try
         {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -63,9 +63,15 @@ public class Account
         try {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
+            System.out.println(password);
+            password = generatePasswordHash(password);
+            System.out.println(email);
+            System.out.println("pas = " + password);
             while (rs.next()) {
                 String eml = rs.getString("email");
+                System.out.println(eml);
                 String pas = rs.getString("password");
+                System.out.println(pas);
                 if (eml.equalsIgnoreCase(email) && pas.equals(password)) {
                     System.out.println("Login credentials accepted.");
                     return true;

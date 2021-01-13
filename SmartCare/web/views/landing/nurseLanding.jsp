@@ -6,7 +6,7 @@
 
 <%@page import="smartcare.models.Appointment"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="smartcare.models.User"%>
+<%@page import="smartcare.models.users.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

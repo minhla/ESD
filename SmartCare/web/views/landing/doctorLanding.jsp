@@ -4,7 +4,7 @@
     Author     : Michael, Giacomo
 --%>
 
-<%@page import="smartcare.models.User"%>
+<%@page import="smartcare.models.users.User"%>
 <%@page import="smartcare.models.Appointment"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

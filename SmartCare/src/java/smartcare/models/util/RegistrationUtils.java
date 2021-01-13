@@ -1,5 +1,5 @@
 
-package smartcare.util;
+package smartcare.models.util;
 
 public class RegistrationUtils {
    

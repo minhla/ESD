@@ -5,6 +5,8 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,9 +14,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import smartcare.models.Account;
 import smartcare.models.database.Jdbc;
 import smartcare.models.users.User;
-import smartcare.util.RegistrationUtils;
+import smartcare.models.util.RegistrationUtils;
 
 /**
  *
@@ -37,7 +40,9 @@ public class RegisterPatient extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
+        Account ac = new Account();
+        
         String viewPath = "views/registration/newPatient.jsp";
 
         HttpSession session = request.getSession();
@@ -53,15 +58,32 @@ public class RegisterPatient extends HttpServlet {
         String address = request.getParameter("address");
         String password = ru.dateToPassword(dob);
 
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime date = LocalDateTime.now();
-        String regdate = dateFormat.format(date);
+        String regdate = date.format(dtFormatter);
 
+         //check that username doesn't already exist
+        ArrayList<String> existingUser = jdbc.getResultList("username", "username = '" + username + "'", "USERS", 1);
+        
+        if( ! existingUser.isEmpty()) //increment the number at the end of username if the username already exists
+        {
+            System.out.println("user by the name of " + username + " already exists. Attempting username incrementation...");
+            if(existingUser.get(0).substring(existingUser.get(0).length()-1, existingUser.get(0).length()).matches("[0-9]")) //if username has a number at the end
+            {
+            username = existingUser.get(0).substring(0, existingUser.get(0).length()-1) + 
+                (Integer.parseInt(existingUser.get(0).substring(existingUser.get(0).length()-1, existingUser.get(0).length())) + 1);
+            }
+            else
+            {
+                username = username + "1";
+            }
+        }
+        
         //Add to database
         String table = "users (username, firstname, lastname, usertype, dob, phone, email, address, password, regdate)";
         String values = "('" + username  + "', '"+  firstname + "','" + lastname + "', '"+ "P"
                               + "', '" + dob + "', '" + phone +"', '"
-                              + email + "', '" + address + "', '" + password  + "', '" + regdate +"')";
+                              + email + "', '" + address + "', '" + ac.generatePasswordHash(password)  + "', '" + regdate +"')";
 
 
         int success = jdbc.addRecords(table, values);

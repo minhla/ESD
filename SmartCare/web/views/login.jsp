@@ -21,7 +21,7 @@
             <a href="/SmartCare"><h1>SmartCare</h1></a>
             <form method="post" action="<%=request.getContextPath()%>/Login.do" class="login-form">
                 <p>Email</p>
-                <input type="text" name="username">
+                <input type="text" name="email">
                 <p>Password</p>
                 <input type="password" name="password"> <br />
                 <button type="Submit" value="Login">Login</button>
