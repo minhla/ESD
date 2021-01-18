@@ -19,11 +19,11 @@
             <h1>Patient registration</h1>
             <h3>Fill in your information</h3>
             <form action="<%=request.getContextPath()%>/AddPatient.do" name="addpatient" method="Post">
-                <input type="text" name="firstname" placeholder="First name" required><br/>
-                <input type="text" name="lastname" placeholder="Last name" required><br/>
+                <input type="text" pattern="[A-Za-z]" title="Only alphabet letters" name="firstname" placeholder="First name" required><br/>
+                <input type="text" pattern="[A-Za-z]" title="Only alphabet letters" name="lastname" placeholder="Last name" required><br/>
                 <input type="date" name="dob" placeholder="Date of birth" required><br/>
                 <input type="email" name="email" placeholder="Email" required><br/>
-                <input type="text" pattern="\d*" name="phone" maxlength="11" placeholder="Phone number" required><br/>
+                <input type="text" pattern="\d*" title="Only numbers" name="phone" maxlength="11" placeholder="Phone number" required><br/>
                 <input type="text" name="address" placeholder="Address" required><br/>
 
                 <button type="Submit" value="Submit">Register</button>
