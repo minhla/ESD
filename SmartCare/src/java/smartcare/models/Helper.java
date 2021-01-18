@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 package smartcare.models;
-
+import smartcare.models.users.Nurse;
+import smartcare.models.users.Doctor;
 import java.util.ArrayList;
 import smartcare.models.database.Jdbc;
 
