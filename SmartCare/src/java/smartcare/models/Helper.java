@@ -48,7 +48,7 @@ public class Helper {
         ArrayList<String> r;
         
         int numOfColumns = 3;
-        String column = "uuid, firstname, lastname";
+        String column = "username, firstname, lastname";
         String table = "Users";
         String condition = "usertype = 'D'";
         
@@ -69,7 +69,7 @@ public class Helper {
         ArrayList<String> r;
         
         int numOfColumns = 3;
-        String column = "uuid, firstname, lastname";
+        String column = "username, firstname, lastname";
         String table = "Users";
         String condition = "usertype = 'N'";
         

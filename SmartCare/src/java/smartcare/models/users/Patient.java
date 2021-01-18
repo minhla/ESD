@@ -29,7 +29,7 @@ public class Patient extends User
         int numOfColumns = 5;
         String column = "appointmentid, starttime, endtime, appointmentdate, comment";
         String table = "Appointments";
-        String condition = "patientID = '" + this.getUsername() + "'";
+        String condition = "patient_username = '" + this.getUsername() + "'";
         
         //Get all of the appointments for this user
         r = this.jdbc.getResultList(column, condition, table, numOfColumns);
@@ -86,7 +86,7 @@ public class Patient extends User
         }
         
         //Add to database
-        String table = "appointments (appointmentdate, starttime, endtime, comment, patientID, locationID)";
+        String table = "appointments (appointmentdate, starttime, endtime, comment, patient_username, locationID)";
         String values = "('"  + date + "', '"+ startTime+ "', '" 
                 + endtime + "', '" + comment + "', " + this.getUsername()+")";
         
