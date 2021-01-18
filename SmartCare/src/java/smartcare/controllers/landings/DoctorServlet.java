@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import smartcare.models.Appointment;
+import smartcare.models.Invoice;
 import smartcare.models.users.Doctor;
 import smartcare.models.users.User;
 import smartcare.models.Prescription;
@@ -125,6 +126,68 @@ public class DoctorServlet extends HttpServlet {
        return request;
         
     }
+
+      /*
+    Method: createInvoice
+    Description: handle interactions with prescription form
+    Params: HttpServletRequest request
+    Returns: HttpServletRequest request
+    */
+    private HttpServletRequest createInvoice(HttpServletRequest request){
+        
+        HttpSession session = request.getSession();
+        
+       //get parameters from the form
+       String appointmentID = request.getParameter("appointmentID");
+       
+       String service = request.getParameter("services");
+       String detail = request.getParameter("detail");
+       String amount = request.getParameter("amount");
+       String paymenttype = request.getParameter("paymenttype");
+
+       //Get patientID based on appointmentID
+        int numOfColumns = 1;
+        String column = "patient_username";
+        String table = "Appointments";
+        String condition = "appointmentid = "+appointmentID+"";
+        
+        //JDBC execute search statement
+        ArrayList<String> res = this.jdbc.getResultList(column, condition, table, numOfColumns);
+        System.out.println(res);
+        
+       String patientID = res.get(0);
+       
+       //create invoice object
+       Invoice invoice = new Invoice(patientID,service,detail,amount,paymenttype);
+       
+       //validate the patient id
+       String validation = jdbc.getResultSet("firstname, lastname, dob", "(username ='"+patientID+"' AND usertype = 'P')", "users",3);
+       
+       if (!validation.equals(""))
+       {
+
+         int success = invoice.createInvoicedeleteAppointment(appointmentID);
+         
+         //check if the database is successfully updated or not
+         if(success != 0)
+         {
+             session.setAttribute("updateSuccess", "The invoice has been added!");
+         }
+         else
+         {
+             session.setAttribute("updateSuccess", "There has been a problem.");
+         }
+       }
+       else
+       {
+           session.setAttribute("updateSuccess", "Patient not found!");
+       }
+        
+
+        
+        return request;
+        
+    }
     
     /**
     * Retrieves appointments for current doctor (scheduled for today).
@@ -164,6 +227,10 @@ public class DoctorServlet extends HttpServlet {
             else if (action.equals("Create Prescription"))
             {
                 request = createPrescription(request);
+            }
+            else if (action.equals("Issue Invoice"))
+            {
+                request = createInvoice(request);
             }
          
         //show appointment

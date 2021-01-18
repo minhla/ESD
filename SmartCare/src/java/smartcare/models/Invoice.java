@@ -58,6 +58,26 @@ public class Invoice {
         return success;
     }
 
+    public int createInvoicedeleteAppointment(String appointmentID ) {        
+        //get current date
+       LocalDate currentDate = java.time.LocalDate.now();
+       Date date= java.sql.Date.valueOf(currentDate);
+       //get calendar
+       Calendar cl = Calendar. getInstance();
+       //set date
+       cl.setTime(date);
+         //get week num
+       int weekNum = cl.WEEK_OF_YEAR;
+        String table = "invoice (servicetype, detail, amount, patient_username, issuedate, weeknum, paymenttype)";
+        String values = "('"  + this.service + "', '"+ this.detail+ "', "+ this.amount + ", '" + this.patientID+"','"+currentDate+"',"+weekNum+",'"+paymenttype+"')";
+        int half2_success = jdbc.addRecords(table, values);
+        
+        //Delete the given appointment ID after issuing invoice successfully
+        int half1_success = this.jdbc.delete("Appointments", "appointmentId = " + appointmentID);
+        
+        return (half1_success + half2_success)/2;
+    }
+
     public void setPatientID(String patientID) {
         this.patientID = patientID;
     }
