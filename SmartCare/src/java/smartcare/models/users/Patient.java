@@ -122,4 +122,17 @@ public class Patient extends User
         return invoiceList;
     }
     
+        public String deleteInvoice(String invoiceID) {
+        int success = this.jdbc.delete("Invoice", "invoiceid = " + invoiceID);
+        String deleteStatus = new String();
+        if (success == 0) {
+            deleteStatus = "Failed to pay invoice";
+        } else {
+            deleteStatus = "Invoice paid successfully";
+        }
+        return deleteStatus;
+
+    }
+
+    
 }

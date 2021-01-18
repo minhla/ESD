@@ -15,78 +15,77 @@ import smartcare.models.database.Jdbc;
  * @author asia
  */
 public class Invoice {
+
     String invoiceID;
     String patientID;
     String service;
     String detail;
     String amount;
     String date;
-    String paymenttype;  
-    
+    String paymenttype;
+
     //get jdbc object
     Jdbc jdbc = Jdbc.getJdbc();
-    
-    public Invoice(){}
-    
-    public Invoice(String patientID, String service, String detail, String amount,String paymenttype) 
-    {  
+
+    public Invoice() {
+    }
+
+    public Invoice(String patientID, String service, String detail, String amount, String paymenttype) {
         this.patientID = patientID;
         this.service = service;
         this.detail = detail;
         this.amount = amount;
-        this.paymenttype = paymenttype; 
+        this.paymenttype = paymenttype;
     }
 
-     public Invoice(String invoiceID, String service, String detail, String amount, String patientID,String date, String paymenttype) 
-    {   this.invoiceID = invoiceID;
+    public Invoice(String invoiceID, String service, String detail, String amount, String patientID, String date, String paymenttype) {
+        this.invoiceID = invoiceID;
         this.patientID = patientID;
         this.service = service;
         this.detail = detail;
         this.amount = amount;
         this.date = date;
-        this.paymenttype = paymenttype; 
+        this.paymenttype = paymenttype;
     }
-    
-    public int createInvoice() 
-    
-    {
-       //get current date
-       LocalDate currentDate = java.time.LocalDate.now();
-       Date date= java.sql.Date.valueOf(currentDate);
-       //get calendar
-       Calendar cl = Calendar. getInstance();
-       //set date
-       cl.setTime(date);
-         //get week num
-       int weekNum = cl.WEEK_OF_YEAR;
-       
-       //Add details of prescription to database
+
+    public int createInvoice() {
+        //get current date
+        LocalDate currentDate = java.time.LocalDate.now();
+        Date date = java.sql.Date.valueOf(currentDate);
+        //get calendar
+        Calendar cl = Calendar.getInstance();
+        //set date
+        cl.setTime(date);
+        //get week num
+        int weekNum = cl.WEEK_OF_YEAR;
+
+        //Add details of prescription to database
         String table = "invoice (servicetype, detail, amount, patient_username, issuedate, weeknum, paymenttype)";
-        String values = "('"  + this.service + "', '"+ this.detail+ "', "+ this.amount + ", '" + this.patientID+"','"+currentDate+"',"+weekNum+",'"+paymenttype+"')";
+        String values = "('" + this.service + "', '" + this.detail + "', " + this.amount + ", '" + this.patientID + "','" + currentDate + "'," + weekNum + ",'" + paymenttype + "')";
 
         int success = jdbc.addRecords(table, values);
 
         return success;
     }
 
-    public int createInvoicedeleteAppointment(String appointmentID ) {        
+    public int createInvoicedeleteAppointment(String appointmentID) {
         //get current date
-       LocalDate currentDate = java.time.LocalDate.now();
-       Date date= java.sql.Date.valueOf(currentDate);
-       //get calendar
-       Calendar cl = Calendar. getInstance();
-       //set date
-       cl.setTime(date);
-         //get week num
-       int weekNum = cl.WEEK_OF_YEAR;
+        LocalDate currentDate = java.time.LocalDate.now();
+        Date date = java.sql.Date.valueOf(currentDate);
+        //get calendar
+        Calendar cl = Calendar.getInstance();
+        //set date
+        cl.setTime(date);
+        //get week num
+        int weekNum = cl.WEEK_OF_YEAR;
         String table = "invoice (servicetype, detail, amount, patient_username, issuedate, weeknum, paymenttype)";
-        String values = "('"  + this.service + "', '"+ this.detail+ "', "+ this.amount + ", '" + this.patientID+"','"+currentDate+"',"+weekNum+",'"+paymenttype+"')";
+        String values = "('" + this.service + "', '" + this.detail + "', " + this.amount + ", '" + this.patientID + "','" + currentDate + "'," + weekNum + ",'" + paymenttype + "')";
         int half2_success = jdbc.addRecords(table, values);
-        
+
         //Delete the given appointment ID after issuing invoice successfully
         int half1_success = this.jdbc.delete("Appointments", "appointmentId = " + appointmentID);
-        
-        return (half1_success + half2_success)/2;
+
+        return (half1_success + half2_success) / 2;
     }
 
     public void setPatientID(String patientID) {
@@ -144,6 +143,5 @@ public class Invoice {
     public void setDate(String date) {
         this.date = date;
     }
-    
-    
+
 }

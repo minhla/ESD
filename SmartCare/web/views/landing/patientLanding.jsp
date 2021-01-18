@@ -182,13 +182,18 @@
 
                 <div class="payment-container">
                     <h1>Invoice Payment</h1>
-                    <form method="Post">
+                    <form action="PatientServlet.do" name="Pay invoice" method="Post" >
                         <input type="number" maxlength="3" placeholder="Invoice ID" name="invoiceID" required>
                         <input type="text" pattern="\d*" maxlength="16" placeholder="Credit Card Number" required> 
                         <input type="text" pattern="\d{3}" maxlength="3" placeholder="CCV" name="CCV" class="CCV" required>
-                        <input type="submit" value="Pay"> <br/>
+                        <input type="submit" value="Pay" name="action"> <br/>
                     </form>
                     
+                    <%
+                        if (request.getAttribute("deleteStatus") != null) {
+                            out.print("<p>" + request.getAttribute("deleteStatus") + "</p>");
+                        }
+                    %>                  
                     
                     <%
                         //check if to show doctors appointments
