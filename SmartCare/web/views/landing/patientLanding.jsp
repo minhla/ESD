@@ -61,9 +61,12 @@
                         Start Time: <input type="time" name="starttime"><br/>
                         Date: <input type="date" name="date"><br/> <!-- there will be a dropdown here-->
                         Reason: <input type="text" name="comment"><br/>
-                        Doctor:<select name="doctor" id="doctor">
+                        Staff:<select name="doctor" id="doctor" required>
+                            <option value="" disabled="disabled" selected="selected">Please choose</option>
+                            <option value="" disabled="disabled">Doctors</option>
                                 <option value="volvo">Volvo</option>
                                 <option value="saab">Saab</option>
+                                <option value="" disabled="disabled">Nurses</option>
                                 <option value="opel">Opel</option>
                                 <option value="audi">Audi</option>
                               </select><br/>

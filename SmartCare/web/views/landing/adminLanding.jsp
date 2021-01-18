@@ -130,7 +130,7 @@
                                     out.print(appointment.getComment());
                                     out.print("</td>");
                                     out.print("<td>");
-                                    out.print("<input type='submit' value='Cancel' name='action'>");
+                                    out.print("<input type='submit' value='Remove' name='action'>");
                                     out.print("</td>");
                                     out.print("</tr>");
                                     out.print("</form>");

@@ -55,7 +55,7 @@ public class DoctorServlet extends HttpServlet {
        
 
        //validate the patient id
-       String validation = jdbc.getResultSet("firstname, lastname, dob", "(uuid = "+patientID+" AND usertype = 'P')", "users",3);
+       String validation = jdbc.getResultSet("firstname, lastname, dob", "(username = '"+patientID+"' AND usertype = 'P')", "users",3);
        
        if (!validation.equals(""))
        {
@@ -101,7 +101,7 @@ public class DoctorServlet extends HttpServlet {
        try 
        {
            //get patient detail from database
-           patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(uuid = "+patientID+" AND usertype = 'P')", "users",3);
+           patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(username = '"+patientID+"' AND usertype = 'P')", "users",3);
            if(patientDetail.equals(""))
            {
                session.setAttribute("patientDetail","Patient not found!");
