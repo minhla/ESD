@@ -163,14 +163,13 @@
             
                 <h1>Request for re-issue prescription: </h1>
                 <form action="PatientServlet.do" name="re-issue prescription" method="Post" >
-                    Patient ID:<br/> <input type="text" name="patientID" ><br/><br/> 
                     Date of prescription issued:<br/> <input type="date" name="issuedate" ><br/><br/> 
                     reason:<br/> <textarea  type="text" name="reason" rows="4" cols="50"></textarea><br/><br/>
                     <input type="submit" value="request for re-issue" name ="action"><br/>
                 </form>
                 <p>
                     <%
-                        String prescription = (String) session.getAttribute("prescriptionDetail");
+                        String prescription = (String) request.getAttribute("prescriptionDetail");
                         if (prescription != null) {
                             out.println(prescription);
                         }

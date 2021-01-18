@@ -76,7 +76,7 @@
                 </form>
                 <p>
                     <%                      //show result of sending invoice
-                        String update = (String) session.getAttribute("updateSuccess");
+                        String update = (String) request.getAttribute("updateInvoice");
                         if (update != null) {
                             out.println(update);
                         }
@@ -158,7 +158,7 @@
                 <br/>
                 <%
                     //show result of sending invoice
-                    String turnover = (String) session.getAttribute("turnover");
+                    String turnover = (String) request.getAttribute("turnover");
                     if (turnover != null) {
                         out.println(turnover);
                     }
@@ -172,7 +172,7 @@
                     <p>
                         <%
                             //show patient details
-                            String patientDetail = (String) session.getAttribute("patientDetail");
+                            String patientDetail = (String) request.getAttribute("patientDetail");
 
                             if (patientDetail != null) {
                                 out.println(patientDetail);

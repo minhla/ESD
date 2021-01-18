@@ -96,7 +96,8 @@
                 Patient ID:<br/> <input type="text" name="patientID" >         
                 <input type="submit" value="Get patient detail" name ="action"><br/><br/>
                 <p>
-                    <%                String patientDetail = (String) session.getAttribute("patientDetail");
+                    <%                
+                        String patientDetail = (String) request.getAttribute("patientDetail");
 
                         if (patientDetail != null) {
                             out.println(patientDetail);
@@ -110,7 +111,8 @@
                 <input type="submit" value="Create Prescription" name ="action"><br/>
             </form>
             <p>
-                <%                String update = (String) session.getAttribute("updateSuccess");
+                <%                
+                    String update = (String) request.getAttribute("updateSuccess");
                     if (update != null) {
                         out.println(update);
                     }

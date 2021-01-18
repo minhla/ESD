@@ -32,44 +32,6 @@ public class Prescription {
         this.med = med;
 
     }
-    
-    public int createPrescription() 
-    {
-        //get current date
-        LocalDate currentDate = java.time.LocalDate.now();
-        
-        //Add details of prescription to database
-        String table = "prescription (weight, allergies, medicine, patient_username, issuedate)";
-        String values = "("  + this.weight + ", '"+ this.allergies+ "', '"+ this.med + "', '" + this.patientID+"','"+ currentDate.toString()+"')";
-
-        //add prescription to the database
-        int success = jdbc.addRecords(table, values);
-
-
-        return success;
-    }
-    
-    public ArrayList<String> reIssuePrescription(String patientID, String issuedate)
-    {
-        ArrayList<String> result = new ArrayList<String>();
-           //get patient detail from database
-        ArrayList<String> patientDetail = jdbc.getResultList("firstname, lastname, dob", "(username = '"+patientID+"' AND usertype = 'P')", "users",3);
-        ArrayList<String> prescription = jdbc.getResultList("weight, allergies, medicine", "(issuedate = '"+issuedate+"' AND patient_username = '"+patientID+"')","prescription",3);
-
-        if(patientDetail.size() != 0 && patientDetail.size() != 0)
-        {
-            result.add(patientDetail.get(0));
-            result.add(patientDetail.get(1));
-            result.add(patientDetail.get(2));
-            result.add(prescription.get(0));
-            result.add(prescription.get(1));
-            result.add(prescription.get(2));
-            
-        }
-            
-        return result;
-    }
-    
 
     public String getPatientID() {
         return patientID;

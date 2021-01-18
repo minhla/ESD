@@ -40,9 +40,8 @@ public class DoctorServlet extends HttpServlet {
     Params: HttpServletRequest request
     Returns: HttpServletRequest request
     */
-    private HttpServletRequest createPrescription(HttpServletRequest request){
+    private void createPrescription(HttpServletRequest request,Doctor doctor){
         
-        HttpSession session = request.getSession();
         
        //get parameters from prescription form
        String patientID = request.getParameter("patientID");
@@ -53,32 +52,10 @@ public class DoctorServlet extends HttpServlet {
        //create prescription 
        Prescription prescription = new Prescription(patientID,weight,allergies,med);
        
-
-       //validate the patient id
-       String validation = jdbc.getResultSet("firstname, lastname, dob", "(username = '"+patientID+"' AND usertype = 'P')", "users",3);
+       String result = doctor.createPrescription(prescription);
+       request.setAttribute("updateSuccess", result);
        
-       if (!validation.equals(""))
-       {
-       
-         int success = prescription.createPrescription();
 
-         //check if the database is successfully updated or not
-         if(success != 0)
-         {
-             session.setAttribute("updateSuccess", "The prescription has been added!");
-         }
-         else
-         {
-             session.setAttribute("updateSuccess", "There has been a problem.");
-         }
-       }
-       else
-       {
-            session.setAttribute("updateSuccess", "Patient not found!");
-       }
-
-        
-        return request;
         
     }
     
@@ -88,41 +65,13 @@ public class DoctorServlet extends HttpServlet {
     Params: HttpServletRequest request
     Returns: HttpServletRequest request
     */
-     private HttpServletRequest getPatientDetail(HttpServletRequest request){
+     private void getPatientDetail(HttpServletRequest request,Doctor doctor){
         
-        HttpSession session = request.getSession();
-        
-        
-       //get parameters from prescription form
+         //get patient details deom database
        String patientID = request.getParameter("patientID");
-
-       String patientDetail = null;
-       
-       try 
-       {
-           //get patient detail from database
-           patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(username = '"+patientID+"' AND usertype = 'P')", "users",3);
-           if(patientDetail.equals(""))
-           {
-               session.setAttribute("patientDetail","Patient not found!");
-           }
-           else
-           {
-               String detailList [] = patientDetail.split(" ");
-
-               session.setAttribute("patientDetail","Patient Name: "+detailList[0]+"<br/>"+
-                                                    "Patient Surname: "+detailList[1]+"<br/>"+
-                                                    "Date of Birth: "+detailList[2]+"<br/>");         
-           }
-       }
-       
-       catch(Exception e)
-       {
-           session.setAttribute("patientDetail","Patient not found!");
-       }
+       String result = doctor.getPatientDetails(patientID);
+       request.setAttribute("updateSuccess",result);
      
-        
-       return request;
         
     }
     
@@ -159,11 +108,11 @@ public class DoctorServlet extends HttpServlet {
         {
             if (action.equals("Get patient detail"))
             {
-                request = getPatientDetail(request);
+                getPatientDetail(request,doctor);
             }
             else if (action.equals("Create Prescription"))
             {
-                request = createPrescription(request);
+                createPrescription(request,doctor);
             }
          
         //show appointment

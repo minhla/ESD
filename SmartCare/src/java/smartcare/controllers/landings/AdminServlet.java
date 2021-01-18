@@ -10,6 +10,7 @@ package smartcare.controllers.landings;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,41 +44,14 @@ public class AdminServlet extends HttpServlet {
     Params: HttpServletRequest request
     Returns: HttpServletRequest request
     */
-     private HttpServletRequest getPatientDetail(HttpServletRequest request){
+     private void getPatientDetail(HttpServletRequest request, Admin admin)
+     { 
         
-        //create get session
-        HttpSession session = request.getSession();
-        
-       //get parameters from prescription form
+       //get patient details deom database
        String patientID = request.getParameter("patientID");
-       System.out.println("patientID => "+patientID);
-       String patientDetail = null;
-       
-       try 
-       {
-           //get patient detail from database
-           patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(username = '"+patientID+"' AND usertype = 'P')", "users",3);
-           if(patientDetail.equals(""))
-           {
-               session.setAttribute("patientDetail","Patient not found!");
-           }
-           else
-           {
-               String detailList [] = patientDetail.split(" ");
-
-               session.setAttribute("patientDetail","Patient Name: "+detailList[0]+"<br/>"+
-                                                    "Patient Surname: "+detailList[1]+"<br/>"+
-                                                    "Date of Birth: "+detailList[2]+"<br/>");         
-           }
-       }
-       
-       catch(Exception e)
-       {
-           session.setAttribute("patientDetail","Patient not found!");
-       }
+       String result = admin.getPatientDetails(patientID);
+       request.setAttribute("updateSuccess",result);
      
-        
-       return request;
         
     }
      
@@ -87,42 +61,16 @@ public class AdminServlet extends HttpServlet {
     Params: HttpServletRequest request
     Returns: HttpServletRequest request
     */
-     private HttpServletRequest getWeeklyDocument(HttpServletRequest request){
-        
-        HttpSession session = request.getSession();
+     private void getWeeklyDocument(HttpServletRequest request,Admin admin){
 
-       //get parameters from document form
-       String startDate = request.getParameter("startDate");
-       String endDate = request.getParameter("endDate");
+      //get parameters from document form
+      String startDate = request.getParameter("startDate");
+      String endDate = request.getParameter("endDate");
        
-       //create document
-       Document document = new Document();
-       
-       //produce turnover document
-       ArrayList<Integer> result = document.calTurnover(startDate, endDate);
-       
-        if(result.get(0) == 0)
-        {
-            session.setAttribute("turnover","turnover: 0 <br/> private payment: 0 <br/> pay through NHS: 0");
-        }
-        else
-        {
-            session.setAttribute("turnover","this week turn over: "+result.get(0)+"<br/>"+
-                                                                "private payment: "+result.get(1)+"<br/>"+ 
-                                                                "NHS payment: "+result.get(2)+"<br/>" );
-            /*
-            String detailList [] = patientDetail.split(" ");
+      //calculate turnover
+      String result = admin.calTurnover(startDate, endDate);
+      request.setAttribute("turnover",result);
 
-            session.setAttribute("patientDetail","Patient Name: "+detailList[0]+"<br/>"+
-                                                 "Patient Surname: "+detailList[1]+"<br/>"+
-                                                 "Date of Birth: "+detailList[2]+"<br/>");
-            */
-        }
-       
-       
-     
-        
-       return request;
         
     }
      
@@ -132,9 +80,7 @@ public class AdminServlet extends HttpServlet {
     Params: HttpServletRequest request
     Returns: HttpServletRequest request
     */
-    private HttpServletRequest createInvoice(HttpServletRequest request){
-        
-        HttpSession session = request.getSession();
+    private void createInvoice(HttpServletRequest request,Admin admin){
         
        //get parameters from prescription form
        String patientID = request.getParameter("patientID");
@@ -146,32 +92,8 @@ public class AdminServlet extends HttpServlet {
        //create invoice object
        Invoice invoice = new Invoice(patientID,service,detail,amount,paymenttype);
        
-       //validate the patient id
-       String validation = jdbc.getResultSet("firstname, lastname, dob", "(username ='"+patientID+"' AND usertype = 'P')", "users",3);
-       
-       if (!validation.equals(""))
-       {
-
-         int success = invoice.createInvoice();
-         
-         //check if the database is successfully updated or not
-         if(success != 0)
-         {
-             session.setAttribute("updateSuccess", "The invoice has been added!");
-         }
-         else
-         {
-             session.setAttribute("updateSuccess", "There has been a problem.");
-         }
-       }
-       else
-       {
-           session.setAttribute("updateSuccess", "Patient not found!");
-       }
-        
-
-        
-        return request;
+       String result = admin.createInvoice(invoice);
+       request.setAttribute("updateInvoice", result);
         
     }
     
@@ -219,15 +141,15 @@ public class AdminServlet extends HttpServlet {
         if (action != null)
             if (action.equals("Get patient details"))
             {
-                request = getPatientDetail(request);
+                getPatientDetail(request,admin);
             }
             else if(action.equals("Issue Invoice"))
             {
-                request = createInvoice(request);
+                createInvoice(request,admin);
             }
             else if(action.equals("Produce Weekly Documents"))
             {
-                request = getWeeklyDocument(request);
+                getWeeklyDocument(request,admin);
             }else if(action.equals("Cancel"))
             {
                 deleteAppointment(request, admin);
