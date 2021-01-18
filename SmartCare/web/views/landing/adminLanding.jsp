@@ -51,7 +51,7 @@
             <div class="invoice-container">
                 <h1>Invoice Form</h1>
                 <form action="AdminServlet.do" name="invoice" method="Post" >
-                    Patient ID:<br/> <input type="number" name="patientID" placeholder="Ex. 1246092" >         
+                    Patient ID:<br/> <input type="number" name="patientID" placeholder="Ex. 1246092" required>         
                     <input type="submit" value="Get patient details" name="action"><br/><br/>
                     <p>
                         <%
@@ -65,16 +65,18 @@
                         %>
                     </p>
                     Type of service<br/> 
-                    <select id="services" name="services">
-                        <option value="surgery" selected="selected">Surgery</option>
+                    <select id="services" name="services" required>
+                        <option value="" disabled="disabled" selected="selected">Please select</option>
+                        <option value="surgery">Surgery</option>
                         <option value="consultation">Consultation</option>
                     </select>
                     <br/><br/>
-                    Details: <br/> <textarea type="text" name="detail" rows="4" cols="50"></textarea><br/><br/>
-                    Total amount:<br/> <input type="number" name="amount" ><br/><br/> 
+                    Details: <br/> <textarea type="text" name="detail" rows="4" cols="50" required></textarea><br/><br/>
+                    Total amount:<br/> <input type="number" name="amount" required><br/><br/> 
                     Payment type:<br/>             
-                    <select id="paymenttype" name="paymenttype">
-                        <option value="NHS" selected="selected">NHS</option>
+                    <select id="paymenttype" name="paymenttype" required>
+                        <option value="" selected="selected" disabled="disabled">Please select</option>
+                        <option value="NHS">NHS</option>
                         <option value="Private">Private</option>
                     </select>
                     <br/><br/> 
@@ -95,8 +97,8 @@
             <div class="document-form">
                 <h1>Document Management</h1>
                 <form action="AdminServlet.do" name="document management" method="Post" >
-                    Start date:<br/> <input type="date" name="startDate" ><br/><br/> 
-                    End date:<br/> <input type="date" name="endDate" ><br/><br/> 
+                    Start date:<br/> <input type="date" name="startDate" required><br/><br/> 
+                    End date:<br/> <input type="date" name="endDate" required><br/><br/> 
                     <input type="submit" value="Produce Weekly Documents" name ="action"><br/>
                 </form>
                 <br/>
@@ -111,7 +113,7 @@
             </div>
 
             <div class="register-container">
-                <h1>Register New Account</h1>
+                <h1>Register New Staff Account</h1>
                 <form action="RegisterStaff" method="post">
                     <p>Email: <input type="text" name="new_acc_email" placeholder="johndoe@gmail.com"></p>
                     <p>First name: <input type="text" name="new_acc_firstname" placeholder="John"></p>
