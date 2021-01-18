@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.RequestDispatcher;
@@ -87,9 +88,9 @@ public class RegisterStaff extends HttpServlet
         String password = ru.dateToPassword(dob);
         String userType = request.getParameter("new_acc_type");
         
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        LocalDateTime date = LocalDateTime.now();  
-        String regdate = dateFormat.format(date);
+        DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime date = LocalDateTime.now();
+        String regdate = date.format(dtFormatter);
         
         //check that username doesn't already exist
         ArrayList<String> existingUser = jdbc.getResultList("username", "username = " + username, "USERS", 1);
