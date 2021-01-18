@@ -87,18 +87,26 @@ public class RegisterStaff extends HttpServlet
         String address = request.getParameter("new_acc_address");
         String password = ru.dateToPassword(dob);
         String userType = request.getParameter("new_acc_type");
-        
+
         DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime date = LocalDateTime.now();
         String regdate = date.format(dtFormatter);
+
+         //check that username doesn't already exist
+        ArrayList<String> existingUser = jdbc.getResultList("username", "username = '" + username + "'", "USERS", 1);
         
-        //check that username doesn't already exist
-        ArrayList<String> existingUser = jdbc.getResultList("username", "username = " + username, "USERS", 1);
-        
-        if( ! existingUser.isEmpty()) //increment the number at the end of username if the username already exists
+        if( !existingUser.isEmpty()) //increment the number at the end of username if the username already exists
         {
+            System.out.println("user by the name of " + username + " already exists. Attempting username incrementation...");
+            if(existingUser.get(0).substring(existingUser.get(0).length()-1, existingUser.get(0).length()).matches("[0-9]")) //if username has a number at the end
+            {
             username = existingUser.get(0).substring(0, existingUser.get(0).length()-1) + 
                 (Integer.parseInt(existingUser.get(0).substring(existingUser.get(0).length()-1, existingUser.get(0).length())) + 1);
+            }
+            else
+            {
+                username = username + "1";
+            }
         }
         
         //Add to database
@@ -106,13 +114,15 @@ public class RegisterStaff extends HttpServlet
         String values = "('" + username  + "', '"+  firstname + "','" + lastname + "', '"+ userType
                               + "', '" + dob + "', '" + phone +"', '"
                               + email + "', '" + address + "', '" + ac.generatePasswordHash(password)  + "', '" + regdate +"')";
-        
-        
+
+ 
         int success = jdbc.addRecords(table, values);
         if(success != 0){
             request.setAttribute("updateSuccess", "The account has been added!");
+            System.out.println("Account added");
         }else{
             request.setAttribute("updateSuccess", "There has been a problem.");
+            System.out.println("Account could not be added");
         }
         
         RequestDispatcher view = request.getRequestDispatcher(viewPath);
