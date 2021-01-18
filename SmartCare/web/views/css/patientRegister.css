@@ -22,7 +22,8 @@ a {
 input[type="text"],
 input[type="password"],
 input[type="number"],
-input[type="date"] {
+input[type="date"],
+input[type="email"] {
   margin-bottom: 10px;
   width: 280px;
   height: 30px;
@@ -35,7 +36,8 @@ input[type="date"] {
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="number"]:focus,
-input[type="date"]:focus {
+input[type="date"]:focus,
+input[type="email"]:focus {
   border: 1px solid #ff416c;
 }
 
@@ -82,6 +84,7 @@ button[type="submit"]:active {
 
 .login-container {
   margin-top: 15px;
+  width: 400px;
 }
 
 .login-container > a:hover {

@@ -65,7 +65,7 @@ public class RegisterPatient extends HttpServlet {
          //check that username doesn't already exist
         ArrayList<String> existingUser = jdbc.getResultList("username", "username = '" + username + "'", "USERS", 1);
         
-        if( ! existingUser.isEmpty()) //increment the number at the end of username if the username already exists
+        if( !existingUser.isEmpty()) //increment the number at the end of username if the username already exists
         {
             System.out.println("user by the name of " + username + " already exists. Attempting username incrementation...");
             if(existingUser.get(0).substring(existingUser.get(0).length()-1, existingUser.get(0).length()).matches("[0-9]")) //if username has a number at the end
@@ -88,7 +88,7 @@ public class RegisterPatient extends HttpServlet {
 
         int success = jdbc.addRecords(table, values);
         if(success != 0){
-            request.setAttribute("updateSuccess", "The patient has been added!");
+            request.setAttribute("updateSuccess", "You have register successfully. Head to the <a href='/SmartCare'>Login page</a> to sign in.");
         }else{
             request.setAttribute("updateSuccess", "There has been a problem.");
         }
