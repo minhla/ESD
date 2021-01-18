@@ -24,6 +24,7 @@ import smartcare.models.Prescription;
 import smartcare.models.Location;
 import smartcare.models.Location;
 import smartcare.models.Helper;
+import smartcare.models.Invoice;
 import smartcare.models.database.Jdbc;
 import smartcare.models.users.User;
 
@@ -220,6 +221,18 @@ public class PatientServlet extends HttpServlet {
         request.setAttribute("doctors", doctors);
         request.setAttribute("nurses", nurses);
     }
+
+    /**
+    * Get all invoices that the patient needs to pay
+    *
+    * @param request The servlet request variable
+    * @param patient The patient object for which to add appointment.
+     */
+    private void showInvoices(HttpServletRequest request, Patient patient){
+        ArrayList<Invoice> invoices;
+        invoices = patient.getInvoices();
+        request.setAttribute("invoices", invoices);
+    }
     
     
     
@@ -241,6 +254,9 @@ public class PatientServlet extends HttpServlet {
         
         //Show all of the scheduled appointments
         showAppointments(request, patient);
+
+        //Show all invoices
+        showInvoices(request, patient);
 
         //get action from patient landing
         String action = request.getParameter("action");

@@ -47,6 +47,16 @@ input[type="submit"]:hover {
   color: white;
 }
 
+input[name="CCV"] {
+  min-width: 50px;
+  max-width: 50px;
+}
+
+input[name="invoiceID"] {
+  min-width: 100px;
+  max-width: 100px;
+}
+
 .outer-container {
   display: flex;
   flex-flow: row;

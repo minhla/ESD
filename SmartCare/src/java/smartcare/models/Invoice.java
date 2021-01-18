@@ -15,11 +15,12 @@ import smartcare.models.database.Jdbc;
  * @author asia
  */
 public class Invoice {
-    
+    String invoiceID;
     String patientID;
     String service;
     String detail;
     String amount;
+    String date;
     String paymenttype;  
     
     //get jdbc object
@@ -33,6 +34,16 @@ public class Invoice {
         this.service = service;
         this.detail = detail;
         this.amount = amount;
+        this.paymenttype = paymenttype; 
+    }
+
+     public Invoice(String invoiceID, String service, String detail, String amount, String patientID,String date, String paymenttype) 
+    {   this.invoiceID = invoiceID;
+        this.patientID = patientID;
+        this.service = service;
+        this.detail = detail;
+        this.amount = amount;
+        this.date = date;
         this.paymenttype = paymenttype; 
     }
     
@@ -117,5 +128,22 @@ public class Invoice {
     public String getPaymenttype() {
         return paymenttype;
     }
+
+    public String getInvoiceID() {
+        return invoiceID;
+    }
+
+    public void setInvoiceID(String invoiceID) {
+        this.invoiceID = invoiceID;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+    
     
 }
