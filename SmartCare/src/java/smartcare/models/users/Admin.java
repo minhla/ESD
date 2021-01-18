@@ -34,7 +34,7 @@ public class Admin extends User
         
         //Get the received data and put it into appointment objects
         for(int i = 0; i < r.size(); i+=numOfColumns){
-            Appointment app = new Appointment(r.get(i), r.get(i+1), r.get(i+2), r.get(i+3), r.get(i+4), this.getUserID());
+            Appointment app = new Appointment(r.get(i), r.get(i+1), r.get(i+2), r.get(i+3), r.get(i+4), this.getUsername());
             appointmentList.add(app);
         }
         
