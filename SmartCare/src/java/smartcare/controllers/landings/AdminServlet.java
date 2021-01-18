@@ -50,13 +50,13 @@ public class AdminServlet extends HttpServlet {
         
        //get parameters from prescription form
        String patientID = request.getParameter("patientID");
-
+       System.out.println("patientID => "+patientID);
        String patientDetail = null;
        
        try 
        {
            //get patient detail from database
-           patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(uuid = "+patientID+" AND usertype = 'P')", "users",3);
+           patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(username = '"+patientID+"' AND usertype = 'P')", "users",3);
            if(patientDetail.equals(""))
            {
                session.setAttribute("patientDetail","Patient not found!");
@@ -147,7 +147,7 @@ public class AdminServlet extends HttpServlet {
        Invoice invoice = new Invoice(patientID,service,detail,amount,paymenttype);
        
        //validate the patient id
-       String validation = jdbc.getResultSet("firstname, lastname, dob", "(uuid = "+patientID+" AND usertype = 'P')", "users",3);
+       String validation = jdbc.getResultSet("firstname, lastname, dob", "(username ='"+patientID+"' AND usertype = 'P')", "users",3);
        
        if (!validation.equals(""))
        {

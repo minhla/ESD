@@ -112,6 +112,9 @@ input[type="submit"]:hover {
   border-bottom: 2px solid pink;
 }
 
+.profile {
+  margin-bottom: 15px;
+}
 
 /* Set the size of the div element that contains the map */
 #map {

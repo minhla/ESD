@@ -151,6 +151,13 @@
             </div>
 
             <div class="re-issue-container">
+                <div class="profile">
+                    <h1>Your profile info</h1>
+                    Full Name: <%out.println(((User)session.getAttribute("user")).getName());%> <br/>
+                    Username: <%out.println(session.getAttribute("username"));%> <br/>
+                    Email: <%out.println(((User)session.getAttribute("user")).getEmail());%> <br/>
+                </div>
+            
                 <h1>Request for re-issue prescription: </h1>
                 <form action="PatientServlet.do" name="re-issue prescription" method="Post" >
                     Patient ID:<br/> <input type="text" name="patientID" ><br/><br/> 

@@ -88,7 +88,7 @@ public class Patient extends User
         //Add to database
         String table = "appointments (appointmentdate, starttime, endtime, comment, patient_username, locationID)";
         String values = "('"  + date + "', '"+ startTime+ "', '" 
-                + endtime + "', '" + comment + "', " + this.getUsername()+")";
+                + endtime + "', '" + comment + "', '"+ this.getUsername()+ "', "+locationID+")";
         
         int success = this.jdbc.addRecords(table, values);
         if(success != 0){

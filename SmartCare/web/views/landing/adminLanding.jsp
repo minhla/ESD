@@ -50,21 +50,56 @@
 
 
         <div class="outer-container">
-            <div>
+
+            <div class="invoice-container">
+                <h1>Invoice Form</h1>
+                <form action="AdminServlet.do" name="invoice" method="Post" >
+                    Patient Username:<br/> <input type="text" name="patientID" placeholder="Ex. j-doe" required>  <br/><br/>       
+                    
+                    Type of service<br/> 
+                    <select id="services" name="services" required>
+                        <option value="" disabled="disabled" selected="selected">Please select</option>
+                        <option value="surgery">Surgery</option>
+                        <option value="consultation">Consultation</option>
+                    </select>
+                    <br/><br/>
+                    Details: <br/> <textarea type="text" name="detail" rows="4" cols="50" required></textarea><br/><br/>
+                    Total amount:<br/> <input type="number" name="amount" required><br/><br/> 
+                    Payment type:<br/>             
+                    <select id="paymenttype" name="paymenttype" required>
+                        <option value="" selected="selected" disabled="disabled">Please select</option>
+                        <option value="NHS">NHS</option>
+                        <option value="Private">Private</option>
+                    </select>
+                    <br/><br/> 
+                    <input type="submit" value="Issue Invoice" name ="action"><br/>
+                </form>
+                <p>
+                    <%                      //show result of sending invoice
+                        String update = (String) session.getAttribute("updateSuccess");
+                        if (update != null) {
+                            out.println(update);
+                        }
+                    %>
+                </p>
+
+                <div class="appointment-container">
                     <%
                         //check if there are appointments
                         boolean showTable = false;
-                        if(!((ArrayList)request.getAttribute("appointments")).isEmpty()){
+                        if (!((ArrayList) request.getAttribute("appointments")).isEmpty()) {
                             showTable = true;
                         }
-                        if(showTable){
+                        if (showTable) {
                             out.print("<h4>All booked appointments:</h4>");
-                        }else{
+                        } else {
                             out.print("<h4>There aren't any booked appointments</h4>");
                         }
                     %>
-                    
-                    <table <% if(!showTable){out.print("hidden='true'");} %> >
+
+                    <table <% if (!showTable) {
+                            out.print("hidden='true'");
+                        } %> >
                         <tr>
                             <th>Appointment ID</th>
                             <th>Date</th>
@@ -76,7 +111,7 @@
                             if (showTable) {
                                 ArrayList<Appointment> a;
                                 a = (ArrayList) request.getAttribute("appointments");
-                                
+
                                 //loop through all of the appointments in the array list
                                 for (Appointment appointment : a) {
                                     out.print("<form action='AdminServlet.do' name ='deleteAppointment' method='Post'>");
@@ -110,52 +145,6 @@
                     %>
                 </div>
             </div>
-            
-            
-            
-            <div class="invoice-container">
-                <h1>Invoice Form</h1>
-                <form action="AdminServlet.do" name="invoice" method="Post" >
-                    Patient ID:<br/> <input type="number" name="patientID" placeholder="Ex. 1246092" required>         
-                    <input type="submit" value="Get patient details" name="action"><br/><br/>
-                    <p>
-                        <%
-                            //show patient details
-                            String patientDetail = (String) session.getAttribute("patientDetail");
-
-                            if (patientDetail != null) {
-                                out.println(patientDetail);
-                            }
-
-                        %>
-                    </p>
-                    Type of service<br/> 
-                    <select id="services" name="services" required>
-                        <option value="" disabled="disabled" selected="selected">Please select</option>
-                        <option value="surgery">Surgery</option>
-                        <option value="consultation">Consultation</option>
-                    </select>
-                    <br/><br/>
-                    Details: <br/> <textarea type="text" name="detail" rows="4" cols="50" required></textarea><br/><br/>
-                    Total amount:<br/> <input type="number" name="amount" required><br/><br/> 
-                    Payment type:<br/>             
-                    <select id="paymenttype" name="paymenttype" required>
-                        <option value="" selected="selected" disabled="disabled">Please select</option>
-                        <option value="NHS">NHS</option>
-                        <option value="Private">Private</option>
-                    </select>
-                    <br/><br/> 
-                    <input type="submit" value="Issue Invoice" name ="action"><br/>
-                </form>
-                <p>
-                    <%                      //show result of sending invoice
-                        String update = (String) session.getAttribute("updateSuccess");
-                        if (update != null) {
-                            out.println(update);
-                        }
-                    %>
-                </p>
-            </div>
 
 
 
@@ -175,6 +164,23 @@
                     }
                 %>
                 <br/>
+                
+                <h1>Find details of a patient</h1>
+                <form action="AdminServlet.do" name="invoice" method="Post" >
+                Patient Username:<br/> <input type="text" name="patientID" placeholder="Ex. j-doe" required>    
+                <input type="submit" value="Get patient details" name="action"><br/><br/>
+                    <p>
+                        <%
+                            //show patient details
+                            String patientDetail = (String) session.getAttribute("patientDetail");
+
+                            if (patientDetail != null) {
+                                out.println(patientDetail);
+                            }
+
+                        %>
+                    </p>
+                </form>
             </div>
 
             <div class="register-container">

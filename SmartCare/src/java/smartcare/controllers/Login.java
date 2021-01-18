@@ -40,7 +40,7 @@ public class Login extends HttpServlet {
         session.setAttribute("user", user);
         session.setAttribute("username", user.getUsername());
         session.setAttribute("userType", user.getUserType());
-
+        System.out.println("session username => "+ session.getAttribute("username"));
         return session;
     }
 
@@ -116,6 +116,7 @@ public class Login extends HttpServlet {
 
                     Admin admin = new Admin();
                     admin.setUserType("A");
+                    admin.setUsername(user.getUsername());
                     session = setupUserSession(admin, session);
 
                     setCookies(user.getUsername(), session, response);
@@ -126,6 +127,9 @@ public class Login extends HttpServlet {
 
                     Patient patient = new Patient();
                     patient.setUserType("P");
+                    patient.setUsername(user.getUsername());
+                    patient.setName(user.getName());
+                    patient.setEmail(user.getEmail());
                     session = setupUserSession(patient, session);
 
                     setCookies(user.getUsername(), session, response);
@@ -136,6 +140,7 @@ public class Login extends HttpServlet {
 
                     Nurse nurse = new Nurse();
                     nurse.setUserType("N");
+                    nurse.setUsername(user.getUsername());
                     session = setupUserSession(nurse, session);
 
                     setCookies(user.getUsername(), session, response);
@@ -145,6 +150,7 @@ public class Login extends HttpServlet {
 
                     Doctor doctor = new Doctor();
                     doctor.setUserType("D");
+                    doctor.setUsername(user.getUsername());
                     session = setupUserSession(doctor, session);
 
                     setCookies(user.getUsername(), session, response);
@@ -178,10 +184,10 @@ public class Login extends HttpServlet {
 
     private void setCookies(String user, HttpSession session, HttpServletResponse response)
     {
-        //setting session to expiry in 30 mins
-        session.setMaxInactiveInterval(30*60);
+        //set the existing session to expire in 30 mins
+        session.setMaxInactiveInterval(1800);
         Cookie userName = new Cookie("user", user);
-        userName.setMaxAge(30*60);
+        userName.setMaxAge(1800);
         response.addCookie(userName);
     }
 
