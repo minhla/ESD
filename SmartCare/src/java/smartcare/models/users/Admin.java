@@ -3,7 +3,7 @@ package smartcare.models.users;
 
 import java.util.ArrayList;
 import smartcare.models.database.Jdbc;
-
+import smartcare.models.Appointment;
 public class Admin extends User
 {    
     
