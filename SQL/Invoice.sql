@@ -8,5 +8,6 @@ CREATE TABLE invoice(
     issuedate VARCHAR(20),
     weeknum INT,
     paymenttype VARCHAR(100),
+    paid CHAR(1),
     FOREIGN KEY (patient_username) REFERENCES Users(username)
 )

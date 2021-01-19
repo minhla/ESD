@@ -47,16 +47,6 @@ input[type="submit"]:hover {
   color: white;
 }
 
-input[name="CCV"] {
-  min-width: 50px;
-  max-width: 50px;
-}
-
-input[name="invoiceID"] {
-  min-width: 100px;
-  max-width: 100px;
-}
-
 .outer-container {
   display: flex;
   flex-flow: row;
@@ -102,10 +92,11 @@ input[name="invoiceID"] {
   background-color: lightsalmon;
 }
 
-.book-appointment-container,
-.re-issue-container {
+.appointment-container,
+.prescription-container,
+.invoice-container {
   background-color: white;
-  width: 45%;
+  width: 29%;
   border-radius: 15px;
   padding: 25px 25px 0 25px;
   -webkit-box-shadow: 0px 0px 20px -6px rgba(0,0,0,0.56);
@@ -114,8 +105,9 @@ input[name="invoiceID"] {
   margin-bottom: 20px;
 }
 
-.book-appointment-container h1,
-.re-issue-container h1 {
+.appointment-container h1,
+.prescription-container h1,
+.invoice-container h1 {
   margin: 0;
   font-size: 20px;
   margin-bottom: 20px;
@@ -123,14 +115,10 @@ input[name="invoiceID"] {
   border-bottom: 2px solid pink;
 }
 
-.profile {
-  margin-bottom: 15px;
+.appointment-list {
+  margin: 15px 0;
 }
 
-/* Set the size of the div element that contains the map */
-#map {
-  height: 400px;
-  /* The height is 400 pixels */
+table {
   width: 100%;
-  /* The width is the width of the web page */
 }
