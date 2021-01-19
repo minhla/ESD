@@ -54,7 +54,7 @@
             <div class="invoice-container">
                 <h1>Invoice Form</h1>
                 <form action="AdminServlet.do" name="invoice" method="Post" >
-                    Patient Username:<br/> <input type="text" name="patientID" placeholder="Ex. j-doe" required>  <br/><br/>       
+                    Appointment ID: <br/> <input type="text" pattern="\d*" name="appointmentID" placeholder="123" required>  <br/><br/>       
                     
                     Type of service<br/> 
                     <select id="services" name="services" required>

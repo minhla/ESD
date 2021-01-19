@@ -63,8 +63,8 @@ public class Invoice {
         int weekNum = cl.WEEK_OF_YEAR;
 
         //Add details of prescription to database
-        String table = "invoice (servicetype, detail, amount, patient_username, issuedate, weeknum, paymenttype)";
-        String values = "('" + this.service + "', '" + this.detail + "', " + this.amount + ", '" + this.patientID + "','" + currentDate + "'," + weekNum + ",'" + paymenttype + "')";
+        String table = "invoice (servicetype, detail, amount, patient_username, issuedate, weeknum, paymenttype, paid)";
+        String values = "('" + this.service + "', '" + this.detail + "', " + this.amount + ", '" + this.patientID + "','" + currentDate + "'," + weekNum + ",'" + paymenttype + "', '0')";
 
         int success = jdbc.addRecords(table, values);
 
