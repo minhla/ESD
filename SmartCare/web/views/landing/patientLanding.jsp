@@ -1,3 +1,5 @@
+<%@page import="smartcare.models.users.Nurse"%>
+<%@page import="smartcare.models.users.Doctor"%>
 <%@page import="smartcare.models.Invoice"%>
 <%@page import="smartcare.models.users.User"%>
 <%@page import="smartcare.models.Appointment"%>
@@ -62,14 +64,24 @@
                         Start Time: <input type="time" name="starttime"><br/>
                         Date: <input type="date" name="date"><br/> <!-- there will be a dropdown here-->
                         Reason: <input type="text" name="comment"><br/>
-                        Staff:<select name="doctor" id="doctor" required>
+                        Staff:<select name="staff" id="staff" required>
                             <option value="" disabled="disabled" selected="selected">Please choose</option>
                             <option value="" disabled="disabled">Doctors</option>
-                            <option value="volvo">Volvo</option>
-                            <option value="saab">Saab</option>
+                            <%
+                                ArrayList<Doctor> doctors;
+                                doctors = (ArrayList) request.getAttribute("doctors");
+                                for(Doctor doctor: doctors){
+                                    out.print("<option value=\""+ doctor.getUsername()+"\">" + doctor.getName() + " " + doctor.getLastname()+ "</option>");
+                                }
+                            %>
                             <option value="" disabled="disabled">Nurses</option>
-                            <option value="opel">Opel</option>
-                            <option value="audi">Audi</option>
+                            <%
+                                ArrayList<Nurse> nurses;
+                                nurses = (ArrayList) request.getAttribute("nurses");
+                                for(Nurse nurse: nurses){
+                                    out.print("<option value=\""+ nurse.getUsername()+"\">" + nurse.getName() + " " + nurse.getLastname()+ "</option>");
+                                }
+                            %>
                         </select><br/>
                         Location: <input type="text" id="location" readonly="yes" placeholder="Choose from map"><br>
                         Type: <input type="text" id="type" readonly="yes" placeholder="Private/NHS"><br>
