@@ -48,6 +48,7 @@ public class RegisterPatient extends HttpServlet {
         HttpSession session = request.getSession();
 
         //get parameters from form
+        String title = request.getParameter("titles");
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
         String username = firstname.charAt(0) + "-" + lastname;
@@ -80,8 +81,8 @@ public class RegisterPatient extends HttpServlet {
         }
         
         //Add to database
-        String table = "users (username, firstname, lastname, usertype, dob, phone, email, address, password, regdate)";
-        String values = "('" + username  + "', '"+  firstname + "','" + lastname + "', '"+ "P"
+        String table = "users (title, username, firstname, lastname, usertype, dob, phone, email, address, password, regdate)";
+        String values = "('" + title  + "', '" + username  + "', '"+  firstname + "','" + lastname + "', '"+ "P"
                               + "', '" + dob + "', '" + phone +"', '"
                               + email + "', '" + address + "', '" + ac.generatePasswordHash(password)  + "', '" + regdate +"')";
 

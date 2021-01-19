@@ -41,7 +41,7 @@ public class Admin extends User
         return appointmentList;
     }
     
-    /**
+       /**
     * Deletes a specified appointment.
     * Deletes an appointment by id and returns an success message.
     *
@@ -134,5 +134,53 @@ public class Admin extends User
             return username;
         
         return username + (index - 1);
+    }
+        /**
+    * Returns list of fees .
+    * Retrieves data from Fees table in the database and returns it
+    *
+    * @return     list of fees.
+    */
+    public ArrayList<Fees> getFees(){
+        ArrayList<Fees> feesList = new ArrayList<>();
+        ArrayList<String> r;
+        
+        int numOfColumns = 5;
+        String column = "price, period";
+        String table = "Fees";
+        String condition = "1=1";
+        
+        //Get all of the appointments for this user
+        r = this.jdbc.getResultList(column, condition, table, numOfColumns);
+        
+        //Get the received data and put it into appointment objects
+        for(int i = 0; i < r.size(); i+=numOfColumns){
+            String price = r.get(i);
+            String period = r.get(i+1);
+             
+            Fees fee = new Fees(Integer.parseInt(price), Integer.parseInt(period));
+            
+            feesList.add(fee);
+        }
+        
+        return feesList;
+    }
+    
+       
+    /**
+    * Updates the price and period of an appointment.
+    *
+    * @param price and period from the table fees in the database.
+    * @return Whether the update was successful .
+    */
+    public int updateFees(int price, int period){
+
+         String table = "fees (period, price)";
+        String values = "('" + period  + "', '"+  price + "')";
+        
+        
+        int success = jdbc.updateQuery("Update Fees Set price = " +price+", period = "+period);
+        
+        return success;
     }
 }

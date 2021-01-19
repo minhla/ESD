@@ -29,6 +29,7 @@ import smartcare.models.Appointment;
 import smartcare.models.users.User;
 import smartcare.models.database.Jdbc;
 import smartcare.models.util.RegistrationUtils;
+import smartcare.models.users.Fees;
 
 /**
  *
@@ -122,10 +123,7 @@ public class AdminServlet extends HttpServlet {
                                                  "Date of Birth: "+detailList[2]+"<br/>");
             */
         }
-       
-       
-     
-        
+ 
        return request;
         
     }
@@ -257,6 +255,44 @@ public class AdminServlet extends HttpServlet {
     }
     
     
+        /**
+    * Retrieves fee.
+    *
+    * @param request The servlet request variable.
+    * @param admin The Admin object.
+    */
+    private void showFees(HttpServletRequest request, Admin admin){
+        ArrayList<Fees> fees;
+        fees = admin.getFees();
+        request.setAttribute("fees", fees);
+    }
+    
+    
+    private HttpServletRequest updateFees(HttpServletRequest request, Admin admin) {
+        
+        HttpSession session = request.getSession();
+        
+       //get parameters from prescription form
+       String price = request.getParameter("price");
+       String period = request.getParameter("period");
+       
+       //create fee object
+       
+         int success = admin.updateFees(Integer.parseInt(price),Integer.parseInt(period));
+         
+         //check if the database is successfully updated or not
+         if(success != 0)
+         {
+             session.setAttribute("updateSuccess", "The price has been updated!");
+         }
+         else
+         {
+             session.setAttribute("updateSuccess", "There has been a problem.");
+         }
+        
+        return request;
+    }
+    
     /**
     * Deletes an appointment from the database.
     * Deletes appointment for this patient and alerts the patientLanding.
@@ -295,16 +331,23 @@ public class AdminServlet extends HttpServlet {
             else if(action.equals("Produce Weekly Documents"))
             {
                 request = getWeeklyDocument(request);
-            }else if(action.equals("Cancel"))
+                
+            } else if(action.equals("Change Appointment Price"))
             {
-                deleteAppointment(request, admin);
+                request = updateFees(request, admin);
             }
             else if(action.equals("Register"))
             {
                 registerStaff(request, admin);
             }
+            else if(action.equals("Cancel"))
+            {
+                deleteAppointment(request, admin);
+                
+            } 
         
         showAppointments(request, admin);
+        showFees(request, admin);
         
         
         
@@ -350,5 +393,6 @@ public class AdminServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 
 }

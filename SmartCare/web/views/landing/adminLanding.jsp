@@ -4,6 +4,7 @@
     Author     : Michael
 --%>
 
+<%@page import="smartcare.models.users.Fees"%>
 <%@page import="smartcare.models.Appointment"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -194,7 +195,42 @@
                         %>
                     </p>
                 </form>
+                    
+                <h1>Fees Management</h1>
+                
+                <%
+                        //check if there are appointments
+                        boolean showPrice = false;
+                        if (!((ArrayList) request.getAttribute("fees")).isEmpty()) {
+                            showPrice = true;
+                        }
+                        if (!showPrice) {
+                      
+                            out.print("<h4>There aren't any prices fixed</h4>");
+                        }
+                        
+                        ArrayList<Fees> feesList = (ArrayList) request.getAttribute("fees");
+                        Fees currentFee = feesList.get(0);
+            
+                    %>
+                    
+                <form action="AdminServlet.do" name="updateSuccess" method="Post">
+                     Price: <br> <input type="number" name="price" required="" value="<%=currentFee.getPrice() %>"> £<br><br> 
+                    Period: <br> <input type="number" name="period" required="" value="<%=currentFee.getPeriod() %>"> Mn<br><br>  
+                    <input type="submit" value="Change Appointment Price" name="action"><br>
+                </form>
+                    
+                        <%
+                    String updateSuccess = (String) request.getAttribute("updateSuccess");
+                    if (updateSuccess != null) {
+                        out.println(updateSuccess);
+                    }
+                %>
+                <br>
+                
             </div>
+                    
+           
 
             <div class="register-container">
                 <h1>Register New Staff Account</h1>
