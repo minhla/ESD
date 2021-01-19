@@ -54,7 +54,7 @@
             <div class="invoice-container">
                 <h1>Invoice Form</h1>
                 <form action="AdminServlet.do" name="invoice" method="Post" >
-                    Patient Username:<br/> <input type="text" name="patientID" placeholder="Ex. j-doe" required>  <br/><br/>       
+                    Appointment ID: <br/> <input type="text" pattern="\d*" name="appointmentID" placeholder="123" required>  <br/><br/>       
                     
                     Type of service<br/> 
                     <select id="services" name="services" required>
@@ -99,7 +99,7 @@
 
                     <table <% if (!showTable) {
                             out.print("hidden='true'");
-                        } %> >
+                        } %> style="width:100%;margin-bottom:20px" >
                         <tr>
                             <th>Appointment ID</th>
                             <th>Date</th>
@@ -108,6 +108,8 @@
                             <th>Action</th>
                         </tr>
                         <%
+                            try
+                            {
                             if (showTable) {
                                 ArrayList<Appointment> a;
                                 a = (ArrayList) request.getAttribute("appointments");
@@ -136,11 +138,22 @@
                                     out.print("</form>");
                                 }
                             }
+                            }
+                            catch(NullPointerException e)
+                            {
+                            }
                         %>
                     </table>
                     <%
-                        if (request.getAttribute("deleteSuccess") != null) {
-                            out.print("<p>" + request.getAttribute("deleteSuccess") + "</p>");
+                        try
+                        {
+                            if (request.getAttribute("deleteSuccess") != null) {
+                                out.print("<p>" + request.getAttribute("deleteSuccess") + "</p>");
+                        }
+                        }
+                        catch(NullPointerException e)
+                        {
+                            System.out.println("deleteSuccess parameter not populated");
                         }
                     %>
                 </div>
@@ -185,7 +198,7 @@
 
             <div class="register-container">
                 <h1>Register New Staff Account</h1>
-                <form action="RegisterStaff" method="post">
+                <form action="AdminServlet.do" method="post">
                     <p>Email: <input type="text" name="new_acc_email" placeholder="johndoe@gmail.com"></p>
                     <p>First name: <input type="text" name="new_acc_firstname" placeholder="John"></p>
                     <p>Last name: <input type="text" name="new_acc_lastname" placeholder="Doe"></p>
@@ -196,7 +209,7 @@
                     <p>Date of birth: <input type="date" name="new_acc_dob"></p>
                     <p>Phone number: <input type="text" name="new_acc_phone" placeholder="Maximum 11 numbers"></p>
                     <p>Address: <input type="text" name="new_acc_address" placeholder="Somewhere on Earth..."></p>
-                    <input type="submit" value="Submit">
+                <input type="submit" value="Register" name="action">
                 </form>
                 <%
                     String error = (String) request.getAttribute("updateSuccess");

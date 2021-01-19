@@ -151,6 +151,8 @@ public class Login extends HttpServlet {
                     Doctor doctor = new Doctor();
                     doctor.setUserType("D");
                     doctor.setUsername(user.getUsername());
+                    doctor.setName(user.getName());
+                    doctor.setEmail(user.getEmail());
                     session = setupUserSession(doctor, session);
 
                     setCookies(user.getUsername(), session, response);

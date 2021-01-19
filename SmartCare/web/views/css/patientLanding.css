@@ -47,6 +47,16 @@ input[type="submit"]:hover {
   color: white;
 }
 
+input[name="CCV"] {
+  min-width: 50px;
+  max-width: 50px;
+}
+
+input[name="invoiceID"] {
+  min-width: 100px;
+  max-width: 100px;
+}
+
 .outer-container {
   display: flex;
   flex-flow: row;
@@ -101,6 +111,7 @@ input[type="submit"]:hover {
   -webkit-box-shadow: 0px 0px 20px -6px rgba(0,0,0,0.56);
   -moz-box-shadow: 0px 0px 20px -6px rgba(0,0,0,0.56);
   box-shadow: 0px 0px 20px -6px rgba(0,0,0,0.56);
+  margin-bottom: 20px;
 }
 
 .book-appointment-container h1,

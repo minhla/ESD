@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import smartcare.models.Appointment;
+import smartcare.models.Invoice;
 import smartcare.models.database.Jdbc;
 
 public class Patient extends User
@@ -99,5 +100,39 @@ public class Patient extends User
         
         return updateSuccess;
     }
+
+    public ArrayList<Invoice> getInvoices() {
+        ArrayList<Invoice> invoiceList = new ArrayList<>();
+        ArrayList<String> r;
+        
+        int numOfColumns = 6;
+        String column = "invoiceid, servicetype, detail, amount, issuedate, paymenttype";
+        String table = "Invoice";
+        String condition = "patient_username = '" + this.getUsername() + "' AND paid='0' ORDER BY invoiceid ASC, issuedate ASC";
+        
+        //Get all of the appointments for this user
+        r = this.jdbc.getResultList(column, condition, table, numOfColumns);
+        
+        //Get the received data and put it into appointment objects
+        for(int i = 0; i < r.size(); i+=numOfColumns){
+            Invoice app = new Invoice(r.get(i), r.get(i+1), r.get(i+2), r.get(i+3),this.getUsername(), r.get(i+4), r.get(i+5));
+            invoiceList.add(app);
+        }
+        
+        return invoiceList;
+    }
+    
+        public String payInvoice(String invoiceID) {
+        int success = this.jdbc.update("Invoice", "invoiceid = " + invoiceID, "paid='1'");
+        String deleteStatus = new String();
+        if (success == 0) {
+            deleteStatus = "Failed to pay invoice";
+        } else {
+            deleteStatus = "Invoice paid successfully";
+        }
+        return deleteStatus;
+
+    }
+
     
 }

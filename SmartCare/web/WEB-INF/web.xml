@@ -32,10 +32,6 @@
         <servlet-name>AddPatient</servlet-name>
         <servlet-class>smartcare.controllers.registration.RegisterPatient</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>RegisterStaff</servlet-name>
-        <servlet-class>smartcare.controllers.registration.RegisterStaff</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login.do</url-pattern>
@@ -63,10 +59,6 @@
     <servlet-mapping>
         <servlet-name>AddPatient</servlet-name>
         <url-pattern>/AddPatient.do</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>RegisterStaff</servlet-name>
-        <url-pattern>/RegisterStaff</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

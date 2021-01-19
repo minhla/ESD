@@ -42,9 +42,9 @@ public class Document {
         String eDate = endDate.replaceAll("-","");       
         
         //invoice detail from database
-        ArrayList<String> turnover = jdbc.getResultList("amount", "(issuedate >= '"+startDate+"' AND issuedate <= '"+endDate+"')", "invoice",1);
-        ArrayList<String> payPrivate = jdbc.getResultList("paymenttype", "(issuedate >= '"+startDate+"' AND issuedate <= '"+endDate+"' AND paymenttype = 'Private')", "invoice",1);
-        ArrayList<String> payNHS =  jdbc.getResultList("paymenttype", "(issuedate >= '"+startDate+"' AND issuedate <= '"+endDate+"' AND paymenttype = 'NHS')", "invoice",1);
+        ArrayList<String> turnover = jdbc.getResultList("amount", "(issuedate >= '"+startDate+"' AND issuedate <= '"+endDate+"' AND paid='1')", "invoice",1);
+        ArrayList<String> payPrivate = jdbc.getResultList("paymenttype", "(issuedate >= '"+startDate+"' AND issuedate <= '"+endDate+"' AND paymenttype = 'Private' AND paid='1')", "invoice",1);
+        ArrayList<String> payNHS =  jdbc.getResultList("paymenttype", "(issuedate >= '"+startDate+"' AND issuedate <= '"+endDate+"' AND paymenttype = 'NHS' AND paid='1')", "invoice",1);
         
         //calculate turnover over the period selected
         if ((turnover.size() != 0))

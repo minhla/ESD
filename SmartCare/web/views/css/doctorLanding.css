@@ -92,9 +92,9 @@ input[type="submit"]:hover {
   background-color: lightsalmon;
 }
 
-.invoice-container,
-.document-form,
-.register-container {
+.appointment-container,
+.prescription-container,
+.invoice-container {
   background-color: white;
   width: 29%;
   border-radius: 15px;
@@ -105,12 +105,20 @@ input[type="submit"]:hover {
   margin-bottom: 20px;
 }
 
-.invoice-container h1,
-.document-form h1,
-.register-container h1 {
+.appointment-container h1,
+.prescription-container h1,
+.invoice-container h1 {
   margin: 0;
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 5px;
   border-bottom: 2px solid pink;
+}
+
+.appointment-list {
+  margin: 15px 0;
+}
+
+table {
+  width: 100%;
 }

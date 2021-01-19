@@ -297,7 +297,29 @@ public class Jdbc implements ServletContextListener{
         }
         return flag;
     }
+    
+    public int update(String table, String condition, String change){
+        int flag = 0;
+        Statement stmt = null;
+        String sql = "UPDATE " + table +" SET " +change+" WHERE " + condition;
+        System.out.println(sql);
 
+        Connection conn = this.connect();
+        
+        try
+        {
+            stmt = conn.createStatement();
+            flag = stmt.executeUpdate(sql);
+            stmt.close();
+            conn.close();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Failed to execute update from: " + table);
+            e.printStackTrace();
+        }
+        return flag;
+    }
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
