@@ -1,0 +1,7 @@
+create table "SMARTCARE".FEES
+(
+    PRICE INT,
+    PERIOD INT
+)
+
+INSERT INTO FEES (PRICE, PERIOD) VALUES (20, 10);

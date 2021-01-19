@@ -134,6 +134,7 @@ public class Admin extends User
             return username;
         
         return username + (index - 1);
+    }
         /**
     * Returns list of fees .
     * Retrieves data from Fees table in the database and returns it
