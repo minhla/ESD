@@ -109,7 +109,7 @@
 
                     <table <% if (!showTable) {
                             out.print("hidden='true'");
-                        } %> style='width:100%' >
+                        } %> style='width:100%;margin-bottom:20px' >
                         <tr>
                             <th>Appointment ID</th>
                             <th>Date</th>
