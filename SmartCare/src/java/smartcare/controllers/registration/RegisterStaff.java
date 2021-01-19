@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,6 +33,77 @@ public class RegisterStaff extends HttpServlet
 
     private Jdbc jdbc = Jdbc.getJdbc();
     private RegistrationUtils ru = new RegistrationUtils();
+    
+    
+    /*
+    Method: userExists
+    Description: checks if a username exists in the database.
+    Params: String username - the username to be searched for.
+    Returns: True if username already exists. Otherwise it will return false. 
+    */
+    private boolean userExists(String username)
+    {
+        ArrayList<String> existingUser;
+        
+        try
+        {
+            existingUser = jdbc.getResultList("username", "username = '" + username + "'", "USERS", 1);
+        }
+        catch(IllegalStateException e )
+        {
+            existingUser = new ArrayList<String>();
+        }
+        
+        if(existingUser.isEmpty())
+            return false;
+        else
+            return true;
+    }
+    
+    /*
+    Method: getUsernameNumOccur
+    Description: Returns the position of the first number in a string. Should be
+                 used in the creation of usernames.
+    Parameters: String username - the string to search for number index.
+    Returns: Int - the index position of the first number in username. 
+    */
+    private int getUsernameNumOccur(String username)
+    {
+        for (int x = 0; x < username.length(); x++)
+        {
+            if(Character.isDigit(username.charAt(x)))
+            {
+                return x;
+            }
+        }
+        return 0;
+    }
+    
+    private String incrementUsername(String username)
+    {
+        int firstInt = getUsernameNumOccur(username);
+        return username.substring(0, firstInt) + 
+        Integer.toString((Integer.parseInt(username.substring(firstInt, username.length())) + 1));
+    }
+    
+    /*
+    Method: usernameHasNum
+    Description: checks if a given username has a number at the end of it.
+    Params: String username - the username to be checked.
+    Returns: True if username has a number at the end. Otherwise it will return false. 
+    */
+    private String usernameWithNum(String username, int index)
+    {
+        //search for username+1 in db
+        //if it exists repeat the search
+        //if it does not exist, return username + index (unless index is 0)
+        if(userExists(username + Integer.toString(index)))
+            return usernameWithNum(username, index + 1);
+        else if(index == 0)
+            return username;
+        
+        return username + index;
+    }
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -73,8 +146,11 @@ public class RegisterStaff extends HttpServlet
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        
         Account ac = new Account();
-        String viewPath = "views/landing/adminLanding.jsp";
+        
+        String viewPath = "/views/landing/adminLanding.jsp";
                 
         //get parameters from form
         String firstname = request.getParameter("new_acc_firstname");
@@ -91,22 +167,15 @@ public class RegisterStaff extends HttpServlet
         DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime date = LocalDateTime.now();
         String regdate = date.format(dtFormatter);
-
-         //check that username doesn't already exist
-        ArrayList<String> existingUser = jdbc.getResultList("username", "username = '" + username + "'", "USERS", 1);
         
-        if( !existingUser.isEmpty()) //increment the number at the end of username if the username already exists
+        if(userExists(username)) //increment the number at the end of username if the username already exists
         {
             System.out.println("user by the name of " + username + " already exists. Attempting username incrementation...");
-            if(existingUser.get(0).substring(existingUser.get(0).length()-1, existingUser.get(0).length()).matches("[0-9]")) //if username has a number at the end
-            {
-            username = existingUser.get(0).substring(0, existingUser.get(0).length()-1) + 
-                (Integer.parseInt(existingUser.get(0).substring(existingUser.get(0).length()-1, existingUser.get(0).length())) + 1);
-            }
-            else
-            {
-                username = username + "1";
-            }
+            
+            username = usernameWithNum(username, 1); //find the version of this username with the highest number at the end
+            username = incrementUsername(username);
+            
+            System.out.println("New username is: " + username);
         }
         
         //Add to database
@@ -125,9 +194,8 @@ public class RegisterStaff extends HttpServlet
             System.out.println("Account could not be added");
         }
         
-        RequestDispatcher view = request.getRequestDispatcher(viewPath);
-        view.forward(request,response);
-        
+        System.out.println(request.getContextPath() + viewPath);
+        response.sendRedirect(request.getContextPath() + viewPath);
     }
 
     /**

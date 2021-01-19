@@ -108,6 +108,8 @@
                             <th>Action</th>
                         </tr>
                         <%
+                            try
+                            {
                             if (showTable) {
                                 ArrayList<Appointment> a;
                                 a = (ArrayList) request.getAttribute("appointments");
@@ -136,11 +138,22 @@
                                     out.print("</form>");
                                 }
                             }
+                            }
+                            catch(NullPointerException e)
+                            {
+                            }
                         %>
                     </table>
                     <%
-                        if (request.getAttribute("deleteSuccess") != null) {
-                            out.print("<p>" + request.getAttribute("deleteSuccess") + "</p>");
+                        try
+                        {
+                            if (request.getAttribute("deleteSuccess") != null) {
+                                out.print("<p>" + request.getAttribute("deleteSuccess") + "</p>");
+                        }
+                        }
+                        catch(NullPointerException e)
+                        {
+                            System.out.println("deleteSuccess parameter not populated");
                         }
                     %>
                 </div>

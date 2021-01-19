@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import smartcare.controllers.registration.RegisterStaff;
 import smartcare.models.Document;
 import smartcare.models.Invoice;
 import smartcare.models.users.Admin;
@@ -234,6 +235,8 @@ public class AdminServlet extends HttpServlet {
             }
         
         showAppointments(request, admin);
+        RegisterStaff regStaff = new RegisterStaff();
+        
         
         
         RequestDispatcher view = request.getRequestDispatcher(JSP);
