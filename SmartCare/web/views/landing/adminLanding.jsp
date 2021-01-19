@@ -54,7 +54,7 @@
             <div class="invoice-container">
                 <h1>Invoice Form</h1>
                 <form action="AdminServlet.do" name="invoice" method="Post" >
-                    Patient Username:<br/> <input type="text" name="patientID" placeholder="Ex. j-doe" required>  <br/><br/>       
+                    Appointment ID: <br/> <input type="text" pattern="\d*" name="appointmentID" placeholder="123" required>  <br/><br/>       
                     
                     Type of service<br/> 
                     <select id="services" name="services" required>
@@ -99,7 +99,7 @@
 
                     <table <% if (!showTable) {
                             out.print("hidden='true'");
-                        } %> >
+                        } %> style="width:100%;margin-bottom:20px" >
                         <tr>
                             <th>Appointment ID</th>
                             <th>Date</th>
@@ -130,7 +130,7 @@
                                     out.print(appointment.getComment());
                                     out.print("</td>");
                                     out.print("<td>");
-                                    out.print("<input type='submit' value='Cancel' name='action'>");
+                                    out.print("<input type='submit' value='Remove' name='action'>");
                                     out.print("</td>");
                                     out.print("</tr>");
                                     out.print("</form>");

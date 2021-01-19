@@ -137,11 +137,26 @@ public class AdminServlet extends HttpServlet {
         HttpSession session = request.getSession();
         
        //get parameters from prescription form
-       String patientID = request.getParameter("patientID");
+       String appointmentID = request.getParameter("appointmentID");
        String service = request.getParameter("services");
        String detail = request.getParameter("detail");
        String amount = request.getParameter("amount");
        String paymenttype = request.getParameter("paymenttype");
+
+       //Get patientID based on appointmentID
+        int numOfColumns = 1;
+        String column = "patient_username";
+        String table = "Appointments";
+        String condition = "appointmentid = " + appointmentID + "";
+
+        //JDBC execute search statement
+        ArrayList<String> res = this.jdbc.getResultList(column, condition, table, numOfColumns);
+        System.out.println(res);
+        if (res.isEmpty()) {
+            session.setAttribute("updateInvoice", "There has been a problem.");
+            return request;
+        }
+        String patientID = res.get(0);
 
        //create invoice object
        Invoice invoice = new Invoice(patientID,service,detail,amount,paymenttype);
@@ -152,7 +167,7 @@ public class AdminServlet extends HttpServlet {
        if (!validation.equals(""))
        {
 
-         int success = invoice.createInvoice();
+         int success = invoice.createInvoicedeleteAppointment(appointmentID);
          
          //check if the database is successfully updated or not
          if(success != 0)

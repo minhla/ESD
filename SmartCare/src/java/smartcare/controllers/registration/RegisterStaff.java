@@ -26,12 +26,12 @@ import smartcare.models.database.Jdbc;
 import smartcare.models.util.RegistrationUtils;
 
 
-public class RegisterStaff extends HttpServlet 
+public class RegisterStaff extends HttpServlet
 {
 
     private Jdbc jdbc = Jdbc.getJdbc();
     private RegistrationUtils ru = new RegistrationUtils();
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -75,7 +75,7 @@ public class RegisterStaff extends HttpServlet
         processRequest(request, response);
         Account ac = new Account();
         String viewPath = "views/landing/adminLanding.jsp";
-                
+
         //get parameters from form
         String firstname = request.getParameter("new_acc_firstname");
         String lastname = request.getParameter("new_acc_lastname");
@@ -87,37 +87,37 @@ public class RegisterStaff extends HttpServlet
         String address = request.getParameter("new_acc_address");
         String password = ru.dateToPassword(dob);
         String userType = request.getParameter("new_acc_type");
-        
+
         DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime date = LocalDateTime.now();
         String regdate = date.format(dtFormatter);
-        
+
         //check that username doesn't already exist
         ArrayList<String> existingUser = jdbc.getResultList("username", "username = " + username, "USERS", 1);
-        
+
         if( ! existingUser.isEmpty()) //increment the number at the end of username if the username already exists
         {
-            username = existingUser.get(0).substring(0, existingUser.get(0).length()-1) + 
+            username = existingUser.get(0).substring(0, existingUser.get(0).length()-1) +
                 (Integer.parseInt(existingUser.get(0).substring(existingUser.get(0).length()-1, existingUser.get(0).length())) + 1);
         }
-        
+
         //Add to database
         String table = "users (username, firstname, lastname, usertype, dob, phone, email, address, password, regdate)";
         String values = "('" + username  + "', '"+  firstname + "','" + lastname + "', '"+ userType
                               + "', '" + dob + "', '" + phone +"', '"
                               + email + "', '" + address + "', '" + ac.generatePasswordHash(password)  + "', '" + regdate +"')";
-        
-        
+
+
         int success = jdbc.addRecords(table, values);
         if(success != 0){
             request.setAttribute("updateSuccess", "The account has been added!");
         }else{
             request.setAttribute("updateSuccess", "There has been a problem.");
         }
-        
+
         RequestDispatcher view = request.getRequestDispatcher(viewPath);
         view.forward(request,response);
-        
+
     }
 
     /**
