@@ -156,6 +156,13 @@
                     <br/><br/> 
                     <input type="submit" value="Issue Invoice" name ="action"><br/>
                 </form>
+                <p>
+                    <%                String updateInvoice = (String) session.getAttribute("updateInvoice");
+                        if (updateInvoice != null) {
+                            out.println(updateInvoice);
+                        }
+                    %>
+                </p>
             </div>
 
             

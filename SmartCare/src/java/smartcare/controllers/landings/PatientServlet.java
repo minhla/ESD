@@ -270,7 +270,7 @@ public class PatientServlet extends HttpServlet {
             }
 
             showAppointments(request, patient);
-            patient.getInvoices();
+            showInvoices(request, patient);
         }
 
         RequestDispatcher view = request.getRequestDispatcher(JSP);

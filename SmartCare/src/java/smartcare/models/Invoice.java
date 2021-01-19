@@ -37,6 +37,7 @@ public class Invoice {
         this.detail = detail;
         this.amount = amount;
         this.paymenttype = paymenttype;
+        this.paid = "0";
     }
 
     public Invoice(String invoiceID, String service, String detail, String amount, String patientID, String date, String paymenttype) {
