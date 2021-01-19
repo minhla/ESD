@@ -221,9 +221,9 @@ public class PatientServlet extends HttpServlet {
         request.setAttribute("invoices", invoices);
     }
 
-    private void deleteInvoice(HttpServletRequest request, Patient patient) {
+    private void payInvoice(HttpServletRequest request, Patient patient) {
         String invoiceId = request.getParameter("invoiceID");
-        String deleteSuccess = patient.deleteInvoice(invoiceId);
+        String deleteSuccess = patient.payInvoice(invoiceId);
         request.setAttribute("deleteStatus", deleteSuccess);
     }
 
@@ -263,7 +263,7 @@ public class PatientServlet extends HttpServlet {
                     deleteAppointment(request, patient);
                     break;
                 case "Pay":
-                    deleteInvoice(request, patient);
+                    payInvoice(request, patient);
                     break;
                 default:
                     break;

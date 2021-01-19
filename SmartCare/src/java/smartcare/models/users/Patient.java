@@ -108,7 +108,7 @@ public class Patient extends User
         int numOfColumns = 6;
         String column = "invoiceid, servicetype, detail, amount, issuedate, paymenttype";
         String table = "Invoice";
-        String condition = "patient_username = '" + this.getUsername() + "' ORDER BY invoiceid ASC, issuedate ASC";
+        String condition = "patient_username = '" + this.getUsername() + "' AND paid='0' ORDER BY invoiceid ASC, issuedate ASC";
         
         //Get all of the appointments for this user
         r = this.jdbc.getResultList(column, condition, table, numOfColumns);
@@ -122,8 +122,8 @@ public class Patient extends User
         return invoiceList;
     }
     
-        public String deleteInvoice(String invoiceID) {
-        int success = this.jdbc.delete("Invoice", "invoiceid = " + invoiceID);
+        public String payInvoice(String invoiceID) {
+        int success = this.jdbc.update("Invoice", "invoiceid = " + invoiceID, "paid='1'");
         String deleteStatus = new String();
         if (success == 0) {
             deleteStatus = "Failed to pay invoice";

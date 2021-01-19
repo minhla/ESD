@@ -23,6 +23,7 @@ public class Invoice {
     String amount;
     String date;
     String paymenttype;
+    String paid;
 
     //get jdbc object
     Jdbc jdbc = Jdbc.getJdbc();
@@ -46,6 +47,7 @@ public class Invoice {
         this.amount = amount;
         this.date = date;
         this.paymenttype = paymenttype;
+        this.paid = "0";
     }
 
     public int createInvoice() {
@@ -78,8 +80,8 @@ public class Invoice {
         cl.setTime(date);
         //get week num
         int weekNum = cl.WEEK_OF_YEAR;
-        String table = "invoice (servicetype, detail, amount, patient_username, issuedate, weeknum, paymenttype)";
-        String values = "('" + this.service + "', '" + this.detail + "', " + this.amount + ", '" + this.patientID + "','" + currentDate + "'," + weekNum + ",'" + paymenttype + "')";
+        String table = "invoice (servicetype, detail, amount, patient_username, issuedate, weeknum, paymenttype, paid)";
+        String values = "('" + this.service + "', '" + this.detail + "', " + this.amount + ", '" + this.patientID + "','" + currentDate + "'," + weekNum + ",'" + paymenttype + "', '0')";
         int half2_success = jdbc.addRecords(table, values);
 
         //Delete the given appointment ID after issuing invoice successfully
@@ -143,5 +145,15 @@ public class Invoice {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public String getPaid() {
+        return paid;
+    }
+
+    public void setPaid(String paid) {
+        this.paid = paid;
+    }
+    
+    
 
 }
