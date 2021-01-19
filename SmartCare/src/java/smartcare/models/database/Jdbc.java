@@ -267,8 +267,9 @@ public class Jdbc implements ServletContextListener{
         }
         return flag;
     }
-
-    /*
+    
+   
+  /*
     Method: delete
     Description: Deletes an entry in the database.
     Params: String table - the table to be updated (and columns)
@@ -293,6 +294,34 @@ public class Jdbc implements ServletContextListener{
         catch(SQLException e)
         {
             System.out.println("Failed to execute delete from: " + table);
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
+
+    /*
+    Description: updates an entry in the database.
+    Params: String   sql query to be updated 
+           
+    */
+    public int updateQuery(String sql){
+        int flag = 0;
+        Statement stmt = null;
+        System.out.println(sql);
+
+        Connection conn = this.connect();
+
+        try
+        {
+            stmt = conn.createStatement();
+            flag = stmt.executeUpdate(sql);
+            stmt.close();
+            conn.close();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Failed to execute update query. " );
             e.printStackTrace();
         }
         return flag;

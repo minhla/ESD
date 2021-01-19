@@ -19,6 +19,16 @@
             <h1>Patient registration</h1>
             <h3>Fill in your information</h3>
             <form action="<%=request.getContextPath()%>/AddPatient.do" name="addpatient" method="Post">
+                <select id="titles" name="titles" required="required">
+                        <option value="" disabled="disabled" selected="selected">Please select</option>
+                        <option value="Ms">Ms</option>
+                        <option value="Miss">Miss</option>
+                        <option value="Mr">Mr</option>
+                        <option value="Dr">Dr</option>
+                        <option value="Rev">Rev</option>
+                        <option value="Sir">Sir</option>
+                     
+                </select>
                 <input type="text" pattern="\S+" title="Only alphabet letters" name="firstname" placeholder="First name" required><br/>
                 <input type="text" pattern="\S+" title="Only alphabet letters" name="lastname" placeholder="Last name" required><br/>
                 <input type="date" name="dob" placeholder="Date of birth" required><br/>
