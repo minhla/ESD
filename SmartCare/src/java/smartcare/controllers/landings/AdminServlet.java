@@ -26,9 +26,9 @@ import smartcare.models.Document;
 import smartcare.models.Invoice;
 import smartcare.models.users.Admin;
 import smartcare.models.Appointment;
+import smartcare.models.Registration;
 import smartcare.models.users.User;
 import smartcare.models.database.Jdbc;
-import smartcare.models.util.RegistrationUtils;
 
 /**
  *
@@ -39,7 +39,7 @@ public class AdminServlet extends HttpServlet {
     final String JSP = "/views/landing/adminLanding.jsp";
     
     Jdbc jdbc = Jdbc.getJdbc();
-    
+    Registration reg = new Registration();
     
        /*
     Method: getPatientDetail
@@ -208,9 +208,8 @@ public class AdminServlet extends HttpServlet {
     }
     
     
-    private void registerStaff(HttpServletRequest request, Admin admin)
-    {
-        RegistrationUtils ru = new RegistrationUtils();        
+    private void registerStaff(HttpServletRequest request)
+    {      
         Account ac = new Account();
                   
         //get parameters from form
@@ -222,19 +221,19 @@ public class AdminServlet extends HttpServlet {
         String phone = request.getParameter("new_acc_phone");
         String email = request.getParameter("new_acc_email");
         String address = request.getParameter("new_acc_address");
-        String password = ru.dateToPassword(dob);
+        String password = reg.dateToPassword(dob);
         String userType = request.getParameter("new_acc_type");
 
         DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime date = LocalDateTime.now();
         String regdate = date.format(dtFormatter);
         
-        if(admin.userExists(username)) //increment the number at the end of username if the username already exists
+        if(reg.userExists(username)) //increment the number at the end of username if the username already exists
         {
             System.out.println("user by the name of " + username + " already exists. Attempting username incrementation...");
             
-            username = admin.usernameWithNum(username, 1); //find the version of this username with the highest number at the end
-            username = admin.incrementUsername(username);
+            username = reg.usernameWithNum(username, 1); //find the version of this username with the highest number at the end
+            username = reg.incrementUsername(username);
             
             System.out.println("New username is: " + username);
         }
@@ -301,7 +300,7 @@ public class AdminServlet extends HttpServlet {
             }
             else if(action.equals("Register"))
             {
-                registerStaff(request, admin);
+                registerStaff(request);
             }
         
         showAppointments(request, admin);

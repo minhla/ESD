@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import smartcare.models.Account;
+import smartcare.models.Registration;
 import smartcare.models.database.Jdbc;
 import smartcare.models.users.User;
-import smartcare.models.util.RegistrationUtils;
 
 /**
  *
@@ -27,7 +27,7 @@ import smartcare.models.util.RegistrationUtils;
 public class RegisterPatient extends HttpServlet {
 
         private Jdbc jdbc = Jdbc.getJdbc();
-        private RegistrationUtils ru = new RegistrationUtils();
+        private Registration reg = new Registration();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -56,7 +56,7 @@ public class RegisterPatient extends HttpServlet {
         String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String address = request.getParameter("address");
-        String password = ru.dateToPassword(dob);
+        String password = reg.dateToPassword(dob);
 
         DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime date = LocalDateTime.now();
@@ -65,18 +65,14 @@ public class RegisterPatient extends HttpServlet {
          //check that username doesn't already exist
         ArrayList<String> existingUser = jdbc.getResultList("username", "username = '" + username + "'", "USERS", 1);
         
-        if( !existingUser.isEmpty()) //increment the number at the end of username if the username already exists
+        if(reg.userExists(username)) //increment the number at the end of username if the username already exists
         {
             System.out.println("user by the name of " + username + " already exists. Attempting username incrementation...");
-            if(existingUser.get(0).substring(existingUser.get(0).length()-1, existingUser.get(0).length()).matches("[0-9]")) //if username has a number at the end
-            {
-            username = existingUser.get(0).substring(0, existingUser.get(0).length()-1) + 
-                (Integer.parseInt(existingUser.get(0).substring(existingUser.get(0).length()-1, existingUser.get(0).length())) + 1);
-            }
-            else
-            {
-                username = username + "1";
-            }
+            
+            username = reg.usernameWithNum(username, 1); //find the version of this username with the highest number at the end
+            username = reg.incrementUsername(username);
+            
+            System.out.println("New username is: " + username);
         }
         
         //Add to database
