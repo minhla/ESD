@@ -73,7 +73,7 @@ public class Patient extends User
     * @param locationID the id of the location of the appointment.
     * @return      String with a success message about adding the appointment.
     */
-    public String addAppointment(String startTime, String date, String comment, String locationID){
+    public String addAppointment(String startTime, String date, String comment, String locationID, String staffID){
         String updateSuccess;
         String endtime = startTime;
                 
@@ -87,9 +87,9 @@ public class Patient extends User
         }
         
         //Add to database
-        String table = "appointments (appointmentdate, starttime, endtime, comment, patient_username, locationID)";
+        String table = "appointments (appointmentdate, starttime, endtime, comment, patient_username, doctor_username, locationID)";
         String values = "('"  + date + "', '"+ startTime+ "', '" 
-                + endtime + "', '" + comment + "', '"+ this.getUsername()+ "', "+locationID+")";
+                + endtime + "', '" + comment + "', '"+ this.getUsername()+ "', '"+ staffID+ "', "+locationID+")";
         
         int success = this.jdbc.addRecords(table, values);
         if(success != 0){

@@ -4,6 +4,7 @@
     Author     : Michael
 --%>
 
+<%@page import="smartcare.models.users.Fees"%>
 <%@page import="smartcare.models.Appointment"%>
 <%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -82,18 +83,34 @@
                         }
                     %>
                 </p>
-
+                
+                <h1>Booked Appointments</h1>
                 <div class="appointment-container">
+                    <form action="AdminServlet.do" name="p" method="Post" >
+                        Private/NHS: <select id="typeOfAppointment" name="typeOfAppointment" onchange="this.form.submit()" required >
+                            <option value="" disabled="disabled">Please select</option>
+                            <option value="NHS"<%
+                                System.out.println("debug");
+                                if (((String) session.getAttribute("previousChoice"))!= null) {
+                                    System.out.println("debug2");
+                                    if (((String) session.getAttribute("previousChoice")).equals("NHS")) {
+                                        System.out.println("debug3");
+                                        out.print("selected=\"selected\"");
+                                    }
+                                } %>>NHS</option>
+                            <option value="Private"<%
+                                if (((String) session.getAttribute("previousChoice"))!= null) {
+                                    if (((String) session.getAttribute("previousChoice")).equals("Private")) {
+                                        out.print("selected=\"selected\"");
+                                    }
+                                } %>>Private</option>
+                        </select>
+                    </form>
                     <%
                         //check if there are appointments
                         boolean showTable = false;
                         if (!((ArrayList) request.getAttribute("appointments")).isEmpty()) {
                             showTable = true;
-                        }
-                        if (showTable) {
-                            out.print("<h4>All booked appointments:</h4>");
-                        } else {
-                            out.print("<h4>There aren't any booked appointments</h4>");
                         }
                     %>
 
@@ -194,7 +211,42 @@
                         %>
                     </p>
                 </form>
+                    
+                <h1>Fees Management</h1>
+                
+                <%
+                        //check if there are appointments
+                        boolean showPrice = false;
+                        if (!((ArrayList) request.getAttribute("fees")).isEmpty()) {
+                            showPrice = true;
+                        }
+                        if (!showPrice) {
+                      
+                            out.print("<h4>There aren't any prices fixed</h4>");
+                        }
+                        
+                        ArrayList<Fees> feesList = (ArrayList) request.getAttribute("fees");
+                        Fees currentFee = feesList.get(0);
+            
+                    %>
+                    
+                <form action="AdminServlet.do" name="updateSuccess" method="Post">
+                     Price: <br> <input type="number" name="price" required="" value="<%=currentFee.getPrice() %>"> £<br><br> 
+                    Period: <br> <input type="number" name="period" required="" value="<%=currentFee.getPeriod() %>"> Mn<br><br>  
+                    <input type="submit" value="Change Appointment Price" name="action"><br>
+                </form>
+                    
+                        <%
+                    String updateSuccess = (String) request.getAttribute("updateSuccess");
+                    if (updateSuccess != null) {
+                        out.println(updateSuccess);
+                    }
+                %>
+                <br>
+                
             </div>
+                    
+           
 
             <div class="register-container">
                 <h1>Register New Staff Account</h1>

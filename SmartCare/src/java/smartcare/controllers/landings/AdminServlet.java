@@ -29,6 +29,7 @@ import smartcare.models.Appointment;
 import smartcare.models.Registration;
 import smartcare.models.users.User;
 import smartcare.models.database.Jdbc;
+import smartcare.models.users.Fees;
 
 /**
  *
@@ -37,10 +38,10 @@ import smartcare.models.database.Jdbc;
 public class AdminServlet extends HttpServlet {
 
     final String JSP = "/views/landing/adminLanding.jsp";
-    
+
     Jdbc jdbc = Jdbc.getJdbc();
     Registration reg = new Registration();
-    
+
        /*
     Method: getPatientDetail
     Description: method to get patient detail
@@ -48,16 +49,16 @@ public class AdminServlet extends HttpServlet {
     Returns: HttpServletRequest request
     */
      private HttpServletRequest getPatientDetail(HttpServletRequest request){
-        
+
         //create get session
         HttpSession session = request.getSession();
-        
+
        //get parameters from prescription form
        String patientID = request.getParameter("patientID");
        System.out.println("patientID => "+patientID);
        String patientDetail = null;
-       
-       try 
+
+       try
        {
            //get patient detail from database
            patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(username = '"+patientID+"' AND usertype = 'P')", "users",3);
@@ -71,20 +72,20 @@ public class AdminServlet extends HttpServlet {
 
                session.setAttribute("patientDetail","Patient Name: "+detailList[0]+"<br/>"+
                                                     "Patient Surname: "+detailList[1]+"<br/>"+
-                                                    "Date of Birth: "+detailList[2]+"<br/>");         
+                                                    "Date of Birth: "+detailList[2]+"<br/>");
            }
        }
-       
+
        catch(Exception e)
        {
            session.setAttribute("patientDetail","Patient not found!");
        }
-     
-        
+
+
        return request;
-        
+
     }
-     
+
            /*
     Method: getPatientDetail
     Description: method to get patient detail
@@ -92,19 +93,19 @@ public class AdminServlet extends HttpServlet {
     Returns: HttpServletRequest request
     */
      private HttpServletRequest getWeeklyDocument(HttpServletRequest request){
-        
+
         HttpSession session = request.getSession();
 
        //get parameters from document form
        String startDate = request.getParameter("startDate");
        String endDate = request.getParameter("endDate");
-       
+
        //create document
        Document document = new Document();
-       
+
        //produce turnover document
        ArrayList<Integer> result = document.calTurnover(startDate, endDate);
-       
+
         if(result.get(0) == 0)
         {
             session.setAttribute("turnover","turnover: 0 <br/> private payment: 0 <br/> pay through NHS: 0");
@@ -112,7 +113,7 @@ public class AdminServlet extends HttpServlet {
         else
         {
             session.setAttribute("turnover","this week turn over: "+result.get(0)+"<br/>"+
-                                                                "private payment: "+result.get(1)+"<br/>"+ 
+                                                                "private payment: "+result.get(1)+"<br/>"+
                                                                 "NHS payment: "+result.get(2)+"<br/>" );
             /*
             String detailList [] = patientDetail.split(" ");
@@ -122,14 +123,11 @@ public class AdminServlet extends HttpServlet {
                                                  "Date of Birth: "+detailList[2]+"<br/>");
             */
         }
-       
-       
-     
-        
+
        return request;
-        
+
     }
-     
+
       /*
     Method: createInvoice
     Description: handle interactions with prescription form
@@ -137,9 +135,9 @@ public class AdminServlet extends HttpServlet {
     Returns: HttpServletRequest request
     */
     private HttpServletRequest createInvoice(HttpServletRequest request){
-        
+
         HttpSession session = request.getSession();
-        
+
        //get parameters from prescription form
        String appointmentID = request.getParameter("appointmentID");
        String service = request.getParameter("services");
@@ -164,15 +162,15 @@ public class AdminServlet extends HttpServlet {
 
        //create invoice object
        Invoice invoice = new Invoice(patientID,service,detail,amount,paymenttype);
-       
+
        //validate the patient id
        String validation = jdbc.getResultSet("firstname, lastname, dob", "(username ='"+patientID+"' AND usertype = 'P')", "users",3);
-       
+
        if (!validation.equals(""))
        {
 
          int success = invoice.createInvoicedeleteAppointment(appointmentID);
-         
+
          //check if the database is successfully updated or not
          if(success != 0)
          {
@@ -187,13 +185,13 @@ public class AdminServlet extends HttpServlet {
        {
            session.setAttribute("updateSuccess", "Patient not found!");
        }
-        
 
-        
+
+
         return request;
-        
+
     }
-    
+
     /**
     * Retrieves all appointments.
     * retrieves all appointments in the database.
@@ -203,15 +201,32 @@ public class AdminServlet extends HttpServlet {
     */
     private void showAppointments(HttpServletRequest request, Admin admin){
         ArrayList<Appointment> appointments;
-        appointments = admin.getAppointments();
+        HttpSession session = request.getSession();
+        String type = request.getParameter("typeOfAppointment");
+
+        //if the user hasn't chosen the value get it from previous choices
+        if(type == null){
+            //if it's not the first time getting the values
+            if(session.getAttribute("previousChoice") != null){
+                type = (String)session.getAttribute("previousChoice");
+            }else{
+                type = "NHS";
+                session.setAttribute("previousChoice", type);
+            }
+        }else{
+            session.setAttribute("previousChoice", type);
+        }
+
+
+        appointments = admin.getAppointments(type);
         request.setAttribute("appointments", appointments);
     }
-    
-    
+
+
     private void registerStaff(HttpServletRequest request)
-    {      
+    {
         Account ac = new Account();
-                  
+
         //get parameters from form
         String firstname = request.getParameter("new_acc_firstname");
         String lastname = request.getParameter("new_acc_lastname");
@@ -227,24 +242,24 @@ public class AdminServlet extends HttpServlet {
         DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime date = LocalDateTime.now();
         String regdate = date.format(dtFormatter);
-        
+
         if(reg.userExists(username)) //increment the number at the end of username if the username already exists
         {
             System.out.println("user by the name of " + username + " already exists. Attempting username incrementation...");
-            
+
             username = reg.usernameWithNum(username, 1); //find the version of this username with the highest number at the end
             username = reg.incrementUsername(username);
-            
+
             System.out.println("New username is: " + username);
         }
-        
+
         //Add to database
         String table = "users (username, firstname, lastname, usertype, dob, phone, email, address, password, regdate)";
         String values = "('" + username  + "', '"+  firstname + "','" + lastname + "', '"+ userType
                               + "', '" + dob + "', '" + phone +"', '"
                               + email + "', '" + address + "', '" + ac.generatePasswordHash(password)  + "', '" + regdate +"')";
 
- 
+
         int success = jdbc.addRecords(table, values);
         if(success != 0){
             request.setAttribute("updateSuccess", "The account has been added!");
@@ -254,8 +269,46 @@ public class AdminServlet extends HttpServlet {
             System.out.println("Account could not be added");
         }
     }
-    
-    
+
+
+        /**
+    * Retrieves fee.
+    *
+    * @param request The servlet request variable.
+    * @param admin The Admin object.
+    */
+    private void showFees(HttpServletRequest request, Admin admin){
+        ArrayList<Fees> fees;
+        fees = admin.getFees();
+        request.setAttribute("fees", fees);
+    }
+
+
+    private HttpServletRequest updateFees(HttpServletRequest request, Admin admin) {
+
+        HttpSession session = request.getSession();
+
+       //get parameters from prescription form
+       String price = request.getParameter("price");
+       String period = request.getParameter("period");
+
+       //create fee object
+
+         int success = admin.updateFees(Integer.parseInt(price),Integer.parseInt(period));
+
+         //check if the database is successfully updated or not
+         if(success != 0)
+         {
+             session.setAttribute("updateSuccess", "The price has been updated!");
+         }
+         else
+         {
+             session.setAttribute("updateSuccess", "There has been a problem.");
+         }
+
+        return request;
+    }
+
     /**
     * Deletes an appointment from the database.
     * Deletes appointment for this patient and alerts the patientLanding.
@@ -269,17 +322,17 @@ public class AdminServlet extends HttpServlet {
         String deleteSuccess = admin.deleteAppointment(appointmentId);
         request.setAttribute("deleteSuccess", deleteSuccess);
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         HttpSession session = request.getSession();
-        
+
         //Make a new patient instance
         Admin admin;
         admin = (Admin)(User)session.getAttribute("user");
-                
+
          //get action type from the admin landing
         String action = request.getParameter("action");
         if (action != null)
@@ -294,19 +347,26 @@ public class AdminServlet extends HttpServlet {
             else if(action.equals("Produce Weekly Documents"))
             {
                 request = getWeeklyDocument(request);
-            }else if(action.equals("Cancel"))
+
+            } else if(action.equals("Change Appointment Price"))
             {
-                deleteAppointment(request, admin);
+                request = updateFees(request, admin);
             }
             else if(action.equals("Register"))
             {
                 registerStaff(request);
             }
-        
+            else if(action.equals("Remove"))
+            {
+                deleteAppointment(request, admin);
+
+            }
+
         showAppointments(request, admin);
-        
-        
-        
+        showFees(request, admin);
+
+
+
         RequestDispatcher view = request.getRequestDispatcher(JSP);
         view.forward(request,response);
     }
@@ -349,5 +409,6 @@ public class AdminServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 
 }

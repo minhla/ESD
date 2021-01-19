@@ -171,8 +171,8 @@ public class PatientServlet extends HttpServlet {
         String date = request.getParameter("date");
         String comment = request.getParameter("comment");
         String locationID = request.getParameter("locationID");
-        //String doctorID = request.getParameter("doctor"); could be doctor or nurse
-        String addSuccess = patient.addAppointment(startTime, date, comment, locationID);
+        String staffID = request.getParameter("staff");
+        String addSuccess = patient.addAppointment(startTime, date, comment, locationID, staffID);
         request.setAttribute("updateSuccess", addSuccess);
     }
 
