@@ -201,7 +201,24 @@ public class AdminServlet extends HttpServlet {
     */
     private void showAppointments(HttpServletRequest request, Admin admin){
         ArrayList<Appointment> appointments;
-        appointments = admin.getAppointments();
+        HttpSession session = request.getSession();
+        String type = request.getParameter("typeOfAppointment");
+        
+        //if the user hasn't chosen the value get it from previous choices
+        if(type == null){
+            //if it's not the first time getting the values
+            if(session.getAttribute("previousChoice") != null){
+                type = (String)session.getAttribute("previousChoice");
+            }else{
+                type = "NHS";
+                session.setAttribute("previousChoice", type);
+            }
+        }else{
+            session.setAttribute("previousChoice", type);
+        }
+        
+        
+        appointments = admin.getAppointments(type);
         request.setAttribute("appointments", appointments);
     }
     
@@ -340,7 +357,7 @@ public class AdminServlet extends HttpServlet {
             {
                 registerStaff(request, admin);
             }
-            else if(action.equals("Cancel"))
+            else if(action.equals("Remove"))
             {
                 deleteAppointment(request, admin);
                 

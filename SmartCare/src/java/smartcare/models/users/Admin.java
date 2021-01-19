@@ -20,14 +20,14 @@ public class Admin extends User
     *
     * @return      All of the appointments scheduled for every user.
     */
-    public ArrayList<Appointment> getAppointments(){
+    public ArrayList<Appointment> getAppointments(String type){
         ArrayList<Appointment> appointmentList = new ArrayList<>();
         ArrayList<String> r;
         
         int numOfColumns = 5;
         String column = "appointmentid, starttime, endtime, appointmentdate, comment";
-        String table = "Appointments";
-        String condition = "1=1" + " ORDER BY appointmentdate ASC, starttime ASC";
+        String table = "Appointments A INNER JOIN Locations L ON A.locationID = L.locationID";
+        String condition = "L.\"TYPE\" = '"+type+"'" + " ORDER BY appointmentdate ASC, starttime ASC";
         
         //Get all of the appointments for this user
         r = this.jdbc.getResultList(column, condition, table, numOfColumns);
@@ -145,7 +145,7 @@ public class Admin extends User
         ArrayList<Fees> feesList = new ArrayList<>();
         ArrayList<String> r;
         
-        int numOfColumns = 5;
+        int numOfColumns = 2;
         String column = "price, period";
         String table = "Fees";
         String condition = "1=1";
@@ -175,7 +175,7 @@ public class Admin extends User
     */
     public int updateFees(int price, int period){
 
-         String table = "fees (period, price)";
+        String table = "fees (period, price)";
         String values = "('" + period  + "', '"+  price + "')";
         
         

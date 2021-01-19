@@ -83,18 +83,34 @@
                         }
                     %>
                 </p>
-
+                
+                <h1>Booked Appointments</h1>
                 <div class="appointment-container">
+                    <form action="AdminServlet.do" name="p" method="Post" >
+                        Private/NHS: <select id="typeOfAppointment" name="typeOfAppointment" onchange="this.form.submit()" required >
+                            <option value="" disabled="disabled">Please select</option>
+                            <option value="NHS"<%
+                                System.out.println("debug");
+                                if (((String) session.getAttribute("previousChoice"))!= null) {
+                                    System.out.println("debug2");
+                                    if (((String) session.getAttribute("previousChoice")).equals("NHS")) {
+                                        System.out.println("debug3");
+                                        out.print("selected=\"selected\"");
+                                    }
+                                } %>>NHS</option>
+                            <option value="Private"<%
+                                if (((String) session.getAttribute("previousChoice"))!= null) {
+                                    if (((String) session.getAttribute("previousChoice")).equals("Private")) {
+                                        out.print("selected=\"selected\"");
+                                    }
+                                } %>>Private</option>
+                        </select>
+                    </form>
                     <%
                         //check if there are appointments
                         boolean showTable = false;
                         if (!((ArrayList) request.getAttribute("appointments")).isEmpty()) {
                             showTable = true;
-                        }
-                        if (showTable) {
-                            out.print("<h4>All booked appointments:</h4>");
-                        } else {
-                            out.print("<h4>There aren't any booked appointments</h4>");
                         }
                     %>
 
