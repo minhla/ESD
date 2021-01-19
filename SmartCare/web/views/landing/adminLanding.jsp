@@ -198,7 +198,7 @@
 
             <div class="register-container">
                 <h1>Register New Staff Account</h1>
-                <form action="RegisterStaff" method="post">
+                <form action="AdminServlet.do" method="post">
                     <p>Email: <input type="text" name="new_acc_email" placeholder="johndoe@gmail.com"></p>
                     <p>First name: <input type="text" name="new_acc_firstname" placeholder="John"></p>
                     <p>Last name: <input type="text" name="new_acc_lastname" placeholder="Doe"></p>
@@ -209,7 +209,7 @@
                     <p>Date of birth: <input type="date" name="new_acc_dob"></p>
                     <p>Phone number: <input type="text" name="new_acc_phone" placeholder="Maximum 11 numbers"></p>
                     <p>Address: <input type="text" name="new_acc_address" placeholder="Somewhere on Earth..."></p>
-                    <input type="submit" value="Submit">
+                <input type="submit" value="Register" name="action">
                 </form>
                 <%
                     String error = (String) request.getAttribute("updateSuccess");

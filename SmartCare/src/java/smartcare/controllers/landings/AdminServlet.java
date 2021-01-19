@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.servlet.RequestDispatcher;
@@ -19,13 +21,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import smartcare.controllers.registration.RegisterStaff;
+import smartcare.models.Account;
 import smartcare.models.Document;
 import smartcare.models.Invoice;
 import smartcare.models.users.Admin;
 import smartcare.models.Appointment;
 import smartcare.models.users.User;
 import smartcare.models.database.Jdbc;
+import smartcare.models.util.RegistrationUtils;
 
 /**
  *
@@ -189,6 +192,56 @@ public class AdminServlet extends HttpServlet {
         request.setAttribute("appointments", appointments);
     }
     
+    
+    private void registerStaff(HttpServletRequest request, Admin admin)
+    {
+        RegistrationUtils ru = new RegistrationUtils();        
+        Account ac = new Account();
+                  
+        //get parameters from form
+        String firstname = request.getParameter("new_acc_firstname");
+        String lastname = request.getParameter("new_acc_lastname");
+        String username = firstname.charAt(0) + "-" + lastname;
+        username = username.toLowerCase();
+        String dob = request.getParameter("new_acc_dob");
+        String phone = request.getParameter("new_acc_phone");
+        String email = request.getParameter("new_acc_email");
+        String address = request.getParameter("new_acc_address");
+        String password = ru.dateToPassword(dob);
+        String userType = request.getParameter("new_acc_type");
+
+        DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime date = LocalDateTime.now();
+        String regdate = date.format(dtFormatter);
+        
+        if(admin.userExists(username)) //increment the number at the end of username if the username already exists
+        {
+            System.out.println("user by the name of " + username + " already exists. Attempting username incrementation...");
+            
+            username = admin.usernameWithNum(username, 1); //find the version of this username with the highest number at the end
+            username = admin.incrementUsername(username);
+            
+            System.out.println("New username is: " + username);
+        }
+        
+        //Add to database
+        String table = "users (username, firstname, lastname, usertype, dob, phone, email, address, password, regdate)";
+        String values = "('" + username  + "', '"+  firstname + "','" + lastname + "', '"+ userType
+                              + "', '" + dob + "', '" + phone +"', '"
+                              + email + "', '" + address + "', '" + ac.generatePasswordHash(password)  + "', '" + regdate +"')";
+
+ 
+        int success = jdbc.addRecords(table, values);
+        if(success != 0){
+            request.setAttribute("updateSuccess", "The account has been added!");
+            System.out.println("Account added");
+        }else{
+            request.setAttribute("updateSuccess", "There has been a problem.");
+            System.out.println("Account could not be added");
+        }
+    }
+    
+    
     /**
     * Deletes an appointment from the database.
     * Deletes appointment for this patient and alerts the patientLanding.
@@ -212,9 +265,7 @@ public class AdminServlet extends HttpServlet {
         //Make a new patient instance
         Admin admin;
         admin = (Admin)(User)session.getAttribute("user");
-        
-        
-        
+                
          //get action type from the admin landing
         String action = request.getParameter("action");
         if (action != null)
@@ -233,9 +284,12 @@ public class AdminServlet extends HttpServlet {
             {
                 deleteAppointment(request, admin);
             }
+            else if(action.equals("Register"))
+            {
+                registerStaff(request, admin);
+            }
         
         showAppointments(request, admin);
-        RegisterStaff regStaff = new RegisterStaff();
         
         
         
