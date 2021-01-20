@@ -9,5 +9,5 @@ CREATE TABLE invoice(
     weeknum INT,
     paymenttype VARCHAR(100),
     paid CHAR(1),
-    FOREIGN KEY (patient_username) REFERENCES Users(username)
+    FOREIGN KEY (patient_username) REFERENCES Users(username) ON DELETE CASCADE
 )

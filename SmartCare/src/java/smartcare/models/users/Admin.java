@@ -40,8 +40,27 @@ public class Admin extends User
 
         return appointmentList;
     }
-
-       /**
+    
+    /**
+    * Deletes a specified user.
+    * Deletes a user by id and returns a success message.
+    *
+    * @param username The username of a user in the database.
+    * @return      Whether the deletion was successful or not.
+    */
+    public String deleteUser(String username){
+        int success = this.jdbc.delete("Users","(username = '" + username+"')");
+        //username = 'u-pellizzari'
+        String deleteSuccess = new String();
+        if(success == 0){
+            deleteSuccess = "Failed to delete user";
+        }else{
+            deleteSuccess = "The user has successfully been deleted";
+        }
+        return deleteSuccess;
+    }
+    
+    /**
     * Deletes a specified appointment.
     * Deletes an appointment by id and returns an success message.
     *
@@ -50,6 +69,7 @@ public class Admin extends User
     */
     public String deleteAppointment(String appointmentId){
         int success = this.jdbc.delete("Appointments", "appointmentId = " + appointmentId);
+        
         String deleteSuccess = new String();
         if(success == 0){
             deleteSuccess = "Failed to cancel appointment";

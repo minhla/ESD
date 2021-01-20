@@ -9,6 +9,6 @@ CREATE TABLE Appointments (
     patient_username VARCHAR(35),
     locationid INT,
     FOREIGN KEY (locationid) REFERENCES Locations(locationID),
-    FOREIGN KEY (doctor_username) REFERENCES Users(username),
-    FOREIGN KEY (patient_username) REFERENCES Users(username)
+    FOREIGN KEY (doctor_username) REFERENCES Users(username) ON DELETE CASCADE,
+    FOREIGN KEY (patient_username) REFERENCES Users(username) ON DELETE CASCADE
 )
