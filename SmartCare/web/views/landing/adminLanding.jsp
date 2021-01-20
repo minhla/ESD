@@ -203,26 +203,35 @@
                         <%
                             //show patient details
                             String patientDetail = (String) session.getAttribute("patientDetail");
+                            String deletion = (String) request.getAttribute("deletePatientSuccess");
 
                             if (patientDetail != null) {
                                 out.println(patientDetail);
                                 
-                                String patientID = request.getParameter("patientID");
-                                out.print("<form action='AdminServlet.do' name ='deleteUser' method='Post'>");
-                                out.print("<input type='submit' value='DeletePatient' name='action'>");
-                                out.print("</form>");
-                            }
-                            
-                            try{
-                                if (request.getAttribute("deletePatientSuccess") != null) {
-                                    out.print("<p>" + request.getAttribute("deletePatientSuccess") + "</p>");
-                                }
-                            }catch(NullPointerException e){
-                                    
                             }
                         %>
                     </p>
                 </form>
+                    <%
+                        //show option to delete patient
+                        if (patientDetail != null) {
+
+                            if(!((String)patientDetail).equals("Patient not found!")){
+                                out.print("<form action='AdminServlet.do' name ='deleteUser' method='Post'>");
+                                out.print("<input type='submit' value='DeletePatient' name='action'>");
+                                out.print("</form>");
+                            }
+                        }
+
+                        try{
+                            if (request.getAttribute("deletePatientSuccess") != null) {
+                                out.print("<p>" + request.getAttribute("deletePatientSuccess") + "</p>");
+                            }
+                        }catch(NullPointerException e){
+
+                        }
+                    %>
+                    <br/>
                     
                 <h1>Fees Management</h1>
                 

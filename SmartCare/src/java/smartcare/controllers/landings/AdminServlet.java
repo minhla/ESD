@@ -329,6 +329,7 @@ public class AdminServlet extends HttpServlet {
         String patientId = (String) session.getAttribute("patientID");
         String deleteSuccess = admin.deleteUser(patientId);
         request.setAttribute("deletePatientSuccess", deleteSuccess);
+        session.setAttribute("patientDetail", null);
     }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -367,7 +368,6 @@ public class AdminServlet extends HttpServlet {
             else if(action.equals("Remove"))
             {
                 deleteAppointment(request, admin);
-                
             }
             else if(action.equals("DeletePatient")){
                 deleteUser(request, admin);
