@@ -51,7 +51,6 @@
 
 
         <div class="outer-container">
-
             <div class="invoice-container">
                 <h1>Invoice Form</h1>
                 <form action="AdminServlet.do" name="invoice" method="Post" >
@@ -166,6 +165,7 @@
                         {
                             if (request.getAttribute("deleteSuccess") != null) {
                                 out.print("<p>" + request.getAttribute("deleteSuccess") + "</p>");
+                                
                         }
                         }
                         catch(NullPointerException e)
@@ -206,8 +206,20 @@
 
                             if (patientDetail != null) {
                                 out.println(patientDetail);
+                                
+                                String patientID = request.getParameter("patientID");
+                                out.print("<form action='AdminServlet.do' name ='deleteUser' method='Post'>");
+                                out.print("<input type='submit' value='DeletePatient' name='action'>");
+                                out.print("</form>");
                             }
-
+                            
+                            try{
+                                if (request.getAttribute("deletePatientSuccess") != null) {
+                                    out.print("<p>" + request.getAttribute("deletePatientSuccess") + "</p>");
+                                }
+                            }catch(NullPointerException e){
+                                    
+                            }
                         %>
                     </p>
                 </form>

@@ -6,5 +6,5 @@ CREATE TABLE Prescription (
     medicine VARCHAR(500),
     patient_username VARCHAR(35),
     issuedate VARCHAR(20),
-    FOREIGN KEY (patient_username) REFERENCES Users(username)    
+    FOREIGN KEY (patient_username) REFERENCES Users(username) ON DELETE CASCADE   
 )

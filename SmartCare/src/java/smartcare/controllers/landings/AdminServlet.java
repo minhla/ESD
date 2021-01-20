@@ -69,7 +69,7 @@ public class AdminServlet extends HttpServlet {
            else
            {
                String detailList [] = patientDetail.split(" ");
-
+               session.setAttribute("patientID", patientID);
                session.setAttribute("patientDetail","Patient Name: "+detailList[0]+"<br/>"+
                                                     "Patient Surname: "+detailList[1]+"<br/>"+
                                                     "Date of Birth: "+detailList[2]+"<br/>");         
@@ -324,6 +324,13 @@ public class AdminServlet extends HttpServlet {
         request.setAttribute("deleteSuccess", deleteSuccess);
     }
     
+    private void deleteUser(HttpServletRequest request, Admin admin){
+        HttpSession session = request.getSession();
+        String patientId = (String) session.getAttribute("patientID");
+        String deleteSuccess = admin.deleteUser(patientId);
+        request.setAttribute("deletePatientSuccess", deleteSuccess);
+    }
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -361,7 +368,10 @@ public class AdminServlet extends HttpServlet {
             {
                 deleteAppointment(request, admin);
                 
-            } 
+            }
+            else if(action.equals("DeletePatient")){
+                deleteUser(request, admin);
+            }
         
         showAppointments(request, admin);
         showFees(request, admin);
