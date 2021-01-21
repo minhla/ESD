@@ -73,6 +73,7 @@
                         <th>Start time</th>
                         <th>Comment</th>
                         <th>Date</th>
+                        <th>Staff mem.</th>
                     </tr>
                     <%
                         if (showTable) {
@@ -95,6 +96,10 @@
                                 out.print("<td>");
                                 out.print(appointment.getComment());
                                 out.print("</td>");
+                                out.print("<td>");
+                                out.print(appointment.getStaff());
+                                out.print("</td>");
+                                out.print("<td>");
                                 out.print("</tr>");
                             }
                         }

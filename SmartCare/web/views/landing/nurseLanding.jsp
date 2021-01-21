@@ -72,30 +72,35 @@
                             <th>Start time</th>
                             <th>Comment</th>
                             <th>Date</th>
+                            <th>Staff mem.</th>
                         </tr>
                         <%
-                            if (showTable) {
-                                ArrayList<Appointment> a;
-                                a = (ArrayList) request.getAttribute("appointments");
+                        if (showTable) {
+                            ArrayList<Appointment> a;
+                            a = (ArrayList) request.getAttribute("appointments");
 
-                                //loop through all of the appointments in the array list
-                                for (Appointment appointment : a) {
-                                    out.print("<input type='hidden' name='appointmentId' value='" + appointment.getID() + "'");
-                                    out.print("<tr>");
-                                    out.print("<td>");
-                                    out.print(appointment.getID());
-                                    out.print("</td>");
-                                    out.print("<td>");
-                                    out.print(appointment.getDate());
-                                    out.print("</td>");
-                                    out.print("<td>");
-                                    out.print(appointment.getStarttime());
-                                    out.print("</td>");
-                                    out.print("<td>");
-                                    out.print(appointment.getComment());
-                                    out.print("</td>");
-                                    out.print("</tr>");
-                                }
+                            //loop through all of the appointments in the array list
+                            for (Appointment appointment : a) {
+                                out.print("<input type='hidden' name='appointmentId' value='" + appointment.getID() + "'");
+                                out.print("<tr>");
+                                out.print("<td>");
+                                out.print(appointment.getID());
+                                out.print("</td>");
+                                out.print("<td>");
+                                out.print(appointment.getDate());
+                                out.print("</td>");
+                                out.print("<td>");
+                                out.print(appointment.getStarttime());
+                                out.print("</td>");
+                                out.print("<td>");
+                                out.print(appointment.getComment());
+                                out.print("</td>");
+                                out.print("<td>");
+                                out.print(appointment.getStaff());
+                                out.print("</td>");
+                                out.print("<td>");
+                                out.print("</tr>");
+                            }
                             }
                         %>
                     </table>

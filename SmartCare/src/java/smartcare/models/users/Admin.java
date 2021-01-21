@@ -29,8 +29,8 @@ public class Admin extends User
         ArrayList<Appointment> appointmentList = new ArrayList<>();
         ArrayList<String> r;
 
-        int numOfColumns = 5;
-        String column = "appointmentid, starttime, endtime, appointmentdate, comment";
+        int numOfColumns = 6;
+        String column = "appointmentid, starttime, endtime, appointmentdate, comment, patient_username";
         String table = "Appointments A INNER JOIN Locations L ON A.locationID = L.locationID";
         String condition = "L.\"TYPE\" = '"+type+"'" + " ORDER BY appointmentdate ASC, starttime ASC";
 
@@ -40,6 +40,7 @@ public class Admin extends User
         //Get the received data and put it into appointment objects
         for(int i = 0; i < r.size(); i+=numOfColumns){
             Appointment app = new Appointment(r.get(i), r.get(i+1), r.get(i+2), r.get(i+3), r.get(i+4), this.getUsername());
+            app.setPatient(r.get(i+5));
             appointmentList.add(app);
         }
 
@@ -183,7 +184,7 @@ public class Admin extends User
             }
             else
             {
-                result = "From "+sDate+" To "+eDate+"<br/> turn over: "+turnoverNum+"<br/>"+
+                result = "From "+sDate+" To "+eDate+"<br/> turn over (£): "+turnoverNum+"<br/>"+
                                                                     "private payment: "+payPrivateNum+"<br/>"+ 
                                                                     "NHS payment: "+payNHSNum+"<br/>" ;
             }

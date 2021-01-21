@@ -50,13 +50,13 @@
         </div>
 
 
-        <div class="outer-container">
+<div class="outer-container">
             <div class="invoice-container">
                 <h1>Invoice Form</h1>
                 <form action="AdminServlet.do" name="invoice" method="Post" >
-                    Appointment ID: <br/> <input type="text" pattern="\d*" name="appointmentID" placeholder="123" required>  <br/><br/>       
-                    
-                    Type of service<br/> 
+                    Appointment ID: <br/> <input type="text" pattern="\d*" name="appointmentID" placeholder="123" required>  <br/><br/>      
+
+                    Type of service<br/>
                     <select id="services" name="services" required>
                         <option value="" disabled="disabled" selected="selected">Please select</option>
                         <option value="surgery">Surgery</option>
@@ -64,16 +64,16 @@
                     </select>
                     <br/><br/>
                     Details: <br/> <textarea type="text" name="detail" rows="4" cols="50" required></textarea><br/><br/>
-                    Total amount:<br/> <input type="number" name="amount" required><br/><br/> 
-                    Payment type:<br/>             
+                    Payment type:<br/>            
                     <select id="paymenttype" name="paymenttype" required>
                         <option value="" selected="selected" disabled="disabled">Please select</option>
                         <option value="NHS">NHS</option>
                         <option value="Private">Private</option>
                     </select>
-                    <br/><br/> 
+                    <br/><br/>
                     <input type="submit" value="Issue Invoice" name ="action"><br/>
                 </form>
+                
                 <p>
                     <%                      //show result of sending invoice
                         String update = (String) request.getAttribute("updateSuccess");
@@ -121,6 +121,7 @@
                             <th>Date</th>
                             <th>Start time</th>
                             <th>Comment</th>
+                            <th>Patient</th>
                             <th>Action</th>
                         </tr>
                         <%
@@ -146,6 +147,9 @@
                                     out.print("</td>");
                                     out.print("<td>");
                                     out.print(appointment.getComment());
+                                    out.print("</td>");
+                                    out.print("<td>");
+                                    out.print(appointment.getPatient());
                                     out.print("</td>");
                                     out.print("<td>");
                                     out.print("<input type='submit' value='Remove' name='action'>");
@@ -248,14 +252,21 @@
                         }
                         
                         ArrayList<Fees> feesList = (ArrayList) request.getAttribute("fees");
-                        Fees currentFee = feesList.get(0);
-            
+                        Fees surgeryFee = feesList.get(0);
+                        Fees consultationFee = feesList.get(1);
                     %>
                     
-                <form action="AdminServlet.do" name="updateSuccess" method="Post">
-                     Price: <br> <input type="number" name="price" required="" value="<%=currentFee.getPrice() %>"> £<br><br> 
-                    Period: <br> <input type="number" name="period" required="" value="<%=currentFee.getPeriod() %>"> Mn<br><br>  
-                    <input type="submit" value="Change Appointment Price" name="action"><br>
+<form action="AdminServlet.do" name="updateSuccess" method="Post">
+
+                    <h3><%=surgeryFee.getServiceType() %></h3>
+                     Price: <br> <input type="number" name="priceSurgery" required="" value="<%=surgeryFee.getPrice() %>"> £<br><br>
+                     Period: <br> <input type="number" name="periodSurgery" required="" value="<%=surgeryFee.getPeriod() %>"> Mn<br><br>
+
+                     <h3><%=consultationFee.getServiceType() %></h3>
+                     Price: <br> <input type="number" name="priceCons" required="" value="<%=consultationFee.getPrice() %>"> £<br><br>
+                     Period: <br> <input type="number" name="periodCons" required="" value="<%=consultationFee.getPeriod() %>"> Mn<br><br>
+
+                    <input type="submit" value="Change Appointment Prices" name="action"><br>
                 </form>
                     
                   

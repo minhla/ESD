@@ -33,8 +33,8 @@ public class Nurse extends User
         LocalDate currentDate = java.time.LocalDate.now();
         
         //retreve all available appointments from database
-        int numOfColumns = 5;
-        String column = "appointmentid, comment, starttime, endtime, appointmentdate";
+        int numOfColumns = 6;
+        String column = "appointmentid, comment, starttime, endtime, appointmentdate, doctor_username";
         String table = "Appointments";
         String condition = "appointmentdate = '" + currentDate.toString()+"' ORDER BY starttime ASC";
         
@@ -44,6 +44,7 @@ public class Nurse extends User
         //get the received data and put it into appointment objects
         for(int i = 0; i < r.size(); i+=numOfColumns){
             Appointment app = new Appointment(r.get(i), r.get(i+1), r.get(i+2), r.get(i+3), r.get(i+4));
+            app.setStaff(r.get(i+5));
             appointmentList.add(app);
         }
         

@@ -16,6 +16,8 @@ public class Appointment {
     String date;
     String comment;
     String userID;
+    String staff;
+    String patient;
 
     public Appointment(String ID, String starttime, String endtime, String date, String comment, String userID) {
         this.ID = ID;
@@ -66,7 +68,23 @@ public class Appointment {
         return date;
     }
 
+    public void setStaff(String staff)
+    {
+        this.staff = staff;
+    }
     
+    public String getStaff()
+    {
+        return staff;
+    }
     
+    public void setPatient(String patient)
+    {
+        this.patient = patient;
+    }
     
+    public String getPatient()
+    {
+        return patient;
+    }
 }
