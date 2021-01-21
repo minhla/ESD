@@ -26,8 +26,8 @@
                         <option value="Mr">Mr</option>
                         <option value="Dr">Dr</option>
                         <option value="Rev">Rev</option>
-                        <option value="Sir">Sir</option>  
-                        
+                        <option value="Sir">Sir</option>
+                     
                 </select>
                 <input type="text" pattern="\S+" title="Only alphabet letters" name="firstname" placeholder="First name" required><br/>
                 <input type="text" pattern="\S+" title="Only alphabet letters" name="lastname" placeholder="Last name" required><br/>

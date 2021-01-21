@@ -94,8 +94,8 @@ public class Admin extends User
         ArrayList<Fees> feesList = new ArrayList<>();
         ArrayList<String> r;
 
-        int numOfColumns = 3;
-        String column = "price, period, service_type";
+        int numOfColumns = 2;
+        String column = "price, period";
         String table = "Fees";
         String condition = "1=1";
 
@@ -104,12 +104,10 @@ public class Admin extends User
 
         //Get the received data and put it into appointment objects
         for(int i = 0; i < r.size(); i+=numOfColumns){
-            String id = r.get(i);
             String price = r.get(i);
             String period = r.get(i+1);
-            String serviceType = r.get(i+2);
 
-            Fees fee = new Fees(Integer.parseInt(id),Integer.parseInt(price), Integer.parseInt(period), serviceType);
+            Fees fee = new Fees(Integer.parseInt(price), Integer.parseInt(period));
 
             feesList.add(fee);
         }
@@ -124,9 +122,13 @@ public class Admin extends User
     * @param price and period from the table fees in the database.
     * @return Whether the update was successful .
     */
-    public int updateFees(int price, int period, String serviceType){
+    public int updateFees(int price, int period){
 
-        int success = jdbc.updateQuery("Update Fees Set price = " +price+", period = "+period+" WHERE service_type = '" + serviceType+"'");
+        String table = "fees (period, price)";
+        String values = "('" + period  + "', '"+  price + "')";
+
+
+        int success = jdbc.updateQuery("Update Fees Set price = " +price+", period = "+period);
 
         return success;
     }

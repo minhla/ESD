@@ -86,7 +86,7 @@ public class AdminServlet extends HttpServlet {
     Params: HttpServletRequest request
     Returns: HttpServletRequest request
     */
-    private HttpServletRequest createInvoice(HttpServletRequest request, Admin admin){
+    private HttpServletRequest createInvoice(HttpServletRequest request){
 
         HttpSession session = request.getSession();
 
@@ -111,28 +111,9 @@ public class AdminServlet extends HttpServlet {
             return request;
         }
         String patientID = res.get(0);
-        
-        // Calculate amount
-        ArrayList<Fees> fees = admin.getFees();
-        Fees surgeryFee = fees.get(0);
-        Fees consultationFee = fees.get(1);
-        
-        double totalAmount = 0.00;
-        
-        if (service.equals("surgery")) {
-            
-            totalAmount = surgeryFee.getPrice();
-            
-        } else if (service.equals("consultation")) {
-            
-            totalAmount = consultationFee.getPrice();
-            
-        } else {
-            totalAmount = 20.00;
-        }
 
        //create invoice object
-       Invoice invoice = new Invoice(patientID,service,detail,String.valueOf(totalAmount),paymenttype);
+       Invoice invoice = new Invoice(patientID,service,detail,amount,paymenttype);
 
        //validate the patient id
        String validation = jdbc.getResultSet("firstname, lastname, dob", "(username ='"+patientID+"' AND usertype = 'P')", "users",3);
@@ -199,7 +180,6 @@ public class AdminServlet extends HttpServlet {
         Account ac = new Account();
 
         //get parameters from form
-        String title = request.getParameter("titles");
         String firstname = request.getParameter("new_acc_firstname");
         String lastname = request.getParameter("new_acc_lastname");
         String username = firstname.charAt(0) + "-" + lastname;
@@ -226,8 +206,8 @@ public class AdminServlet extends HttpServlet {
         }
 
         //Add to database
-        String table = "users (title, username, firstname, lastname, usertype, dob, phone, email, address, password, regdate)";
-        String values = "('" + title  + "','" + username  + "', '"+  firstname + "','" + lastname + "', '"+ userType
+        String table = "users (username, firstname, lastname, usertype, dob, phone, email, address, password, regdate)";
+        String values = "('" + username  + "', '"+  firstname + "','" + lastname + "', '"+ userType
                               + "', '" + dob + "', '" + phone +"', '"
                               + email + "', '" + address + "', '" + ac.generatePasswordHash(password)  + "', '" + regdate +"')";
 
@@ -255,25 +235,21 @@ public class AdminServlet extends HttpServlet {
         request.setAttribute("fees", fees);
     }
 
-    
+
     private HttpServletRequest updateFees(HttpServletRequest request, Admin admin) {
 
         HttpSession session = request.getSession();
 
        //get parameters from prescription form
-       String priceSurgery = request.getParameter("priceSurgery");
-       String periodSurgery = request.getParameter("periodSurgery");
-       
-       String priceCons = request.getParameter("priceCons");
-       String periodCons = request.getParameter("periodCons");
+       String price = request.getParameter("price");
+       String period = request.getParameter("period");
 
        //create fee object
 
-         int successS = admin.updateFees(Integer.parseInt(priceSurgery),Integer.parseInt(periodSurgery), "Surgery");
-         int successC = admin.updateFees(Integer.parseInt(priceCons),Integer.parseInt(periodCons), "Consultation");
+         int success = admin.updateFees(Integer.parseInt(price),Integer.parseInt(period));
 
          //check if the database is successfully updated or not
-         if(successS != 0 && successC != 0)
+         if(success != 0)
          {
              session.setAttribute("updateSuccess", "The price has been updated!");
          }
@@ -326,13 +302,13 @@ public class AdminServlet extends HttpServlet {
             }
             else if(action.equals("Issue Invoice"))
             {
-                request = createInvoice(request, admin);
+                request = createInvoice(request);
             }
             else if(action.equals("Produce Weekly Documents"))
             {
                  getWeeklyDocument(request,admin);
 
-            } else if(action.equals("Change Appointment Prices"))
+            } else if(action.equals("Change Appointment Price"))
             {
                 request = updateFees(request, admin);
             }

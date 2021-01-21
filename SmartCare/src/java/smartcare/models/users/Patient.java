@@ -1,7 +1,5 @@
 package smartcare.models.users;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -78,15 +76,7 @@ public class Patient extends User
     public String addAppointment(String startTime, String date, String comment, String locationID, String staffID){
         String updateSuccess;
         String endtime = startTime;
-        
-        LocalTime tS = LocalTime.parse(startTime);
-        LocalTime tE = LocalTime.parse(startTime).plusMinutes(30);
-        
-        //change format
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm:ss");
-        String sStart = tS.format(myFormatObj);
-        String sEnd = tE.format(myFormatObj);
-    
+                
         //check if that time slot is free (not implemented yet)
         
         //sanitize the comment input
@@ -98,8 +88,8 @@ public class Patient extends User
         
         //Add to database
         String table = "appointments (appointmentdate, starttime, endtime, comment, patient_username, doctor_username, locationID)";
-        String values = "('"  + date + "', '"+ sStart+ "', '" 
-                + sEnd + "', '" + comment + "', '"+ this.getUsername()+ "', '"+ staffID+ "', "+locationID+")";
+        String values = "('"  + date + "', '"+ startTime+ "', '" 
+                + endtime + "', '" + comment + "', '"+ this.getUsername()+ "', '"+ staffID+ "', "+locationID+")";
         
         int success = this.jdbc.addRecords(table, values);
         if(success != 0){
