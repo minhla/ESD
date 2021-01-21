@@ -34,38 +34,6 @@ public class Document {
 
     }
     
-    public ArrayList<Integer> calTurnover(String startDate,String endDate) 
-    {
-        ArrayList<Integer> result = new ArrayList<Integer>();
-        //convert date to string and remove hyphen
-        String sDate = startDate.replaceAll("-","");
-        String eDate = endDate.replaceAll("-","");       
-        
-        //invoice detail from database
-        ArrayList<String> turnover = jdbc.getResultList("amount", "(issuedate >= '"+startDate+"' AND issuedate <= '"+endDate+"' AND paid='1')", "invoice",1);
-        ArrayList<String> payPrivate = jdbc.getResultList("paymenttype", "(issuedate >= '"+startDate+"' AND issuedate <= '"+endDate+"' AND paymenttype = 'Private' AND paid='1')", "invoice",1);
-        ArrayList<String> payNHS =  jdbc.getResultList("paymenttype", "(issuedate >= '"+startDate+"' AND issuedate <= '"+endDate+"' AND paymenttype = 'NHS' AND paid='1')", "invoice",1);
-        
-        //calculate turnover over the period selected
-        if ((turnover.size() != 0))
-        {
-            for(int i=0;i<turnover.size();i++)
-            {
-                this.turnoverNum += Integer.parseInt(turnover.get(i));
-            }
-        }
-        
-        //count number per payment type
-        this.payPrivateNum = payPrivate.size();
-        this.payNHSNum = payNHS.size();
-        
-        result.add(this.turnoverNum);
-        result.add(this.payPrivateNum);
-        result.add(this.payNHSNum);
-        
-        
-        return result;
-    }
 
     public void setTurnoverNum(int turnoverNum) {
         this.turnoverNum = turnoverNum;

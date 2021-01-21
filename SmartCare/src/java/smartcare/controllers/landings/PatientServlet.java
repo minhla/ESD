@@ -97,37 +97,16 @@ public class PatientServlet extends HttpServlet {
         return request;
     }
 
-    private HttpServletRequest reIssuePrescription(HttpServletRequest request) {
+   private void reIssuePrescription(HttpServletRequest request, Patient patient){
 
-        HttpSession session = request.getSession();
+       //get parameters from prescription form
+       String issuedate = request.getParameter("issuedate");
+       
+       //get presription from database
+       String result = patient.reIssuePrescription(patient.getUsername(), issuedate);
+       request.setAttribute("prescriptionDetail",result);
 
-        //get parameters from prescription form
-        String patientID = request.getParameter("patientID");
-        String issuedate = request.getParameter("issuedate");
 
-        //create prescription
-        Prescription prescription = new Prescription();
-
-        prescription.reIssuePrescription(patientID, issuedate);
-
-        //get prescription from database
-        ArrayList<String> result = prescription.reIssuePrescription(patientID, issuedate);
-
-        //check if patient and prescription are available or not
-        if (result.size() != 0) {
-
-            session.setAttribute("prescriptionDetail", "Patient Name: " + result.get(0) + "<br/>"
-                    + "Patient Surname: " + result.get(1) + "<br/>"
-                    + "Date of Birth : " + result.get(2) + "<br/>"
-                    + "Weight : " + result.get(3) + "<br/>"
-                    + "Allergies : " + result.get(4) + "<br/>"
-                    + "Medicine : " + result.get(5) + "<br/>");
-        } else {
-            session.setAttribute("prescriptionDetail", "Prescription not found!");
-        }
-
-        //when deleting an appointment
-        return request;
     }
 
     /**
@@ -257,7 +236,7 @@ public class PatientServlet extends HttpServlet {
                     addAppointment(request, patient);
                     break;
                 case "request for re-issue":
-                    request = reIssuePrescription(request);
+                     reIssuePrescription(request,patient);
                     break;
                 case "Cancel":
                     deleteAppointment(request, patient);

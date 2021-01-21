@@ -48,84 +48,36 @@ public class AdminServlet extends HttpServlet {
     Params: HttpServletRequest request
     Returns: HttpServletRequest request
     */
-     private HttpServletRequest getPatientDetail(HttpServletRequest request){
-
-        //create get session
-        HttpSession session = request.getSession();
-
-       //get parameters from prescription form
+     private void getPatientDetail(HttpServletRequest request, Admin admin)
+     { 
+       HttpSession session = request.getSession();
+        
+       //get patient details deom database
        String patientID = request.getParameter("patientID");
-       System.out.println("patientID => "+patientID);
-       String patientDetail = null;
-
-       try
-       {
-           //get patient detail from database
-           patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(username = '"+patientID+"' AND usertype = 'P')", "users",3);
-           if(patientDetail.equals(""))
-           {
-               session.setAttribute("patientDetail","Patient not found!");
-           }
-           else
-           {
-               String detailList [] = patientDetail.split(" ");
-               session.setAttribute("patientID", patientID);
-               session.setAttribute("patientDetail","Patient Name: "+detailList[0]+"<br/>"+
-                                                    "Patient Surname: "+detailList[1]+"<br/>"+
-                                                    "Date of Birth: "+detailList[2]+"<br/>");
-           }
-       }
-
-       catch(Exception e)
-       {
-           session.setAttribute("patientDetail","Patient not found!");
-       }
-
-
-       return request;
-
+       String result = admin.getPatientDetails(patientID);
+       request.setAttribute("PatientDetail",result); 
+       //set patient id to the session
+       session.setAttribute("patientID",patientID);
+        
     }
-
+     
            /*
     Method: getPatientDetail
     Description: method to get patient detail
     Params: HttpServletRequest request
     Returns: HttpServletRequest request
     */
-     private HttpServletRequest getWeeklyDocument(HttpServletRequest request){
+     private void getWeeklyDocument(HttpServletRequest request,Admin admin){
 
-        HttpSession session = request.getSession();
+      //get parameters from document form
+      String startDate = request.getParameter("startDate");
+      String endDate = request.getParameter("endDate");
+       
+      //calculate turnover
+      String result = admin.calTurnover(startDate, endDate);
+      request.setAttribute("turnover",result);
 
-       //get parameters from document form
-       String startDate = request.getParameter("startDate");
-       String endDate = request.getParameter("endDate");
-
-       //create document
-       Document document = new Document();
-
-       //produce turnover document
-       ArrayList<Integer> result = document.calTurnover(startDate, endDate);
-
-        if(result.get(0) == 0)
-        {
-            session.setAttribute("turnover","turnover: 0 <br/> private payment: 0 <br/> pay through NHS: 0");
-        }
-        else
-        {
-            session.setAttribute("turnover","this week turn over: "+result.get(0)+"<br/>"+
-                                                                "private payment: "+result.get(1)+"<br/>"+
-                                                                "NHS payment: "+result.get(2)+"<br/>" );
-            /*
-            String detailList [] = patientDetail.split(" ");
-
-            session.setAttribute("patientDetail","Patient Name: "+detailList[0]+"<br/>"+
-                                                 "Patient Surname: "+detailList[1]+"<br/>"+
-                                                 "Date of Birth: "+detailList[2]+"<br/>");
-            */
-        }
-
-       return request;
-
+        
     }
 
       /*
@@ -262,10 +214,10 @@ public class AdminServlet extends HttpServlet {
 
         int success = jdbc.addRecords(table, values);
         if(success != 0){
-            request.setAttribute("updateSuccess", "The account has been added!");
+            request.setAttribute("registerSuccess", "The account has been added!");
             System.out.println("Account added");
         }else{
-            request.setAttribute("updateSuccess", "There has been a problem.");
+            request.setAttribute("registerSuccess", "There has been a problem.");
             System.out.println("Account could not be added");
         }
     }
@@ -346,7 +298,7 @@ public class AdminServlet extends HttpServlet {
         if (action != null)
             if (action.equals("Get patient details"))
             {
-                request = getPatientDetail(request);
+                 getPatientDetail(request,admin);
             }
             else if(action.equals("Issue Invoice"))
             {
@@ -354,7 +306,7 @@ public class AdminServlet extends HttpServlet {
             }
             else if(action.equals("Produce Weekly Documents"))
             {
-                request = getWeeklyDocument(request);
+                 getWeeklyDocument(request,admin);
 
             } else if(action.equals("Change Appointment Price"))
             {

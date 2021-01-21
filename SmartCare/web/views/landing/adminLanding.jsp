@@ -76,7 +76,7 @@
                 </form>
                 <p>
                     <%                      //show result of sending invoice
-                        String update = (String) session.getAttribute("updateSuccess");
+                        String update = (String) request.getAttribute("updateSuccess");
                         if (update != null) {
                             out.println(update);
                         }
@@ -188,7 +188,7 @@
                 <br/>
                 <%
                     //show result of sending invoice
-                    String turnover = (String) session.getAttribute("turnover");
+                    String turnover = (String) request.getAttribute("turnover");
                     if (turnover != null) {
                         out.println(turnover);
                     }
@@ -200,16 +200,26 @@
                 Patient Username:<br/> <input type="text" name="patientID" placeholder="Ex. j-doe" required>    
                 <input type="submit" value="Get patient details" name="action"><br/><br/>
                     <p>
+                <%
+                    String patientDetail = (String) request.getAttribute("PatientDetail");
+                    String patientID = (String) session.getAttribute("patientID");
+                  
+                    if (patientDetail != null) {
+                        out.println(patientDetail);
+                    }
+                %>
+              
                         <%
                             //show patient details
-                            String patientDetail = (String) session.getAttribute("patientDetail");
+                           /* String patientDetail = (String) request.getAttribute("patientDetail");
                             String deletion = (String) request.getAttribute("deletePatientSuccess");
 
                             if (patientDetail != null) {
                                 out.println(patientDetail);
                                 
-                            }
+                            }*/
                         %>
+                        
                     </p>
                 </form>
                     <%
@@ -219,7 +229,7 @@
                             if(!((String)patientDetail).equals("Patient not found!")){
                                 out.print("<form action='AdminServlet.do' name ='deleteUser' method='Post'>");
                                 out.print("<input type='submit' value='DeletePatient' name='action'>");
-                                out.print("</form>");
+                                out.print("</form>"); 
                             }
                         }
 
@@ -257,12 +267,7 @@
                     <input type="submit" value="Change Appointment Price" name="action"><br>
                 </form>
                     
-                        <%
-                    String updateSuccess = (String) request.getAttribute("updateSuccess");
-                    if (updateSuccess != null) {
-                        out.println(updateSuccess);
-                    }
-                %>
+                  
                 <br>
                 
             </div>
@@ -285,7 +290,7 @@
                 <input type="submit" value="Register" name="action">
                 </form>
                 <%
-                    String error = (String) request.getAttribute("updateSuccess");
+                    String error = (String) request.getAttribute("registerSuccess");
                     if (error != null) {
                         out.println(error);
                     }

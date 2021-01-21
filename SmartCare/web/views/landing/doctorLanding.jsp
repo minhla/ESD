@@ -109,11 +109,13 @@
                     Patient username:<br/> <input type="text" name="patientID" >         
                     <input type="submit" value="Get patient detail" name ="action"><br/><br/>
                     <p>
-                        <%                String patientDetail = (String) session.getAttribute("patientDetail");
+                   <%               
+                       
+                       String update = (String) request.getAttribute("PatientDetail");
+                        if (update != null) {
+                            out.println(update);
+                        }            
 
-                            if (patientDetail != null) {
-                                out.println(patientDetail);
-                            }
 
                         %>
                     </p>
@@ -127,11 +129,15 @@
                     <input type="submit" value="Create Prescription" name ="action"><br/>
                 </form>
                 <p>
-                    <%                String update = (String) session.getAttribute("updateSuccess");
-                        if (update != null) {
-                            out.println(update);
-                        }
-                    %>
+  <%               
+                       
+                       String prescriptionSuccess = (String) request.getAttribute("prescriptionSuccess");
+                        if (prescriptionSuccess != null) {
+                            out.println(prescriptionSuccess);
+                        }            
+
+
+                        %>
                 </p>
             </div>
 

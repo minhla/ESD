@@ -133,6 +133,67 @@ public class Patient extends User
         return deleteStatus;
 
     }
+        
+     public String reIssuePrescription(String patientID, String issuedate)
+    {
+        String result;
+
+        ArrayList<String> details = new ArrayList<String>();
+        
+        //get patient detail from database
+        ArrayList<String> patientDetail = jdbc.getResultList("firstname, lastname, dob", "(username = '"+patientID+"' AND usertype = 'P')", "users",3);
+        ArrayList<String> prescription = jdbc.getResultList("weight, allergies, medicine", "(issuedate = '"+issuedate+"' AND patient_username = '"+patientID+"')","prescription",3);
+
+        //check if prescription is valid or not
+        if(patientDetail.size() != 0 && prescription.size() != 0)
+        {
+            details.add(patientDetail.get(0));
+            details.add(patientDetail.get(1));
+            details.add(patientDetail.get(2));
+            
+            for (int i=0;i<prescription.size();i++)
+            {
+                details.add(prescription.get(i));
+            }
+            
+            if(prescription.size() <= 3)
+            {
+                result ="Prescription <br/>"+  
+                        "================= <br/>"+
+                        "Patient Name: "+details.get(0)+"<br/>"+
+                         "Patient Surname: "+details.get(1)+"<br/>"+
+                         "Date of Birth : "+details.get(2)+"<br/>"+
+                         "Weight : "+details.get(3)+"<br/>"+
+                         "Allergies : "+details.get(4)+"<br/>"+
+                         "Medicine : "+details.get(5)+"<br/>";
+            }
+            else
+            {
+                 result ="Patient Name: "+details.get(0)+"<br/>"+
+                         "Patient Surname: "+details.get(1)+"<br/>"+
+                         "Date of Birth : "+details.get(2)+"<br/><br/>"+
+                         "==================== <br/>"+
+                         "First prescription <br/>"+ 
+                         "==================== <br/>"+
+                         "Weight : "+details.get(3)+"<br/>"+
+                         "Allergies : "+details.get(4)+"<br/>"+
+                         "Medicine : "+details.get(5)+"<br/><br/>"+
+                         "==================== <br/>"+
+                         "Second prescription <br/>"+
+                         "==================== <br/>"+
+                         "Weight : "+details.get(6)+"<br/>"+
+                         "Allergies : "+details.get(7)+"<br/>"+
+                         "Medicine : "+details.get(8)+"<br/>";
+            }
+            
+        }
+        else
+        {
+            result = "Prescription not found!";
+        }
+
+        return result;
+    }
 
     
 }

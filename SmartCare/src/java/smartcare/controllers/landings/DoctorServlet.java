@@ -39,39 +39,21 @@ public class DoctorServlet extends HttpServlet {
     Params: HttpServletRequest request
     Returns: HttpServletRequest request
      */
-    private HttpServletRequest createPrescription(HttpServletRequest request) {
-
-        HttpSession session = request.getSession();
-
-        //get parameters from prescription form
-        String patientID = request.getParameter("patientID");
-        String weight = request.getParameter("weight");
-        String allergies = request.getParameter("allergies");
-        String med = request.getParameter("med");
-
-        //create prescription 
-        Prescription prescription = new Prescription(patientID, weight, allergies, med);
-
-        //validate the patient id
-        String validation = jdbc.getResultSet("firstname, lastname, dob", "(username = '" + patientID + "' AND usertype = 'P')", "users", 3);
-
-        if (!validation.equals("")) {
-
-            int success = prescription.createPrescription();
-
-            //check if the database is successfully updated or not
-            if (success != 0) {
-                session.setAttribute("updateSuccess", "The prescription has been added!");
-            } else {
-                session.setAttribute("updateSuccess", "There has been a problem.");
-            }
-        } else {
-            session.setAttribute("updateSuccess", "Patient not found!");
-        }
-
-        return request;
-
-    }
+     private void createPrescription(HttpServletRequest request,Doctor doctor){
+        
+        
+       //get parameters from prescription form
+       String patientID = request.getParameter("patientID");
+       String weight = request.getParameter("weight");
+       String allergies = request.getParameter("allergies");
+       String med = request.getParameter("med");
+       
+       //create prescription 
+       Prescription prescription = new Prescription(patientID,weight,allergies,med);
+       
+       String result = doctor.createPrescription(prescription);
+       request.setAttribute("prescriptionSuccess", result);
+     }
 
     /*
     Method: getPatientDetail
@@ -79,35 +61,14 @@ public class DoctorServlet extends HttpServlet {
     Params: HttpServletRequest request
     Returns: HttpServletRequest request
      */
-    private HttpServletRequest getPatientDetail(HttpServletRequest request) {
-
-        HttpSession session = request.getSession();
-
-        //get parameters from prescription form
-        String patientID = request.getParameter("patientID");
-
-        String patientDetail = null;
-
-        try {
-            //get patient detail from database
-            patientDetail = jdbc.getResultSet("firstname, lastname, dob", "(username = '" + patientID + "' AND usertype = 'P')", "users", 3);
-            if (patientDetail.equals("")) {
-                session.setAttribute("patientDetail", "Patient not found!");
-            } else {
-                String detailList[] = patientDetail.split(" ");
-
-                session.setAttribute("patientDetail", "Patient Name: " + detailList[0] + "<br/>"
-                        + "Patient Surname: " + detailList[1] + "<br/>"
-                        + "Date of Birth: " + detailList[2] + "<br/>");
-            }
-        } catch (Exception e) {
-            session.setAttribute("patientDetail", "Patient not found!");
-        }
-
-        return request;
-
+    private void getPatientDetail(HttpServletRequest request,Doctor doctor){
+        
+         //get patient details deom database
+       String patientID = request.getParameter("patientID");
+       String result = doctor.getPatientDetails(patientID);
+       request.setAttribute("PatientDetail",result);
+     
     }
-
     /*
     Method: createInvoice
     Description: handle interactions with prescription form
@@ -126,6 +87,9 @@ public class DoctorServlet extends HttpServlet {
         String amount = request.getParameter("amount");
         String paymenttype = request.getParameter("paymenttype");
 
+        //sanitize the comment input
+        detail = detail.replace("'", "''");
+        
         //Get patientID based on appointmentID
         int numOfColumns = 1;
         String column = "patient_username";
@@ -195,9 +159,9 @@ public class DoctorServlet extends HttpServlet {
         String action = request.getParameter("action");
         if (action != null) {
             if (action.equals("Get patient detail")) {
-                request = getPatientDetail(request);
+                 getPatientDetail(request,doctor);
             } else if (action.equals("Create Prescription")) {
-                request = createPrescription(request);
+                 createPrescription(request,doctor);
             } else if (action.equals("Issue Invoice")) {
                 request = createInvoice(request);
             }
