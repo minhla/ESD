@@ -3,7 +3,7 @@ Class: AdminServlet
 Description: the servlet for handing admin interactions
 Created: 14/12/2020
 Updated: 22/12/2020
-Author/s: Asia Benyadilok
+Author/s: Asia Benyadilok, Michael Tonkin, Dayvid Gueorguev.
 */
 package smartcare.controllers.landings;
 

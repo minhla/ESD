@@ -1,6 +1,7 @@
 /*
 Class: AdminFilter
-Description: 
+Description: Controls user session for admins
+Author: Michael Tonkin.
 */
 
 package smartcare.controllers.filters;
