@@ -96,6 +96,8 @@ public class AdminServlet extends HttpServlet {
        String detail = request.getParameter("detail");
        String amount = request.getParameter("amount");
        String paymenttype = request.getParameter("paymenttype");
+       
+
 
        //Get patientID based on appointmentID
         int numOfColumns = 1;
@@ -108,7 +110,6 @@ public class AdminServlet extends HttpServlet {
         System.out.println(res);
         if (res.isEmpty()) {
             session.setAttribute("updateInvoice", "There has been a problem.");
-            return request;
         }
         String patientID = res.get(0);
         

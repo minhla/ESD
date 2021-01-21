@@ -1,7 +1,7 @@
 <%-- 
     Document   : doctorLanding
     Created on : 06-Dec-2020, 09:33:59
-    Author     : Michael, Giacomo
+    Author     : Michael, Giacomo,Asia
 --%>
 
 <%@page import="smartcare.models.users.User"%>
