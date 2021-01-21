@@ -103,6 +103,36 @@
             </div>
         </div>
             
+            <div class="invoice-container">
+                <h1>Invoice Form</h1>
+                <form action="NurseServlet.do" name="invoice" method="Post">
+                    Appointment ID: <input type="text" name="appointmentID" pattern="\d*" maxlength="4" placeholder="123"> <br/><br/>
+                    Type of service: <select id="services" name="services" required>
+                        <option value="" disabled="disabled" selected="selected">Please select</option>
+                        <option value="surgery">Surgery</option>
+                        <option value="consultation">Consultation</option>
+                    </select>
+                    <br/><br/>
+                    Details: <textarea type="text" name="detail" rows="4" cols="50" required></textarea><br/><br/>
+                    Payment type:            
+                    <select id="paymenttype" name="paymenttype" required>
+                        <option value="" selected="selected" disabled="disabled">Please select</option>
+                        <option value="NHS">NHS</option>
+                        <option value="Private">Private</option>
+                    </select>
+                    <br/><br/> 
+                    <input type="submit" value="Issue Invoice" name ="action"><br/>
+                </form>
+                <p>
+                    <%               
+                        String updateInvoice = (String) session.getAttribute("updateInvoice");
+                        if (updateInvoice != null) {
+                            out.println(updateInvoice);
+                        }
+                    %>
+                </p>
+            </div>
+                    
     </body>
     <style>
         <%@ include file="../css/nurseLanding.css" %>
