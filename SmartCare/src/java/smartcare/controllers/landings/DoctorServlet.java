@@ -23,6 +23,8 @@ import smartcare.models.users.Doctor;
 import smartcare.models.users.User;
 import smartcare.models.Prescription;
 import smartcare.models.database.Jdbc;
+import smartcare.models.users.Fees;
+import smartcare.models.users.Admin;
 
 /**
  *
@@ -32,6 +34,7 @@ public class DoctorServlet extends HttpServlet {
 
     final String JSP = "/views/landing/doctorLanding.jsp";
     Jdbc jdbc = Jdbc.getJdbc();
+    private Admin admin = new Admin();
 
     /*
     Method: createPrescription
@@ -141,8 +144,26 @@ public class DoctorServlet extends HttpServlet {
         }
         String patientID = res.get(0);
 
+        // Calculate amount
+        ArrayList<Fees> fees = admin.getFees();
+        Fees surgeryFee = fees.get(0);
+        Fees consultationFee = fees.get(1);
+        
+        double totalAmount = 0.00;
+        
+        if (service.equals("surgery")) {
+            
+            totalAmount = surgeryFee.getPrice();
+            
+        } else if (service.equals("consultation")) {
+            
+            totalAmount = consultationFee.getPrice();
+            
+        } else {
+            totalAmount = 20.00;
+        }
         //create invoice object
-        Invoice invoice = new Invoice(patientID, service, detail, amount, paymenttype);
+        Invoice invoice = new Invoice(patientID,service,detail,String.valueOf(totalAmount),paymenttype);
 
         //validate the patient id
         String validation = jdbc.getResultSet("firstname, lastname, dob", "(username ='" + patientID + "' AND usertype = 'P')", "users", 3);
