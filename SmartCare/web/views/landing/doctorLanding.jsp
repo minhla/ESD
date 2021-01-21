@@ -152,7 +152,6 @@
                     </select>
                     <br/><br/>
                     Details: <textarea type="text" name="detail" rows="4" cols="50" required></textarea><br/><br/>
-                    Total amount: <input type="number" name="amount" required><br/><br/> 
                     Payment type:            
                     <select id="paymenttype" name="paymenttype" required>
                         <option value="" selected="selected" disabled="disabled">Please select</option>
@@ -163,7 +162,8 @@
                     <input type="submit" value="Issue Invoice" name ="action"><br/>
                 </form>
                 <p>
-                    <%                String updateInvoice = (String) session.getAttribute("updateInvoice");
+                    <%               
+                        String updateInvoice = (String) session.getAttribute("updateInvoice");
                         if (updateInvoice != null) {
                             out.println(updateInvoice);
                         }

@@ -158,7 +158,8 @@ public class Patient extends User
             
             if(prescription.size() <= 3)
             {
-                result ="Prescription <br/>"+  
+                result ="================= <br/>"+
+                        "Prescription <br/>"+  
                         "================= <br/>"+
                         "Patient Name: "+details.get(0)+"<br/>"+
                          "Patient Surname: "+details.get(1)+"<br/>"+

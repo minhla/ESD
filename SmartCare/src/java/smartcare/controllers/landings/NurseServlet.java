@@ -65,6 +65,8 @@ public class NurseServlet extends HttpServlet {
         Nurse nurse;
         nurse = (Nurse)(User)session.getAttribute("user");
         
+
+        
         //Show appointments
         showAppointments(request, nurse);
         
