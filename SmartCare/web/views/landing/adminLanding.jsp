@@ -64,7 +64,6 @@
                     </select>
                     <br/><br/>
                     Details: <br/> <textarea type="text" name="detail" rows="4" cols="50" required></textarea><br/><br/>
-                    Total amount:<br/> <input type="number" name="amount" required><br/><br/> 
                     Payment type:<br/>             
                     <select id="paymenttype" name="paymenttype" required>
                         <option value="" selected="selected" disabled="disabled">Please select</option>
@@ -257,14 +256,22 @@
                         }
                         
                         ArrayList<Fees> feesList = (ArrayList) request.getAttribute("fees");
-                        Fees currentFee = feesList.get(0);
+                        Fees surgeryFee = feesList.get(0);
+                        Fees consultationFee = feesList.get(1);
             
                     %>
                     
                 <form action="AdminServlet.do" name="updateSuccess" method="Post">
-                     Price: <br> <input type="number" name="price" required="" value="<%=currentFee.getPrice() %>"> £<br><br> 
-                    Period: <br> <input type="number" name="period" required="" value="<%=currentFee.getPeriod() %>"> Mn<br><br>  
-                    <input type="submit" value="Change Appointment Price" name="action"><br>
+                    
+                    <h3><%=surgeryFee.getServiceType() %></h3>
+                     Price: <br> <input type="number" name="priceSurgery" required="" value="<%=surgeryFee.getPrice() %>"> £<br><br> 
+                     Period: <br> <input type="number" name="periodSurgery" required="" value="<%=surgeryFee.getPeriod() %>"> Mn<br><br>  
+                     
+                     <h3><%=consultationFee.getServiceType() %></h3>
+                     Price: <br> <input type="number" name="priceCons" required="" value="<%=consultationFee.getPrice() %>"> £<br><br> 
+                     Period: <br> <input type="number" name="periodCons" required="" value="<%=consultationFee.getPeriod() %>"> Mn<br><br> 
+                     
+                    <input type="submit" value="Change Appointment Prices" name="action"><br>
                 </form>
                     
                   
@@ -277,6 +284,16 @@
             <div class="register-container">
                 <h1>Register New Staff Account</h1>
                 <form action="AdminServlet.do" method="post">
+                    <select id="titles" name="titles" required="required">
+                        <option value="" disabled="disabled" selected="selected">Please select</option>
+                        <option value="Ms">Ms</option>
+                        <option value="Miss">Miss</option>
+                        <option value="Mr">Mr</option>
+                        <option value="Dr">Dr</option>
+                        <option value="Rev">Rev</option>
+                        <option value="Sir">Sir</option>  
+                        
+                </select>
                     <p>Email: <input type="text" name="new_acc_email" placeholder="johndoe@gmail.com"></p>
                     <p>First name: <input type="text" name="new_acc_firstname" placeholder="John"></p>
                     <p>Last name: <input type="text" name="new_acc_lastname" placeholder="Doe"></p>
